@@ -17,8 +17,8 @@ function useAnchor() {
           baseUrl: 'https://matrix.woke.net',
         })
         const reg = await client.registerGuest()
-        userId = reg.user_id
-        accessToken = reg.access_token
+        userId = reg['user_id']
+        accessToken = reg['access_token']
         localStorage.setItem('mx_user_id', userId)
         localStorage.setItem('mx_access_token', accessToken)
       }
@@ -35,7 +35,7 @@ function useAnchor() {
         console.error('Room not found', roomAlias)
         return
       }
-      const roomId = roomResult.room_id
+      const roomId = roomResult['room_id']
 
       client.on('Room.timeline', () => {
         const roomUpdate = client.getRoom(roomId)
