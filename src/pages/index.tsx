@@ -40,7 +40,6 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, getContainer }) {
     >
       <DrawerOverlay>
         <DrawerContent justifyContent="center">
-          <DrawerCloseButton />
           <Center flexDir="column">
             <DrawerHeader>
               {mode === 'register'
@@ -70,7 +69,6 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, getContainer }) {
                 </Flex>
               </VStack>
             </DrawerBody>
-
             <DrawerFooter>
               <Button variant="outline" mr={3} onClick={onClose}>
                 Cancel
@@ -79,6 +77,7 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, getContainer }) {
                 {mode === 'register' ? 'Register' : 'Login'}
               </Button>
             </DrawerFooter>
+            <DrawerCloseButton />
           </Center>
         </DrawerContent>
       </DrawerOverlay>
