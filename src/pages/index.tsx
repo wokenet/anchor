@@ -18,7 +18,7 @@ function Home() {
       <Center onClick={handleUnmute} flex="1" backgroundColor="black">
         <Video
           ref={videoRef}
-          src="https://get.woke.net/live/playlist.m3u8"
+          src="https://a.woke.net/live/playlist.m3u8"
           muted
         />
       </Center>
