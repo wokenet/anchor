@@ -149,6 +149,9 @@ function Home() {
   async function handleSend(ev: React.SyntheticEvent) {
     ev.preventDefault()
     setMessageText('')
+    if (!messageText.length) {
+      return
+    }
     await actions.sendMessage(messageText)
   }
 
