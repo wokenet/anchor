@@ -74,6 +74,7 @@ function useAnchor() {
       } else {
         await client.startClient({ initialSyncLimit: 20 })
         await once(client, 'sync')
+        await client.joinRoom(roomId)
       }
 
       const room = client.getRoom(roomId)
@@ -117,25 +118,14 @@ function useAnchor() {
           localStorage.setItem('mx_user_mode', 'account')
           localStorage.setItem('mx_user_id', res['user_id'])
           localStorage.setItem('mx_access_token', res['access_token'])
-          setUserInfo({
-            userId: client.credentials.userId,
-            isGuest: false,
-          })
-          client.setGuest(false)
-          await client.startClient()
-          await client.joinRoom(roomId)
+          await connect()
         },
         login: async (username, password) => {
           const res = await client.loginWithPassword(username, password)
           localStorage.setItem('mx_user_mode', 'account')
           localStorage.setItem('mx_user_id', res['user_id'])
           localStorage.setItem('mx_access_token', res['access_token'])
-          setUserInfo({
-            userId: client.credentials.userId,
-            isGuest: false,
-          })
-          client.setGuest(false)
-          await client.joinRoom(roomId)
+          await connect()
         },
         logout: async () => {
           await client.logout()
