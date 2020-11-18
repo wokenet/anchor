@@ -73,9 +73,8 @@ function useAnchor() {
         await client.peekInRoom(roomId)
       } else {
         await client.startClient({ initialSyncLimit: 20 })
+        await once(client, 'sync')
       }
-
-      await once(client, 'sync')
 
       const room = client.getRoom(roomId)
       setUserInfo({
