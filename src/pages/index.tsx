@@ -17,87 +17,139 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
+import ReCAPTCHA from 'react-google-recaptcha'
 
-import { siteName } from '../constants'
+import { siteName, recaptchaSiteKey } from '../constants'
 import Video from '../Video'
 import useAnchor from '../useAnchor'
 
-function AuthDrawer({ isOpen, onClose, finalFocusRef, getContainer }) {
+const RECAPTCHA_WIDTH = '304px'
+
+function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
   const [mode, setMode] = useState<'login' | 'register'>('register')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [captchaToken, setCaptchaToken] = useState<string>()
 
   function handleToggleMode() {
     setMode(mode === 'register' ? 'login' : 'register')
   }
 
+  function handleSubmit(ev: React.SyntheticEvent) {
+    ev.preventDefault()
+    if (mode === 'register') {
+      onRegister(username, password, captchaToken)
+    } else {
+      onLogin(username, password)
+    }
+  }
+
   return (
     <Drawer
-      size="xs"
       placement="right"
       isOpen={isOpen}
       onClose={onClose}
       finalFocusRef={finalFocusRef}
-      getContainer={getContainer}
     >
       <DrawerOverlay>
-        <DrawerContent justifyContent="center">
-          <Center flexDir="column">
-            <DrawerHeader>
-              {mode === 'register'
-                ? `Create a ${siteName} account`
-                : `Log in to ${siteName}`}
-            </DrawerHeader>
+        <form onSubmit={handleSubmit}>
+          <DrawerContent justifyContent="center" maxW="24rem">
+            <Center flexDir="column">
+              <DrawerHeader>
+                {mode === 'register'
+                  ? `Create a ${siteName} account`
+                  : `Log in to ${siteName}`}
+              </DrawerHeader>
 
-            <DrawerBody width="full">
-              <VStack spacing={4} px={0}>
-                <Input placeholder="Username" />
-                <Input placeholder="Password" type="password" />
-                <Flex alignItems="baseline" fontSize="md">
-                  <Text>
-                    {mode === 'register'
-                      ? 'Have an account?'
-                      : 'Need an account?'}
-                  </Text>
-                  <Button
-                    onClick={handleToggleMode}
-                    ml=".5em"
-                    colorScheme="teal"
-                    variant="link"
-                  >
-                    {mode === 'register' ? 'Login' : 'Register'}
-                  </Button>
-                  <Text>.</Text>
-                </Flex>
-              </VStack>
-            </DrawerBody>
-            <DrawerFooter>
-              <Button variant="outline" mr={3} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button colorScheme="teal">
-                {mode === 'register' ? 'Register' : 'Login'}
-              </Button>
-            </DrawerFooter>
-            <DrawerCloseButton />
-          </Center>
-        </DrawerContent>
+              <DrawerBody width="full">
+                <VStack
+                  spacing={4}
+                  px={0}
+                  w={RECAPTCHA_WIDTH}
+                  alignItems="center"
+                >
+                  <Input
+                    placeholder="Username"
+                    value={username}
+                    onChange={(ev) => setUsername(ev.target.value)}
+                  />
+                  <Input
+                    placeholder="Password"
+                    type="password"
+                    value={password}
+                    onChange={(ev) => setPassword(ev.target.value)}
+                  />
+                  {mode === 'register' && (
+                    <ReCAPTCHA
+                      sitekey={recaptchaSiteKey}
+                      onChange={setCaptchaToken}
+                    />
+                  )}
+                  <Flex alignItems="baseline" fontSize="md">
+                    <Text>
+                      {mode === 'register'
+                        ? 'Have an account?'
+                        : 'Need an account?'}
+                    </Text>
+                    <Button
+                      onClick={handleToggleMode}
+                      ml=".5em"
+                      colorScheme="teal"
+                      variant="link"
+                    >
+                      {mode === 'register' ? 'Login' : 'Register'}
+                    </Button>
+                    <Text>.</Text>
+                  </Flex>
+                </VStack>
+              </DrawerBody>
+              <DrawerFooter>
+                <Button variant="outline" mr={3} onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button type="submit" colorScheme="teal">
+                  {mode === 'register' ? 'Register' : 'Login'}
+                </Button>
+              </DrawerFooter>
+              <DrawerCloseButton />
+            </Center>
+          </DrawerContent>
+        </form>
       </DrawerOverlay>
     </Drawer>
   )
 }
 
 function Home() {
+  // TODO: registration/login error handling
   const authButtonRef = useRef<HTMLButtonElement>()
-  const chatRef = useRef<HTMLDivElement>()
   const videoRef = useRef<HTMLVideoElement>()
-  const { timeline } = useAnchor()
+  const { userInfo, timeline, actions } = useAnchor()
   const {
     isOpen: isAuthOpen,
     onOpen: onAuthOpen,
     onClose: onAuthClose,
   } = useDisclosure()
+  const [messageText, setMessageText] = useState('')
 
   function handleUnmute() {
     videoRef.current.muted = false
+  }
+
+  async function handleRegister(username, password, captchaToken) {
+    await actions.register(username, password, captchaToken)
+    onAuthClose()
+  }
+
+  async function handleLogin(username, password) {
+    await actions.login(username, password)
+    onAuthClose()
+  }
+
+  async function handleSend(ev: React.SyntheticEvent) {
+    ev.preventDefault()
+    setMessageText('')
+    await actions.sendMessage(messageText)
   }
 
   return (
@@ -109,7 +161,7 @@ function Home() {
           muted
         />
       </Center>
-      <Flex flexDir="column" ref={chatRef} w="sm">
+      <Flex flexDir="column" w="sm">
         <Box flex="1" my={2} mx={4} overflowY="auto">
           {timeline &&
             timeline.map((ev) => {
@@ -123,21 +175,34 @@ function Home() {
               )
             })}
         </Box>
-        <Button
-          ref={authButtonRef}
-          colorScheme="teal"
-          onClick={onAuthOpen}
-          mx={4}
-          mb={4}
-        >
-          Log in to chat
-        </Button>
+        {!userInfo ? null : userInfo.isGuest ? (
+          <Button
+            ref={authButtonRef}
+            colorScheme="teal"
+            onClick={onAuthOpen}
+            mx={4}
+            mb={4}
+          >
+            Log in to chat
+          </Button>
+        ) : (
+          <form onSubmit={handleSend} style={{ display: 'flex' }}>
+            <Input
+              m={4}
+              flex={1}
+              placeholder="Say something"
+              value={messageText}
+              onChange={(ev) => setMessageText(ev.target.value)}
+            />
+          </form>
+        )}
       </Flex>
       <AuthDrawer
         isOpen={isAuthOpen}
         onClose={onAuthClose}
         finalFocusRef={authButtonRef}
-        getContainer={() => chatRef.current}
+        onRegister={handleRegister}
+        onLogin={handleLogin}
       />
     </Box>
   )
