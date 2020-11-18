@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState, useRef } from 'react'
+import { useLayoutEffect, useState, useRef } from 'react'
 import {
   Box,
   Button,
@@ -122,6 +122,7 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
 
 function Home() {
   // TODO: registration/login error handling
+  const messagesRef = useRef<HTMLDivElement>()
   const authButtonRef = useRef<HTMLButtonElement>()
   const videoRef = useRef<HTMLVideoElement>()
   const { userInfo, timeline, actions } = useAnchor()
@@ -155,6 +156,14 @@ function Home() {
     await actions.sendMessage(messageText)
   }
 
+  useLayoutEffect(() => {
+    const el = messagesRef.current
+    if (!el) {
+      return
+    }
+    el.scrollTo(0, el.scrollHeight)
+  }, [timeline])
+
   return (
     <Box display="flex" backgroundColor="gray.900" width="100vw" height="100vh">
       <Center onClick={handleUnmute} flex="1" backgroundColor="black">
@@ -165,7 +174,7 @@ function Home() {
         />
       </Center>
       <Flex flexDir="column" w="sm">
-        <Box flex="1" my={2} mx={4} overflowY="auto">
+        <Box ref={messagesRef} flex="1" my={2} mx={4} overflowY="auto">
           {timeline &&
             timeline.map((ev) => {
               if (ev.getType() !== 'm.room.message') {
