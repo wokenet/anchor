@@ -72,7 +72,7 @@ function useAnchor() {
       if (client.isGuest()) {
         await client.peekInRoom(roomId)
       } else {
-        await client.startClient({ initialSyncLimit: 20 })
+        await client.startClient({ initialSyncLimit: 40 })
         await once(client, 'sync')
         await client.joinRoom(roomId)
       }
