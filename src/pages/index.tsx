@@ -22,7 +22,7 @@ import { Scrollbars } from 'react-custom-scrollbars'
 
 import { siteName, recaptchaSiteKey } from '../constants'
 import Message from '../components/Message'
-import Video from '../Video'
+import Video from '../components/Video'
 import useAnchor from '../useAnchor'
 
 const RECAPTCHA_WIDTH = '304px'
