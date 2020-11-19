@@ -33,7 +33,7 @@ const Video = forwardRef(
 
     useImperativeHandle(ref, () => videoRef.current)
 
-    return <video key={src} ref={videoRef} {...props} />
+    return <video key={src} ref={videoRef} {...props} controls />
   },
 )
 
