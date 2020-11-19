@@ -188,7 +188,7 @@ function Home() {
         >
           {timeline &&
             timeline.map((ev) => {
-              if (ev.getType() !== 'm.room.message') {
+              if (ev.getType() !== 'm.room.message' || !ev.event.content.body) {
                 return
               }
               return (
