@@ -27,6 +27,7 @@ export function Emote({ emote }: { emote: string }) {
       display="inline-block"
       src={emotes.get(emote)}
       boxSize={emoteSize + 'px'}
+      title={`:${emote}:`}
     />
   )
 }
