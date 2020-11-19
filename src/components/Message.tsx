@@ -45,7 +45,11 @@ export default function Message({ body, sender, ...props }: MessageProps) {
   }
   return (
     <Text {...props}>
-      {sender}: {parts}
+      <Text display="inline" color="deepRed.300">
+        {sender}
+      </Text>
+      {': '}
+      {parts}
     </Text>
   )
 }
