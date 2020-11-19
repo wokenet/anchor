@@ -212,7 +212,8 @@ function Home() {
         ) : (
           <form onSubmit={handleSend} style={{ display: 'flex' }}>
             <Input
-              m={4}
+              m={2}
+              px={2}
               flex={1}
               placeholder="Say something"
               value={messageText}
