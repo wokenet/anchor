@@ -18,6 +18,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { Scrollbars } from 'react-custom-scrollbars'
 
 import { siteName, recaptchaSiteKey } from '../constants'
 import Video from '../Video'
@@ -122,7 +123,7 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
 
 function Home() {
   // TODO: registration/login error handling
-  const messagesRef = useRef<HTMLDivElement>()
+  const messagesRef = useRef<Scrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
   const videoRef = useRef<HTMLVideoElement>()
   const { userInfo, timeline, actions } = useAnchor()
@@ -161,7 +162,7 @@ function Home() {
     if (!el) {
       return
     }
-    el.scrollTo(0, el.scrollHeight)
+    el.scrollToBottom()
   }, [timeline])
 
   return (
@@ -174,7 +175,14 @@ function Home() {
         />
       </Center>
       <Flex flexDir="column" w="sm">
-        <Box ref={messagesRef} flex="1" my={2} overflowY="auto">
+        <Scrollbars
+          ref={messagesRef}
+          renderThumbVertical={(props) => (
+            <Box {...props} bgColor="gray.600" borderRadius="full" />
+          )}
+          autoHide
+          universal
+        >
           {timeline &&
             timeline.map((ev) => {
               if (ev.getType() !== 'm.room.message') {
@@ -190,7 +198,7 @@ function Home() {
                 </Text>
               )
             })}
-        </Box>
+        </Scrollbars>
         {!userInfo ? null : userInfo.isGuest ? (
           <Button
             ref={authButtonRef}
