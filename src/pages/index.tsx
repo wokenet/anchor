@@ -62,7 +62,7 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
                   : `Log in to ${siteName}`}
               </DrawerHeader>
 
-              <DrawerBody width="full">
+              <DrawerBody>
                 <VStack
                   spacing={4}
                   px={0}
