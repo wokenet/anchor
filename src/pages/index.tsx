@@ -174,14 +174,18 @@ function Home() {
         />
       </Center>
       <Flex flexDir="column" w="sm">
-        <Box ref={messagesRef} flex="1" my={2} mx={4} overflowY="auto">
+        <Box ref={messagesRef} flex="1" my={2} overflowY="auto">
           {timeline &&
             timeline.map((ev) => {
               if (ev.getType() !== 'm.room.message') {
                 return
               }
               return (
-                <Text key={ev.event.event_id}>
+                <Text
+                  key={ev.event.event_id}
+                  px={4}
+                  _odd={{ backgroundColor: 'gray.800' }}
+                >
                   {ev.sender.name}: {ev.event.content.body}
                 </Text>
               )
