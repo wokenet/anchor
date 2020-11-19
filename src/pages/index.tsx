@@ -20,7 +20,7 @@ import {
 import ReCAPTCHA from 'react-google-recaptcha'
 import { Scrollbars } from 'react-custom-scrollbars'
 
-import { siteName, recaptchaSiteKey } from '../constants'
+import { siteName, recaptchaSiteKey } from '../../constants.json'
 import Message from '../components/Message'
 import Video from '../components/Video'
 import useAnchor from '../useAnchor'
