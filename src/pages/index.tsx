@@ -21,6 +21,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import { siteName, recaptchaSiteKey } from '../constants'
+import Message from '../components/Message'
 import Video from '../Video'
 import useAnchor from '../useAnchor'
 
@@ -191,13 +192,13 @@ function Home() {
                 return
               }
               return (
-                <Text
+                <Message
                   key={ev.event.event_id}
+                  sender={ev.sender.name}
+                  body={ev.event.content.body}
                   px={4}
                   _odd={{ backgroundColor: 'gray.900' }}
-                >
-                  {ev.sender.name}: {ev.event.content.body}
-                </Text>
+                />
               )
             })}
         </Scrollbars>
