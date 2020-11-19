@@ -169,7 +169,7 @@ function Home() {
   }, [timeline])
 
   return (
-    <Box display="flex" width="100vw" height="100vh">
+    <Box display="flex" width="100vw" height="100vh" overflow="hidden">
       <Center onClick={handleUnmute} flex="1" backgroundColor="gray.950">
         <Video
           ref={videoRef}
