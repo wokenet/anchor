@@ -70,11 +70,13 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
                   alignItems="center"
                 >
                   <Input
+                    focusBorderColor="orangeYellow.300"
                     placeholder="Username"
                     value={username}
                     onChange={(ev) => setUsername(ev.target.value)}
                   />
                   <Input
+                    focusBorderColor="orangeYellow.300"
                     placeholder="Password"
                     type="password"
                     value={password}
@@ -95,7 +97,7 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
                     <Button
                       onClick={handleToggleMode}
                       ml=".5em"
-                      colorScheme="teal"
+                      colorScheme="orangeYellow"
                       variant="link"
                     >
                       {mode === 'register' ? 'Login' : 'Register'}
@@ -108,7 +110,7 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
                 <Button variant="outline" mr={3} onClick={onClose}>
                   Cancel
                 </Button>
-                <Button type="submit" colorScheme="teal">
+                <Button type="submit" colorScheme="orangeYellow">
                   {mode === 'register' ? 'Register' : 'Login'}
                 </Button>
               </DrawerFooter>
@@ -166,8 +168,8 @@ function Home() {
   }, [timeline])
 
   return (
-    <Box display="flex" backgroundColor="gray.900" width="100vw" height="100vh">
-      <Center onClick={handleUnmute} flex="1" backgroundColor="black">
+    <Box display="flex" width="100vw" height="100vh">
+      <Center onClick={handleUnmute} flex="1" backgroundColor="gray.950">
         <Video
           ref={videoRef}
           src="https://a.woke.net/live/playlist.m3u8"
@@ -192,7 +194,7 @@ function Home() {
                 <Text
                   key={ev.event.event_id}
                   px={4}
-                  _odd={{ backgroundColor: 'gray.800' }}
+                  _odd={{ backgroundColor: 'gray.900' }}
                 >
                   {ev.sender.name}: {ev.event.content.body}
                 </Text>
@@ -202,7 +204,7 @@ function Home() {
         {!userInfo ? null : userInfo.isGuest ? (
           <Button
             ref={authButtonRef}
-            colorScheme="teal"
+            colorScheme="orangeYellow"
             onClick={onAuthOpen}
             mx={4}
             mb={4}
@@ -215,6 +217,7 @@ function Home() {
               m={2}
               px={2}
               flex={1}
+              focusBorderColor="deepRed.700"
               placeholder="Say something"
               value={messageText}
               onChange={(ev) => setMessageText(ev.target.value)}
