@@ -7,9 +7,12 @@ import {
   HTMLProps,
   ForwardedRef,
 } from 'react'
+import { chakra } from '@chakra-ui/react'
 import Hls from 'hls.js'
 
-type VideoProps = HTMLProps<HTMLVideoElement>
+const VideoEl = chakra('video')
+
+type VideoProps = React.ComponentProps<typeof VideoEl>
 const Video = forwardRef(
   ({ src, ...props }: VideoProps, ref: ForwardedRef<HTMLVideoElement>) => {
     const videoRef = useRef<HTMLVideoElement>()
@@ -33,7 +36,7 @@ const Video = forwardRef(
 
     useImperativeHandle(ref, () => videoRef.current)
 
-    return <video key={src} ref={videoRef} {...props} />
+    return <VideoEl key={src} ref={videoRef} {...props} />
   },
 )
 

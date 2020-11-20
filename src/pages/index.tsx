@@ -188,6 +188,7 @@ function Home() {
         <Video
           ref={videoRef}
           src="https://b.woke.net/live/playlist.m3u8"
+          width="full"
           muted
         />
       </Center>
