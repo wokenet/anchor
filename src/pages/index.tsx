@@ -202,7 +202,11 @@ function Home() {
           muted
         />
       </Center>
-      <Flex flexDir="column" w={{ base: 'full', lg: 'sm' }} flex="1">
+      <Flex
+        flexDir="column"
+        w={{ base: 'full', lg: 'sm' }}
+        flex={{ base: 1, lg: 'none' }}
+      >
         <Scrollbars
           ref={messagesRef}
           renderThumbVertical={(props) => (
