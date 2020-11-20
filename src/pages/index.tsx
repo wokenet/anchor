@@ -183,8 +183,18 @@ function Home() {
   })
 
   return (
-    <Box display="flex" width="100vw" height="100vh" overflow="hidden">
-      <Center onClick={handleUnmute} flex="1" backgroundColor="gray.950">
+    <Box
+      display="flex"
+      flexDirection={{ base: 'column', lg: 'row' }}
+      width="100vw"
+      height="100vh"
+      overflow="hidden"
+    >
+      <Center
+        onClick={handleUnmute}
+        flex={{ base: 0, lg: 1 }}
+        backgroundColor="gray.950"
+      >
         <Video
           ref={videoRef}
           src="https://b.woke.net/live/playlist.m3u8"
@@ -192,7 +202,7 @@ function Home() {
           muted
         />
       </Center>
-      <Flex flexDir="column" w="sm">
+      <Flex flexDir="column" w={{ base: 'full', lg: 'sm' }} flex="1">
         <Scrollbars
           ref={messagesRef}
           renderThumbVertical={(props) => (
