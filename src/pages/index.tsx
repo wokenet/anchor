@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useLayoutEffect, useState, useRef } from 'react'
+import { useEffect, useLayoutEffect, useState, useRef } from 'react'
 import {
   Box,
   Button,
@@ -167,6 +167,20 @@ function Home() {
     }
     el.scrollToBottom()
   }, [timeline])
+
+  useEffect(() => {
+    const el = videoRef.current
+    if (!el) {
+      return
+    }
+    el.addEventListener(
+      'playing',
+      () => {
+        el.controls = true
+      },
+      { once: true },
+    )
+  })
 
   return (
     <Box display="flex" width="100vw" height="100vh" overflow="hidden">
