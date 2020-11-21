@@ -1,6 +1,12 @@
 import { once } from 'events'
 import { useEffect, useState } from 'react'
-import { createClient, Room, MatrixEvent, MatrixClient } from 'matrix-js-sdk'
+import {
+  createClient,
+  EventType,
+  Room,
+  MatrixEvent,
+  MatrixClient,
+} from 'matrix-js-sdk'
 
 const roomAlias = '#anchor:woke.net'
 
@@ -20,11 +26,14 @@ type UserInfo = {
   isGuest: boolean
 }
 
+const AnchorEventType = 'net.woke.anchor' as EventType
+
 function useAnchor() {
   let client: MatrixClient
   const [userInfo, setUserInfo] = useState<UserInfo>()
   const [room, setRoom] = useState<Room>()
   const [timeline, setTimeline] = useState<MatrixEvent[]>()
+  const [stream, setStream] = useState<{ kind: string; url: string }>()
   const [actions, setActions] = useState<AnchorActions>()
 
   useEffect(() => {
@@ -77,6 +86,13 @@ function useAnchor() {
         await client.joinRoom(roomId)
       }
 
+      client.on('RoomState.events', (event) => {
+        if (event.getType() !== AnchorEventType) {
+          return
+        }
+        setStream(event.event.content)
+      })
+
       const room = client.getRoom(roomId)
       setUserInfo({
         userId: client.credentials.userId,
@@ -84,6 +100,11 @@ function useAnchor() {
       })
       setRoom(room)
       setTimeline(room?.timeline)
+      const anchorStreamEvent = room.currentState.getStateEvents(
+        AnchorEventType,
+        'stream',
+      ) as MatrixEvent
+      setStream(anchorStreamEvent.event.content)
       setActions({
         register: async (username, password, captchaToken) => {
           let authSessionId
@@ -149,7 +170,7 @@ function useAnchor() {
     }
   }, [])
 
-  return { userInfo, room, timeline, actions }
+  return { userInfo, room, timeline, stream, actions }
 }
 
 export default useAnchor

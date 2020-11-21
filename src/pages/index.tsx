@@ -129,7 +129,7 @@ function Home() {
   const messagesRef = useRef<Scrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
   const videoRef = useRef<HTMLVideoElement>()
-  const { userInfo, timeline, actions } = useAnchor()
+  const { userInfo, timeline, stream, actions } = useAnchor()
   const {
     isOpen: isAuthOpen,
     onOpen: onAuthOpen,
@@ -195,12 +195,7 @@ function Home() {
         flex={{ base: 0, lg: 1 }}
         backgroundColor="gray.950"
       >
-        <Video
-          ref={videoRef}
-          src="https://a.woke.net/live/playlist.m3u8"
-          width="full"
-          muted
-        />
+        {stream && <Video ref={videoRef} src={stream.url} width="full" muted />}
       </Center>
       <Flex
         flexDir="column"
