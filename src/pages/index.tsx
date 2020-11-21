@@ -136,9 +136,10 @@ function Home() {
     onClose: onAuthClose,
   } = useDisclosure()
   const [messageText, setMessageText] = useState('')
+  const [isMuted, setIsMuted] = useState(true)
 
   function handleUnmute() {
-    videoRef.current.muted = false
+    setIsMuted(false)
   }
 
   async function handleRegister(username, password, captchaToken) {
@@ -195,7 +196,9 @@ function Home() {
         flex={{ base: 0, lg: 1 }}
         backgroundColor="gray.950"
       >
-        {stream && <Video ref={videoRef} src={stream.url} width="full" muted />}
+        {stream && (
+          <Video ref={videoRef} src={stream.url} width="full" muted={isMuted} />
+        )}
       </Center>
       <Flex
         flexDir="column"
