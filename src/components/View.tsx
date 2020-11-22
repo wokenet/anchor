@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { chakra } from '@chakra-ui/react'
+import { AspectRatio, chakra } from '@chakra-ui/react'
 
 import Video from './Video'
 import { ViewData } from '../useAnchor'
@@ -11,7 +11,10 @@ type ViewProps = {
   view: ViewData
   isMuted: boolean
 }
-export default function View({ view: { kind, url }, isMuted }: ViewProps) {
+export default function View({
+  view: { kind, url, fill },
+  isMuted,
+}: ViewProps) {
   const [initialMuted] = useState(isMuted)
   if (kind === 'hls') {
     return <Video src={url} width="full" muted={isMuted} />
@@ -49,7 +52,7 @@ export default function View({ view: { kind, url }, isMuted }: ViewProps) {
         embedURL.searchParams.set('show_text', 'false')
       }
     }
-    return (
+    const iframe = (
       <IframeEl
         src={embedURL.toString()}
         width="full"
@@ -57,6 +60,14 @@ export default function View({ view: { kind, url }, isMuted }: ViewProps) {
         allow="autoplay; picture-in-picture"
         allowFullScreen
       />
+    )
+    if (fill) {
+      return iframe
+    }
+    return (
+      <AspectRatio width="full" ratio={16 / 9}>
+        {iframe}
+      </AspectRatio>
     )
   }
 }

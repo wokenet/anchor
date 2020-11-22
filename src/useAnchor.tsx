@@ -29,6 +29,7 @@ type UserInfo = {
 export type ViewData = {
   kind: 'hls' | 'embed'
   url: string
+  fill: boolean
 }
 
 const AnchorViewEventType = 'net.woke.anchor.view' as EventType
