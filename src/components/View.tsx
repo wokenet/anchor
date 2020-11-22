@@ -26,6 +26,11 @@ export default function View({
       return <Box />
     }
     if (embedURL.hostname === 'www.youtube.com') {
+      if (!embedURL.pathname.startsWith('/embed')) {
+        embedURL = new URL(
+          `https://www.youtube.com/embed/${embedURL.searchParams.get('v')}`,
+        )
+      }
       embedURL.searchParams.set('autoplay', '1')
       // To get the iframe to start playing we need to mute on page load.
       // TODO: use a play button
