@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { AspectRatio, chakra } from '@chakra-ui/react'
+import { AspectRatio, Box, chakra } from '@chakra-ui/react'
 
 import Video from './Video'
 import { ViewData } from '../useAnchor'
@@ -23,7 +23,7 @@ export default function View({
     try {
       embedURL = new URL(url)
     } catch (err) {
-      return
+      return <Box />
     }
     if (embedURL.hostname === 'www.youtube.com') {
       embedURL.searchParams.set('autoplay', '1')
