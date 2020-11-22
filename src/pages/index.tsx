@@ -22,7 +22,7 @@ import { Scrollbars } from 'react-custom-scrollbars'
 
 import { siteName, recaptchaSiteKey } from '../../constants.json'
 import Message from '../components/Message'
-import Video from '../components/Video'
+import View from '../components/View'
 import useAnchor from '../useAnchor'
 
 const RECAPTCHA_WIDTH = '304px'
@@ -128,7 +128,6 @@ function Home() {
   // TODO: registration/login error handling
   const messagesRef = useRef<Scrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
-  const videoRef = useRef<HTMLVideoElement>()
   const { userInfo, timeline, view, actions } = useAnchor()
   const {
     isOpen: isAuthOpen,
@@ -169,20 +168,6 @@ function Home() {
     el.scrollToBottom()
   }, [timeline])
 
-  useEffect(() => {
-    const el = videoRef.current
-    if (!el) {
-      return
-    }
-    el.addEventListener(
-      'playing',
-      () => {
-        el.controls = true
-      },
-      { once: true },
-    )
-  })
-
   return (
     <Box
       display="flex"
@@ -196,9 +181,7 @@ function Home() {
         flex={{ base: 0, lg: 1 }}
         backgroundColor="gray.950"
       >
-        {view?.url && (
-          <Video ref={videoRef} src={view.url} width="full" muted={isMuted} />
-        )}
+        {view?.kind && <View view={view} isMuted={isMuted} />}
       </Center>
       <Flex
         flexDir="column"

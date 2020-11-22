@@ -32,6 +32,13 @@ const Video = forwardRef(
           video.play()
         })
       }
+      video.addEventListener(
+        'playing',
+        () => {
+          video.controls = true
+        },
+        { once: true },
+      )
     }, [src])
 
     useImperativeHandle(ref, () => videoRef.current)

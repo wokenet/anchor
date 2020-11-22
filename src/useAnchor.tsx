@@ -26,6 +26,11 @@ type UserInfo = {
   isGuest: boolean
 }
 
+export type ViewData = {
+  kind: 'hls' | 'embed'
+  url: string
+}
+
 const AnchorViewEventType = 'net.woke.anchor.view' as EventType
 
 function useAnchor() {
@@ -33,7 +38,7 @@ function useAnchor() {
   const [userInfo, setUserInfo] = useState<UserInfo>()
   const [room, setRoom] = useState<Room>()
   const [timeline, setTimeline] = useState<MatrixEvent[]>()
-  const [view, setView] = useState<{ kind: string; url: string }>()
+  const [view, setView] = useState<ViewData>()
   const [actions, setActions] = useState<AnchorActions>()
 
   useEffect(() => {
