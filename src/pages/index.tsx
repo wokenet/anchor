@@ -196,7 +196,7 @@ function Home() {
         flex={{ base: 0, lg: 1 }}
         backgroundColor="gray.950"
       >
-        {stream && (
+        {stream?.url && (
           <Video ref={videoRef} src={stream.url} width="full" muted={isMuted} />
         )}
       </Center>
