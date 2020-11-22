@@ -90,7 +90,7 @@ function useAnchor() {
         if (event.getType() !== AnchorEventType) {
           return
         }
-        setStream(event.event.content)
+        setView(event.getContent())
       })
 
       const room = client.getRoom(roomId)
@@ -104,7 +104,8 @@ function useAnchor() {
         AnchorEventType,
         'stream',
       ) as MatrixEvent
-      setStream(anchorStreamEvent.event.content)
+      // @ts-ignore
+      setView(anchorViewEvent.getContent())
       setActions({
         register: async (username, password, captchaToken) => {
           let authSessionId
