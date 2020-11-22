@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useEffect, useLayoutEffect, useState, useRef } from 'react'
+import { useLayoutEffect, useState, useRef } from 'react'
 import {
   Box,
   Button,
