@@ -26,14 +26,14 @@ type UserInfo = {
   isGuest: boolean
 }
 
-const AnchorEventType = 'net.woke.anchor' as EventType
+const AnchorViewEventType = 'net.woke.anchor.view' as EventType
 
 function useAnchor() {
   let client: MatrixClient
   const [userInfo, setUserInfo] = useState<UserInfo>()
   const [room, setRoom] = useState<Room>()
   const [timeline, setTimeline] = useState<MatrixEvent[]>()
-  const [stream, setStream] = useState<{ kind: string; url: string }>()
+  const [view, setView] = useState<{ kind: string; url: string }>()
   const [actions, setActions] = useState<AnchorActions>()
 
   useEffect(() => {
@@ -87,7 +87,7 @@ function useAnchor() {
       }
 
       client.on('RoomState.events', (event) => {
-        if (event.getType() !== AnchorEventType) {
+        if (event.getType() !== AnchorViewEventType) {
           return
         }
         setView(event.getContent())
@@ -100,9 +100,9 @@ function useAnchor() {
       })
       setRoom(room)
       setTimeline(room?.timeline)
-      const anchorStreamEvent = room.currentState.getStateEvents(
-        AnchorEventType,
-        'stream',
+      const anchorViewEvent = room.currentState.getStateEvents(
+        AnchorViewEventType,
+        '',
       ) as MatrixEvent
       // @ts-ignore
       setView(anchorViewEvent.getContent())
@@ -171,7 +171,7 @@ function useAnchor() {
     }
   }, [])
 
-  return { userInfo, room, timeline, stream, actions }
+  return { userInfo, room, timeline, view, actions }
 }
 
 export default useAnchor

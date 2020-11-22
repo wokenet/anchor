@@ -129,7 +129,7 @@ function Home() {
   const messagesRef = useRef<Scrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
   const videoRef = useRef<HTMLVideoElement>()
-  const { userInfo, timeline, stream, actions } = useAnchor()
+  const { userInfo, timeline, view, actions } = useAnchor()
   const {
     isOpen: isAuthOpen,
     onOpen: onAuthOpen,
@@ -196,8 +196,8 @@ function Home() {
         flex={{ base: 0, lg: 1 }}
         backgroundColor="gray.950"
       >
-        {stream?.url && (
-          <Video ref={videoRef} src={stream.url} width="full" muted={isMuted} />
+        {view?.url && (
+          <Video ref={videoRef} src={view.url} width="full" muted={isMuted} />
         )}
       </Center>
       <Flex
