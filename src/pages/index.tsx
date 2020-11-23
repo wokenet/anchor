@@ -183,6 +183,8 @@ function Home() {
   useEffect(() => {
     if (announcement) {
       onAnnouncementOpen()
+    } else {
+      onAnnouncementClose()
     }
   }, [announcement])
 
