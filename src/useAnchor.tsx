@@ -7,7 +7,7 @@ import {
   MatrixEvent,
   MatrixClient,
 } from 'matrix-js-sdk'
-import last from 'lodash/last'
+import findLast from 'lodash/findLast'
 
 import { chatRoomId, announcementsRoomId } from '../constants.json'
 
@@ -72,7 +72,13 @@ function useAnchor() {
 
       function getLatestAnnouncement() {
         const announcementsRoom = client.getRoom(announcementsRoomId)
-        const latestAnnouncement = last(announcementsRoom?.timeline)
+        if (!announcementsRoom?.timeline) {
+          return
+        }
+        const latestAnnouncement = findLast(
+          announcementsRoom.timeline,
+          (ev) => ev.getType() === 'm.room.message',
+        )
         // @ts-ignore
         return latestAnnouncement?.getContent()?.body
       }
@@ -86,8 +92,6 @@ function useAnchor() {
           setRoom(roomUpdate)
           setTimeline([...roomUpdate?.timeline])
         } else if (room.roomId === announcementsRoomId) {
-          // @ts-ignore
-          const announcementsRoom = last(announcementsRoom?.timeline)
           setAnnouncement(getLatestAnnouncement())
         }
       })
