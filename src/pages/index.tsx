@@ -131,7 +131,7 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
 
 function Announcement({ onClose, children }) {
   return (
-    <Alert status="info" bg="gray.700" flexShrink="0">
+    <Alert status="info" bg="gray.700" flexShrink={0}>
       <AlertIcon color="orangeYellow.500" />
       <AlertDescription>{children}</AlertDescription>
       <CloseButton onClick={onClose} position="absolute" right="8px" />
