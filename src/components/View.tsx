@@ -1,11 +1,9 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { AspectRatio, Box, chakra } from '@chakra-ui/react'
+import { AspectRatio, Box } from '@chakra-ui/react'
 
 import Video from './Video'
 import { ViewData } from '../useAnchor'
-
-const IframeEl = chakra('iframe')
 
 type ViewProps = {
   view: ViewData
@@ -58,7 +56,8 @@ export default function View({
       }
     }
     const iframe = (
-      <IframeEl
+      <Box
+        as="iframe"
         src={embedURL.toString()}
         width="full"
         height="full"

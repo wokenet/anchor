@@ -21,6 +21,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import { siteName, recaptchaSiteKey } from '../../constants.json'
+import Page from '../components/Page'
 import Message from '../components/Message'
 import View from '../components/View'
 import useAnchor from '../useAnchor'
@@ -169,81 +170,80 @@ function Home() {
   }, [timeline])
 
   return (
-    <Box
-      display="flex"
-      flexDirection={{ base: 'column', lg: 'row' }}
-      width="100vw"
-      height="100vh"
-      overflow="hidden"
-    >
-      <Center
-        onClick={handleUnmute}
-        flex={{ base: 0, lg: 1 }}
-        backgroundColor="gray.950"
-      >
-        {view?.kind && <View view={view} isMuted={isMuted} />}
-      </Center>
-      <Flex
-        flexDir="column"
-        w={{ base: 'full', lg: 'sm' }}
-        flex={{ base: 1, lg: 'none' }}
-      >
-        <Scrollbars
-          ref={messagesRef}
-          renderThumbVertical={(props) => (
-            <Box {...props} bgColor="gray.600" borderRadius="full" />
-          )}
-          autoHide
-          universal
+    <Page>
+      <Flex display="flex" flex="1" direction={{ base: 'column', lg: 'row' }}>
+        <Center
+          onClick={handleUnmute}
+          flex={{ base: 0, lg: 1 }}
+          backgroundColor="gray.950"
         >
-          {timeline &&
-            timeline.map((ev) => {
-              if (ev.getType() !== 'm.room.message' || !ev.event.content.body) {
-                return
-              }
-              return (
-                <Message
-                  key={ev.event.event_id}
-                  sender={ev.sender.name}
-                  body={ev.event.content.body}
-                  px={4}
-                  _odd={{ backgroundColor: 'gray.900' }}
-                />
-              )
-            })}
-        </Scrollbars>
-        {!userInfo ? null : userInfo.isGuest ? (
-          <Button
-            ref={authButtonRef}
-            colorScheme="orangeYellow"
-            onClick={onAuthOpen}
-            mx={4}
-            mb={4}
+          {view?.kind && <View view={view} isMuted={isMuted} />}
+        </Center>
+        <Flex
+          flexDir="column"
+          w={{ base: 'full', lg: 'sm' }}
+          flex={{ base: 1, lg: 'none' }}
+        >
+          <Scrollbars
+            ref={messagesRef}
+            renderThumbVertical={(props) => (
+              <Box {...props} bgColor="gray.600" borderRadius="full" />
+            )}
+            autoHide
+            universal
           >
-            Log in to chat
-          </Button>
-        ) : (
-          <form onSubmit={handleSend} style={{ display: 'flex' }}>
-            <Input
-              m={2}
-              px={2}
-              flex={1}
-              focusBorderColor="deepRed.700"
-              placeholder="Say something"
-              value={messageText}
-              onChange={(ev) => setMessageText(ev.target.value)}
-            />
-          </form>
-        )}
+            {timeline &&
+              timeline.map((ev) => {
+                if (
+                  ev.getType() !== 'm.room.message' ||
+                  !ev.event.content.body
+                ) {
+                  return
+                }
+                return (
+                  <Message
+                    key={ev.event.event_id}
+                    sender={ev.sender.name}
+                    body={ev.event.content.body}
+                    px={4}
+                    _odd={{ backgroundColor: 'gray.900' }}
+                  />
+                )
+              })}
+          </Scrollbars>
+          {!userInfo ? null : userInfo.isGuest ? (
+            <Button
+              ref={authButtonRef}
+              colorScheme="orangeYellow"
+              onClick={onAuthOpen}
+              mx={4}
+              mb={4}
+            >
+              Log in to chat
+            </Button>
+          ) : (
+            <form onSubmit={handleSend} style={{ display: 'flex' }}>
+              <Input
+                m={2}
+                px={2}
+                flex={1}
+                focusBorderColor="deepRed.700"
+                placeholder="Say something"
+                value={messageText}
+                onChange={(ev) => setMessageText(ev.target.value)}
+              />
+            </form>
+          )}
+        </Flex>
+        <AuthDrawer
+          isOpen={isAuthOpen}
+          onClose={onAuthClose}
+          finalFocusRef={authButtonRef}
+          onRegister={handleRegister}
+          onLogin={handleLogin}
+        />
       </Flex>
-      <AuthDrawer
-        isOpen={isAuthOpen}
-        onClose={onAuthClose}
-        finalFocusRef={authButtonRef}
-        onRegister={handleRegister}
-        onLogin={handleLogin}
-      />
-    </Box>
+    </Page>
   )
 }
 

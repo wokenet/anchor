@@ -2,6 +2,8 @@ import * as React from 'react'
 import type { AppProps } from 'next/app'
 import { extendTheme, ChakraProvider } from '@chakra-ui/react'
 
+import '../styles.css'
+
 const customTheme = extendTheme({
   config: {
     useSystemColorMode: false,
@@ -81,6 +83,10 @@ const customTheme = extendTheme({
       900: '#0e0e0c',
       950: '#060605',
     },
+  },
+  fonts: {
+    body: 'Noto Sans, sans-serif',
+    heading: 'Noto Sans, sans-serif',
   },
   shadows: {
     outline: '0 0 0 3px rgba(143, 119, 40, 0.6)',
