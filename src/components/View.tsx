@@ -15,7 +15,7 @@ export default function View({
 }: ViewProps) {
   const [initialMuted] = useState(isMuted)
   if (kind === 'hls') {
-    return <Video src={url} width="full" muted={isMuted} />
+    return <Video src={url} maxHeight="full" muted={isMuted} />
   } else if (kind === 'embed') {
     let embedURL: URL
     try {

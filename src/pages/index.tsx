@@ -171,7 +171,12 @@ function Home() {
 
   return (
     <Page>
-      <Flex display="flex" flex="1" direction={{ base: 'column', lg: 'row' }}>
+      <Flex
+        display="flex"
+        flex="1"
+        direction={{ base: 'column', lg: 'row' }}
+        overflow="hidden"
+      >
         <Center
           onClick={handleUnmute}
           flex={{ base: 0, lg: 1 }}
