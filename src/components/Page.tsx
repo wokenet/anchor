@@ -3,7 +3,13 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Box, Flex, HStack, Icon, Link as ChakraLink } from '@chakra-ui/react'
-import { FaYoutube, FaFacebook, FaTwitter, FaPeriscope } from 'react-icons/fa'
+import {
+  FaYoutube,
+  FaFacebook,
+  FaTwitter,
+  FaPeriscope,
+  FaTwitch,
+} from 'react-icons/fa'
 
 import LogoIcon from 'woke-content/images/logo.svg'
 
@@ -92,6 +98,7 @@ export default function Page({ title, children }: PageProps) {
               url="https://www.facebook.com/watchwoke"
               icon={FaFacebook}
             />
+            <Platform url="https://www.twitch.tv/woke" icon={FaTwitch} />
             <Platform url="https://twitter.com/watchwoke" icon={FaTwitter} />
             <Platform
               url="https://www.periscope.tv/watchwoke"
