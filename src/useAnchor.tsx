@@ -70,6 +70,13 @@ function useAnchor() {
         client.setGuest(true)
       }
 
+      function getLatestAnnouncement() {
+        const announcementsRoom = client.getRoom(announcementsRoomId)
+        const latestAnnouncement = last(announcementsRoom?.timeline)
+        // @ts-ignore
+        return latestAnnouncement?.getContent()?.body
+      }
+
       client.on('Room.timeline', (event: MatrixEvent, room: Room) => {
         if (room.roomId === chatRoomId) {
           const roomUpdate = client.getRoom(chatRoomId)
@@ -80,7 +87,8 @@ function useAnchor() {
           setTimeline([...roomUpdate?.timeline])
         } else if (room.roomId === announcementsRoomId) {
           // @ts-ignore
-          setAnnouncement(event.getContent()?.body)
+          const announcementsRoom = last(announcementsRoom?.timeline)
+          setAnnouncement(getLatestAnnouncement())
         }
       })
 
@@ -109,11 +117,7 @@ function useAnchor() {
       setRoom(chatRoom)
       setTimeline(chatRoom?.timeline)
 
-      const announcementsRoom = client.getRoom(announcementsRoomId)
-      const latestAnnouncement = last(announcementsRoom?.timeline)
-      // @ts-ignore
-      const announcementText = latestAnnouncement?.getContent()?.body
-      setAnnouncement(announcementText)
+      setAnnouncement(getLatestAnnouncement())
 
       const anchorViewEvent = chatRoom.currentState.getStateEvents(
         AnchorViewEventType,
