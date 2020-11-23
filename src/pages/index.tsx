@@ -210,7 +210,7 @@ function Home() {
           )}
           <Center
             onClick={handleUnmute}
-            flex={{ base: 0, lg: 1 }}
+            flex={1}
             overflow="hidden"
             backgroundColor="gray.950"
           >
