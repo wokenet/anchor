@@ -7,8 +7,9 @@ import {
   MatrixEvent,
   MatrixClient,
 } from 'matrix-js-sdk'
+import last from 'lodash/last'
 
-const roomAlias = '#anchor:woke.net'
+import { chatRoomId, announcementsRoomId } from '../constants.json'
 
 type AnchorActions = {
   register: (
@@ -39,6 +40,7 @@ function useAnchor() {
   const [userInfo, setUserInfo] = useState<UserInfo>()
   const [room, setRoom] = useState<Room>()
   const [timeline, setTimeline] = useState<MatrixEvent[]>()
+  const [announcement, setAnnouncement] = useState<string>()
   const [view, setView] = useState<ViewData>()
   const [actions, setActions] = useState<AnchorActions>()
 
@@ -68,28 +70,28 @@ function useAnchor() {
         client.setGuest(true)
       }
 
-      const roomResult = await client.getRoomIdForAlias(roomAlias)
-      if (!roomResult) {
-        console.error('Room not found', roomAlias)
-        return
-      }
-      const roomId = roomResult['room_id']
-
-      client.on('Room.timeline', () => {
-        const roomUpdate = client.getRoom(roomId)
-        if (!roomUpdate) {
-          return
+      client.on('Room.timeline', (event: MatrixEvent, room: Room) => {
+        if (room.roomId === chatRoomId) {
+          const roomUpdate = client.getRoom(chatRoomId)
+          if (!roomUpdate) {
+            return
+          }
+          setRoom(roomUpdate)
+          setTimeline([...roomUpdate?.timeline])
+        } else if (room.roomId === announcementsRoomId) {
+          // @ts-ignore
+          setAnnouncement(event.getContent()?.body)
         }
-        setRoom(roomUpdate)
-        setTimeline([...roomUpdate?.timeline])
       })
 
       if (client.isGuest()) {
-        await client.peekInRoom(roomId)
+        await client.peekInRoom(chatRoomId)
+        await client.peekInRoom(announcementsRoomId)
       } else {
         await client.startClient({ initialSyncLimit: 40 })
         await once(client, 'sync')
-        await client.joinRoom(roomId)
+        await client.joinRoom(chatRoomId)
+        await client.joinRoom(announcementsRoomId)
       }
 
       client.on('RoomState.events', (event) => {
@@ -99,19 +101,27 @@ function useAnchor() {
         setView(event.getContent())
       })
 
-      const room = client.getRoom(roomId)
+      const chatRoom = client.getRoom(chatRoomId)
       setUserInfo({
         userId: client.credentials.userId,
         isGuest: client.isGuest(),
       })
-      setRoom(room)
-      setTimeline(room?.timeline)
-      const anchorViewEvent = room.currentState.getStateEvents(
+      setRoom(chatRoom)
+      setTimeline(chatRoom?.timeline)
+
+      const announcementsRoom = client.getRoom(announcementsRoomId)
+      const latestAnnouncement = last(announcementsRoom?.timeline)
+      // @ts-ignore
+      const announcementText = latestAnnouncement?.getContent()?.body
+      setAnnouncement(announcementText)
+
+      const anchorViewEvent = chatRoom.currentState.getStateEvents(
         AnchorViewEventType,
         '',
       ) as MatrixEvent
       // @ts-ignore
       setView(anchorViewEvent.getContent())
+
       setActions({
         register: async (username, password, captchaToken) => {
           let authSessionId
@@ -163,7 +173,7 @@ function useAnchor() {
           await connect()
         },
         sendMessage: async (body) => {
-          await client.sendTextMessage(roomId, body, '')
+          await client.sendTextMessage(chatRoomId, body, '')
         },
       })
     }
@@ -177,7 +187,7 @@ function useAnchor() {
     }
   }, [])
 
-  return { userInfo, room, timeline, view, actions }
+  return { userInfo, room, timeline, announcement, view, actions }
 }
 
 export default useAnchor

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useLayoutEffect, useState, useRef } from 'react'
+import { useEffect, useLayoutEffect, useState, useRef } from 'react'
 import {
   Box,
   Button,
@@ -16,6 +16,10 @@ import {
   Text,
   VStack,
   useDisclosure,
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  CloseButton,
 } from '@chakra-ui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { Scrollbars } from 'react-custom-scrollbars'
@@ -125,15 +129,30 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
   )
 }
 
+function Announcement({ onClose, children }) {
+  return (
+    <Alert status="info" bg="gray.700" flexShrink="0">
+      <AlertIcon color="orangeYellow.500" />
+      <AlertDescription>{children}</AlertDescription>
+      <CloseButton onClick={onClose} position="absolute" right="8px" />
+    </Alert>
+  )
+}
+
 function Home() {
   // TODO: registration/login error handling
   const messagesRef = useRef<Scrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
-  const { userInfo, timeline, view, actions } = useAnchor()
+  const { userInfo, timeline, announcement, view, actions } = useAnchor()
   const {
     isOpen: isAuthOpen,
     onOpen: onAuthOpen,
     onClose: onAuthClose,
+  } = useDisclosure()
+  const {
+    isOpen: isAnnouncementOpen,
+    onOpen: onAnnouncementOpen,
+    onClose: onAnnouncementClose,
   } = useDisclosure()
   const [messageText, setMessageText] = useState('')
   const [isMuted, setIsMuted] = useState(true)
@@ -161,6 +180,12 @@ function Home() {
     await actions.sendMessage(messageText)
   }
 
+  useEffect(() => {
+    if (announcement) {
+      onAnnouncementOpen()
+    }
+  }, [announcement])
+
   useLayoutEffect(() => {
     const el = messagesRef.current
     if (!el) {
@@ -177,13 +202,21 @@ function Home() {
         direction={{ base: 'column', lg: 'row' }}
         overflow="hidden"
       >
-        <Center
-          onClick={handleUnmute}
-          flex={{ base: 0, lg: 1 }}
-          backgroundColor="gray.950"
-        >
-          {view?.kind && <View view={view} isMuted={isMuted} />}
-        </Center>
+        <Flex flexDirection="column" flex={{ base: 0, lg: 1 }}>
+          {isAnnouncementOpen && (
+            <Announcement onClose={onAnnouncementClose}>
+              {announcement}
+            </Announcement>
+          )}
+          <Center
+            onClick={handleUnmute}
+            flex={{ base: 0, lg: 1 }}
+            overflow="hidden"
+            backgroundColor="gray.950"
+          >
+            {view?.kind && <View view={view} isMuted={isMuted} />}
+          </Center>
+        </Flex>
         <Flex
           flexDir="column"
           w={{ base: 'full', lg: 'sm' }}
