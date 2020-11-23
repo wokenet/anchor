@@ -2,7 +2,8 @@ import * as React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Box, Flex, Icon, Link as ChakraLink } from '@chakra-ui/react'
+import { Box, Flex, HStack, Icon, Link as ChakraLink } from '@chakra-ui/react'
+import { FaYoutube, FaFacebook, FaTwitter, FaPeriscope } from 'react-icons/fa'
 
 import LogoIcon from 'woke-content/images/logo.svg'
 
@@ -30,6 +31,19 @@ function NavLink({ href, children }) {
         {children}
       </ChakraLink>
     </Link>
+  )
+}
+
+function Platform({ url, icon }) {
+  return (
+    <ChakraLink href={url} isExternal>
+      <Icon
+        as={icon}
+        boxSize={6}
+        color="gray.600"
+        _hover={{ color: 'gray.500' }}
+      />
+    </ChakraLink>
   )
 }
 
@@ -69,6 +83,21 @@ export default function Page({ title, children }: PageProps) {
           <NavLink href="/submit">submit</NavLink>
           <NavLink href="/streams">streams</NavLink>
           <NavLink href="/about">about</NavLink>
+          <HStack ml={4} spacing={4}>
+            <Platform
+              url="https://www.youtube.com/WatchWOKE"
+              icon={FaYoutube}
+            />
+            <Platform
+              url="https://www.facebook.com/watchwoke"
+              icon={FaFacebook}
+            />
+            <Platform url="https://twitter.com/watchwoke" icon={FaTwitter} />
+            <Platform
+              url="https://www.periscope.tv/watchwoke"
+              icon={FaPeriscope}
+            />
+          </HStack>
         </Flex>
         <Flex flex={1} flexDirection="column" overflow="auto">
           {children}
