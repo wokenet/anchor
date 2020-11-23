@@ -15,7 +15,8 @@
     "module": "esnext",
     "baseUrl": ".",
     "paths": {
-      "matrix-js-sdk": ["node_modules/@types/matrix-js-sdk/index.d.ts"]
+      "matrix-js-sdk": ["node_modules/@types/matrix-js-sdk/index.d.ts"],
+      "react": ["node_modules/react"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

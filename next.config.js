@@ -19,6 +19,22 @@ module.exports = {
         },
       ],
     })
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [
+        defaultLoaders.babel,
+        {
+          loader: '@svgr/webpack',
+          options: {
+            svgoConfig: {
+              plugins: {
+                removeViewBox: false,
+              },
+            },
+          },
+        },
+      ],
+    })
     return config
   },
 }
