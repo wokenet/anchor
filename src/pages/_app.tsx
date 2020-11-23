@@ -1,8 +1,10 @@
 import * as React from 'react'
 import type { AppProps } from 'next/app'
 import { extendTheme, ChakraProvider } from '@chakra-ui/react'
+import * as Sentry from '@sentry/react'
 
 import '../styles.css'
+import { sentryDSN } from '../../constants.json'
 
 const customTheme = extendTheme({
   config: {
@@ -107,5 +109,9 @@ function App({ Component, pageProps }: AppProps) {
     </ChakraProvider>
   )
 }
+
+Sentry.init({
+  dsn: sentryDSN,
+})
 
 export default App
