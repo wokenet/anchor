@@ -154,7 +154,7 @@ export default function AboutPage({
           Open Technology
         </Heading>
         <Text>
-          We build custom tools to operate our stream and website and distribute
+          We build custom tools to operate our stream + website and distribute
           them free to all:
         </Text>
         <VStack spacing={4} my={4} alignItems="flex-start">
