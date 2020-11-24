@@ -9,6 +9,8 @@ import {
   FaTwitter,
   FaPeriscope,
   FaTwitch,
+  FaDiscord,
+  FaRedditAlien,
 } from 'react-icons/fa'
 
 import LogoIcon from 'woke-content/images/logo.svg'
@@ -104,6 +106,11 @@ export default function Page({ title, children }: PageProps) {
               url="https://www.periscope.tv/watchwoke"
               icon={FaPeriscope}
             />
+            <Platform
+              url="https://www.reddit.com/r/woke"
+              icon={FaRedditAlien}
+            />
+            <Platform url="https://discord.gg/woke" icon={FaDiscord} />
           </HStack>
         </Flex>
         <Flex flex={1} flexDirection="column" overflow="auto">
