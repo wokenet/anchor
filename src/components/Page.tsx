@@ -94,10 +94,7 @@ export default function Page({ title, children }: PageProps) {
           <NavLink href="/streams">streams</NavLink>
           <NavLink href="/about">about</NavLink>
           <HStack ml={4} spacing={4}>
-            <Platform
-              url="https://www.youtube.com/WatchWOKE"
-              icon={FaYoutube}
-            />
+            <Platform url="https://www.youtube.com/StayWOKE" icon={FaYoutube} />
             <Platform
               url="https://www.facebook.com/watchwoke"
               icon={FaFacebook}
