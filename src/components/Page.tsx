@@ -13,6 +13,7 @@ import {
   FaRedditAlien,
 } from 'react-icons/fa'
 
+import { GATag } from '../googleAnalytics'
 import LogoIcon from 'woke-content/images/logo.svg'
 
 function NavLink({ href, children }) {
@@ -70,6 +71,7 @@ export default function Page({ title, children }: PageProps) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link rel="icon" href="/static/eye112.png"></link>
       </Head>
+      <GATag />
       <Flex direction="column" width="100vw" height="100vh" overflow="hidden">
         <Flex
           as="header"

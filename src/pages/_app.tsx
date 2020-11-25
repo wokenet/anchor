@@ -1,10 +1,12 @@
 import * as React from 'react'
+import { useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import { extendTheme, ChakraProvider } from '@chakra-ui/react'
 import * as Sentry from '@sentry/react'
 
 import '../styles.css'
 import { sentryDSN } from '../../constants.json'
+import { useGAPageviewTracking } from 'src/googleAnalytics'
 
 const customTheme = extendTheme({
   config: {
@@ -103,6 +105,8 @@ const customTheme = extendTheme({
 })
 
 function App({ Component, pageProps }: AppProps) {
+  useGAPageviewTracking()
+
   return (
     <ChakraProvider theme={customTheme}>
       <Component {...pageProps} />
