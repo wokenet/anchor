@@ -69,7 +69,7 @@ export default function Page({ title, children }: PageProps) {
           {title ? ' – ' : ''}WOKE.NET
         </title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <link rel="icon" href="/static/eye112.png"></link>
+        <link rel="icon" href="/static/favicon.png"></link>
       </Head>
       <GATag />
       <Flex direction="column" width="100vw" height="100vh" overflow="hidden">
