@@ -6,6 +6,7 @@ import {
   Room,
   MatrixEvent,
   MatrixClient,
+  RoomMember,
 } from 'matrix-js-sdk'
 import findLast from 'lodash/findLast'
 
@@ -41,6 +42,7 @@ function useAnchor() {
   const [room, setRoom] = useState<Room>()
   const [timeline, setTimeline] = useState<MatrixEvent[]>()
   const [announcement, setAnnouncement] = useState<string>()
+  const [onlineCount, setOnlineCount] = useState<number>()
   const [view, setView] = useState<ViewData>()
   const [actions, setActions] = useState<AnchorActions>()
 
@@ -70,7 +72,7 @@ function useAnchor() {
         client.setGuest(true)
       }
 
-      function getLatestAnnouncement() {
+      function updateLatestAnnouncement() {
         const announcementsRoom = client.getRoom(announcementsRoomId)
         if (!announcementsRoom?.timeline) {
           return
@@ -80,7 +82,15 @@ function useAnchor() {
           (ev) => ev.getType() === 'm.room.message',
         )
         // @ts-ignore
-        return latestAnnouncement?.getContent()?.body
+        setAnnouncement(latestAnnouncement?.getContent()?.body)
+      }
+
+      function updateOnlineCount() {
+        // @ts-ignore
+        const members = client.getRoom(chatRoomId)?.currentState.getMembers()
+        const onlineCount =
+          members?.filter((m) => m.user?.presence === 'online').length ?? 0
+        setOnlineCount(onlineCount)
       }
 
       client.on('Room.timeline', (event: MatrixEvent, room: Room) => {
@@ -92,7 +102,7 @@ function useAnchor() {
           setRoom(roomUpdate)
           setTimeline([...roomUpdate?.timeline])
         } else if (room.roomId === announcementsRoomId) {
-          setAnnouncement(getLatestAnnouncement())
+          updateLatestAnnouncement()
         }
       })
 
@@ -111,6 +121,11 @@ function useAnchor() {
           return
         }
         setView(event.getContent())
+        updateOnlineCount()
+      })
+
+      client.on('User.presence', () => {
+        updateOnlineCount()
       })
 
       const chatRoom = client.getRoom(chatRoomId)
@@ -121,7 +136,8 @@ function useAnchor() {
       setRoom(chatRoom)
       setTimeline(chatRoom?.timeline)
 
-      setAnnouncement(getLatestAnnouncement())
+      updateOnlineCount()
+      updateLatestAnnouncement()
 
       const anchorViewEvent = chatRoom.currentState.getStateEvents(
         AnchorViewEventType,
@@ -195,7 +211,7 @@ function useAnchor() {
     }
   }, [])
 
-  return { userInfo, room, timeline, announcement, view, actions }
+  return { userInfo, room, timeline, announcement, view, onlineCount, actions }
 }
 
 export default useAnchor

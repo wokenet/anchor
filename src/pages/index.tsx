@@ -20,6 +20,7 @@ import {
   AlertDescription,
   AlertIcon,
   CloseButton,
+  Icon,
 } from '@chakra-ui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { Scrollbars } from 'react-custom-scrollbars'
@@ -29,6 +30,7 @@ import Page from '../components/Page'
 import Message from '../components/Message'
 import View from '../components/View'
 import useAnchor from '../useAnchor'
+import { FaEye } from 'react-icons/fa'
 
 const RECAPTCHA_WIDTH = '304px'
 
@@ -131,7 +133,7 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
 
 function Announcement({ onClose, children }) {
   return (
-    <Alert status="info" bg="gray.700" flexShrink={0}>
+    <Alert status="info" bg="gray.700" flexShrink={0} zIndex={100}>
       <AlertIcon color="orangeYellow.500" />
       <AlertDescription>{children}</AlertDescription>
       <CloseButton onClick={onClose} position="absolute" right="8px" />
@@ -143,7 +145,15 @@ function Home() {
   // TODO: registration/login error handling
   const messagesRef = useRef<Scrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
-  const { userInfo, timeline, announcement, view, actions } = useAnchor()
+  const {
+    userInfo,
+    timeline,
+    announcement,
+    view,
+    room,
+    onlineCount,
+    actions,
+  } = useAnchor()
   const {
     isOpen: isAuthOpen,
     onOpen: onAuthOpen,
@@ -204,7 +214,11 @@ function Home() {
         direction={{ base: 'column', lg: 'row' }}
         overflow="hidden"
       >
-        <Flex flexDirection="column" flex={{ base: 0, lg: 1 }}>
+        <Flex
+          flexDirection="column"
+          flex={{ base: 0, lg: 1 }}
+          position="relative"
+        >
           {isAnnouncementOpen && (
             <Announcement onClose={onAnnouncementClose}>
               {announcement}
@@ -218,6 +232,22 @@ function Home() {
           >
             {view?.kind && <View view={view} isMuted={isMuted} />}
           </Center>
+          {room && (
+            <Flex
+              position="absolute"
+              bottom="0"
+              right={{ base: 'unset', lg: 0 }}
+              left={{ base: 0, lg: 'unset' }}
+              color="flame.100"
+              alignItems="center"
+              mx={4}
+              my={{ base: 2, lg: 4 }}
+              opacity={{ base: 0.5, lg: 1 }}
+            >
+              <Icon as={FaEye} color="flame.500" boxSize={5} mr={2} />
+              {onlineCount} online
+            </Flex>
+          )}
         </Flex>
         <Flex
           flexDir="column"
