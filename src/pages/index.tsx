@@ -259,7 +259,7 @@ function Home() {
               mx={4}
               mb={4}
             >
-              Log in to chat
+              Start chatting
             </Button>
           ) : (
             <form onSubmit={handleSend} style={{ display: 'flex' }}>
