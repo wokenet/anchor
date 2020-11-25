@@ -297,7 +297,7 @@ function Home() {
                 m={2}
                 px={2}
                 flex={1}
-                focusBorderColor="deepRed.700"
+                focusBorderColor="flame.600"
                 placeholder="Say something"
                 value={messageText}
                 onChange={(ev) => setMessageText(ev.target.value)}
