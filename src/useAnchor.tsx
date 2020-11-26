@@ -108,13 +108,12 @@ function useAnchor() {
 
       if (client.isGuest()) {
         await client.peekInRoom(chatRoomId)
-        await client.peekInRoom(announcementsRoomId)
       } else {
         await client.startClient({ initialSyncLimit: 40 })
         await once(client, 'sync')
         await client.joinRoom(chatRoomId)
-        await client.joinRoom(announcementsRoomId)
       }
+      await client.peekInRoom(announcementsRoomId)
 
       client.on('RoomState.events', (event) => {
         if (event.getType() !== AnchorViewEventType) {
