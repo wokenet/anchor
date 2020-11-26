@@ -131,9 +131,9 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
   )
 }
 
-function Announcement({ onClose, children }) {
+function Announcement({ onClose, children, zIndex }) {
   return (
-    <Alert status="info" bg="gray.700" flexShrink={0} zIndex={100}>
+    <Alert status="info" bg="gray.700" flexShrink={0} zIndex={zIndex}>
       <AlertIcon color="orangeYellow.500" />
       <AlertDescription>{children}</AlertDescription>
       <CloseButton onClick={onClose} position="absolute" right="8px" />
@@ -220,7 +220,7 @@ function Home() {
           position="relative"
         >
           {isAnnouncementOpen && (
-            <Announcement onClose={onAnnouncementClose}>
+            <Announcement onClose={onAnnouncementClose} zIndex={100}>
               {announcement}
             </Announcement>
           )}
