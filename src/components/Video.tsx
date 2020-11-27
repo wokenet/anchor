@@ -14,8 +14,9 @@ import {
   Grid,
   HStack,
   IconButton,
-  Spacer,
   AspectRatio,
+  GridItem,
+  Spinner,
 } from '@chakra-ui/react'
 import Hls from 'hls.js'
 import {
@@ -51,6 +52,7 @@ const Video = forwardRef(
   ) => {
     const containerRef = useRef<HTMLDivElement>()
     const videoRef = useRef<HTMLVideoElement>()
+    const [isWaiting, setIsWaiting] = useState(true)
     const [isPlaying, setIsPlaying] = useState(false)
     const [isMuted, setIsMuted] = useState(false)
     const [isFullscreen, setIsFullscreen] = useState(false)
@@ -109,6 +111,14 @@ const Video = forwardRef(
         setIsPlaying(false)
       }
 
+      function setWaiting() {
+        setIsWaiting(true)
+      }
+
+      function setNotWaiting() {
+        setIsWaiting(false)
+      }
+
       function updateMuted() {
         setIsMuted(video.muted)
       }
@@ -119,6 +129,8 @@ const Video = forwardRef(
 
       video.addEventListener('play', play)
       video.addEventListener('pause', pause)
+      video.addEventListener('waiting', setWaiting)
+      video.addEventListener('playing', setNotWaiting)
       video.addEventListener('volumechange', updateMuted)
       containerRef.current.addEventListener(
         'fullscreenchange',
@@ -126,10 +138,12 @@ const Video = forwardRef(
       )
 
       return () => {
-        video.removeEventListener('play', play)
-        video.removeEventListener('pause', pause)
-        video.removeEventListener('volumechange', updateMuted)
-        containerRef.current.removeEventListener(
+        video?.removeEventListener('play', play)
+        video?.removeEventListener('pause', pause)
+        video?.removeEventListener('waiting', setWaiting)
+        video?.removeEventListener('playing', setNotWaiting)
+        video?.removeEventListener('volumechange', updateMuted)
+        containerRef.current?.removeEventListener(
           'fullscreenchange',
           updateFullscreen,
         )
@@ -140,7 +154,11 @@ const Video = forwardRef(
 
     return (
       <Flex width="full" maxHeight="full" pb={{ base: 0, lg: 14 }}>
-        <AspectRatio width="full" ratio={16 / 9}>
+        <AspectRatio
+          width="full"
+          ratio={16 / 9}
+          boxShadow="0 0 4rem black inset"
+        >
           <Flex ref={containerRef}>
             <Grid
               position="absolute"
@@ -149,26 +167,35 @@ const Video = forwardRef(
               right="0"
               bottom="0"
               m={2}
+              templateRows="repeat(3, 1fr)"
               templateColumns="repeat(3, 1fr)"
               alignItems="end"
-              opacity={isPlaying ? 0 : 1}
+              opacity={isPlaying && !isWaiting ? 0 : 1}
               _hover={{ opacity: 1 }}
               transitionProperty="opacity"
               transitionDuration="normal"
               zIndex={100}
             >
-              <Spacer />
-              <Center>
-                <ControlButton
-                  onClick={isPlaying ? handlePause : handlePlay}
-                  icon={isPlaying ? <FaPause /> : <FaPlay />}
-                  size="lg"
-                  fontSize="3xl"
-                  boxSize={20}
-                  aria-label={isPlaying ? 'Pause' : 'Play'}
-                />
-              </Center>
-              <HStack justifyContent="flex-end">
+              <Spinner
+                gridArea="2 / 2"
+                alignSelf="center"
+                justifySelf="center"
+                boxSize={24}
+                opacity={isWaiting ? 1 : 0}
+                transitionProperty="opacity"
+                transitionDuration="normal"
+              />
+              <ControlButton
+                gridArea="3 / 2"
+                justifySelf="center"
+                onClick={isPlaying ? handlePause : handlePlay}
+                icon={isPlaying ? <FaPause /> : <FaPlay />}
+                size="lg"
+                fontSize="3xl"
+                boxSize={20}
+                aria-label={isPlaying ? 'Pause' : 'Play'}
+              />
+              <HStack gridArea="3 / 3" justifyContent="flex-end">
                 <ControlButton
                   onClick={isMuted ? handleUnmute : handleMute}
                   icon={isMuted ? <FaVolumeMute /> : <FaVolumeDown />}
