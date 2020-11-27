@@ -7,15 +7,17 @@ import { ViewData } from '../useAnchor'
 
 type ViewProps = {
   view: ViewData
-  isMuted: boolean
 }
-export default function View({
-  view: { kind, url, fill },
-  isMuted,
-}: ViewProps) {
-  const [initialMuted] = useState(isMuted)
+export default function View({ view: { kind, url, fill } }: ViewProps) {
+  const [initialMuted, setInitialMuted] = useState(true)
   if (kind === 'hls') {
-    return <Video src={url} maxHeight="full" muted={isMuted} />
+    return (
+      <Video
+        src={url}
+        muted={initialMuted}
+        onUnmute={() => setInitialMuted(false)}
+      />
+    )
   } else if (kind === 'embed') {
     let embedURL: URL
     try {

@@ -185,15 +185,10 @@ function Home() {
         : false,
   })
   const [messageText, setMessageText] = useState('')
-  const [isMuted, setIsMuted] = useState(true)
 
   function handleDismissIntro() {
     onIntroClose()
     localStorage.setItem(INTRO_SEEN_KEY, '1')
-  }
-
-  function handleUnmute() {
-    setIsMuted(false)
   }
 
   async function handleRegister(username, password, captchaToken) {
@@ -249,13 +244,8 @@ function Home() {
               {announcement}
             </Announcement>
           )}
-          <Center
-            onClick={handleUnmute}
-            flex={1}
-            overflow="hidden"
-            backgroundColor="gray.950"
-          >
-            {view?.kind && <View view={view} isMuted={isMuted} />}
+          <Center flex={1} overflow="hidden" backgroundColor="gray.950">
+            {view?.kind && <View view={view} />}
           </Center>
           {onlineCount !== undefined && (
             <Flex
