@@ -42,7 +42,6 @@ function useAnchor() {
   const [room, setRoom] = useState<Room>()
   const [timeline, setTimeline] = useState<MatrixEvent[]>()
   const [announcement, setAnnouncement] = useState<string>()
-  const [onlineCount, setOnlineCount] = useState<number>()
   const [view, setView] = useState<ViewData>()
   const [actions, setActions] = useState<AnchorActions>()
 
@@ -85,14 +84,6 @@ function useAnchor() {
         setAnnouncement(latestAnnouncement?.getContent()?.body)
       }
 
-      function updateOnlineCount() {
-        // @ts-ignore
-        const members = client.getRoom(chatRoomId)?.currentState.getMembers()
-        const onlineCount =
-          members?.filter((m) => m.user?.presence === 'online').length ?? 0
-        setOnlineCount(onlineCount)
-      }
-
       client.on('Room.timeline', (event: MatrixEvent, room: Room) => {
         if (room.roomId === chatRoomId) {
           const roomUpdate = client.getRoom(chatRoomId)
@@ -120,11 +111,6 @@ function useAnchor() {
           return
         }
         setView(event.getContent())
-        updateOnlineCount()
-      })
-
-      client.on('User.presence', () => {
-        updateOnlineCount()
       })
 
       const chatRoom = client.getRoom(chatRoomId)
@@ -135,7 +121,6 @@ function useAnchor() {
       setRoom(chatRoom)
       setTimeline(chatRoom?.timeline)
 
-      updateOnlineCount()
       updateLatestAnnouncement()
 
       const anchorViewEvent = chatRoom.currentState.getStateEvents(
@@ -210,7 +195,7 @@ function useAnchor() {
     }
   }, [])
 
-  return { userInfo, room, timeline, announcement, view, onlineCount, actions }
+  return { userInfo, room, timeline, announcement, view, actions }
 }
 
 export default useAnchor

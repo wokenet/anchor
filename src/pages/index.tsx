@@ -34,6 +34,7 @@ import View from '../components/View'
 import useAnchor from '../useAnchor'
 import { FaEye } from 'react-icons/fa'
 import IntroOverlay from 'src/components/IntroOverlay'
+import useTinyCount from 'src/useTinyCount'
 
 const RECAPTCHA_WIDTH = '304px'
 const INTRO_SEEN_KEY = 'intro_seen'
@@ -165,15 +166,8 @@ function Home() {
   // TODO: registration/login error handling
   const messagesRef = useRef<Scrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
-  const {
-    userInfo,
-    timeline,
-    announcement,
-    view,
-    room,
-    onlineCount,
-    actions,
-  } = useAnchor()
+  const { userInfo, timeline, announcement, view, room, actions } = useAnchor()
+  const onlineCount = useTinyCount('/viewers/')
   const {
     isOpen: isAuthOpen,
     onOpen: onAuthOpen,
@@ -263,7 +257,7 @@ function Home() {
           >
             {view?.kind && <View view={view} isMuted={isMuted} />}
           </Center>
-          {room && (
+          {onlineCount !== undefined && (
             <Flex
               position="absolute"
               bottom="0"
