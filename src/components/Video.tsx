@@ -88,6 +88,9 @@ const Video = forwardRef(
 
     useEffect(() => {
       const video = videoRef.current
+
+      setIsMuted(video.muted)
+
       if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = src
         video.addEventListener('loadedmetadata', () => {
@@ -104,7 +107,6 @@ const Video = forwardRef(
 
       function play() {
         setIsPlaying(true)
-        setIsMuted(video.muted)
       }
 
       function pause() {
