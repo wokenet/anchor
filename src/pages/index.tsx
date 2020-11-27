@@ -98,6 +98,7 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
                     <ReCAPTCHA
                       sitekey={recaptchaSiteKey}
                       onChange={setCaptchaToken}
+                      theme="dark"
                     />
                   )}
                   <Flex alignItems="baseline" fontSize="md">
