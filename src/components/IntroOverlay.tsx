@@ -13,7 +13,7 @@ import {
 
 import Eye from 'woke-content/images/eye.svg'
 
-export default function IntroOverlay({ isOpen, onClose }) {
+export default function IntroOverlay({ isOpen, onClose, zIndex }) {
   function handleClickBackdrop(ev) {
     if (ev.target !== ev.currentTarget) {
       return
@@ -32,6 +32,7 @@ export default function IntroOverlay({ isOpen, onClose }) {
         background="rgba(0, 0, 0, .5)"
         overflow="hidden"
         css={{ 'backdrop-filter': 'blur(10px)' }}
+        zIndex={zIndex}
         onClick={handleClickBackdrop}
       >
         <SlideFade in={isOpen}>

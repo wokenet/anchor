@@ -240,7 +240,7 @@ function Home() {
           position="relative"
         >
           {isAnnouncementOpen && (
-            <Announcement onClose={onAnnouncementClose} zIndex={100}>
+            <Announcement onClose={onAnnouncementClose} zIndex={200}>
               {announcement}
             </Announcement>
           )}
@@ -264,7 +264,11 @@ function Home() {
               {onlineCount} watching
             </Flex>
           )}
-          <IntroOverlay isOpen={isIntroOpen} onClose={handleDismissIntro} />
+          <IntroOverlay
+            isOpen={isIntroOpen}
+            onClose={handleDismissIntro}
+            zIndex={100}
+          />
         </Flex>
         <Flex
           flexDir="column"
