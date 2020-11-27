@@ -167,7 +167,7 @@ function Home() {
   const messagesRef = useRef<Scrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
   const { userInfo, timeline, announcement, view, room, actions } = useAnchor()
-  const onlineCount = useTinyCount('/viewers/')
+  const onlineCount = useTinyCount('https://get.woke.net/viewers/')
   const {
     isOpen: isAuthOpen,
     onOpen: onAuthOpen,
