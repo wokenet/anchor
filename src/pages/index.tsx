@@ -31,8 +31,10 @@ import Message from '../components/Message'
 import View from '../components/View'
 import useAnchor from '../useAnchor'
 import { FaEye } from 'react-icons/fa'
+import IntroOverlay from 'src/components/IntroOverlay'
 
 const RECAPTCHA_WIDTH = '304px'
+const INTRO_SEEN_KEY = 'intro_seen'
 
 function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
   const [mode, setMode] = useState<'login' | 'register'>('register')
@@ -164,8 +166,19 @@ function Home() {
     onOpen: onAnnouncementOpen,
     onClose: onAnnouncementClose,
   } = useDisclosure()
+  const { isOpen: isIntroOpen, onClose: onIntroClose } = useDisclosure({
+    defaultIsOpen:
+      typeof localStorage !== 'undefined'
+        ? !localStorage.getItem(INTRO_SEEN_KEY)
+        : false,
+  })
   const [messageText, setMessageText] = useState('')
   const [isMuted, setIsMuted] = useState(true)
+
+  function handleDismissIntro() {
+    onIntroClose()
+    localStorage.setItem(INTRO_SEEN_KEY, '1')
+  }
 
   function handleUnmute() {
     setIsMuted(false)
@@ -243,11 +256,13 @@ function Home() {
               mx={4}
               my={{ base: 2, lg: 4 }}
               opacity={{ base: 0.5, lg: 1 }}
+              zIndex={200}
             >
               <Icon as={FaEye} color="flame.500" boxSize={5} mr={2} />
               {onlineCount} online
             </Flex>
           )}
+          <IntroOverlay isOpen={isIntroOpen} onClose={handleDismissIntro} />
         </Flex>
         <Flex
           flexDir="column"
