@@ -185,7 +185,7 @@ export default function AboutPage({
         </Heading>
         <VStack spacing={2} my={4} alignItems="flex-start" fontSize="sm">
           {ledger ? (
-            ledger.map((row) => <LedgerRow {...row} />)
+            ledger.map((row, idx) => <LedgerRow key={idx} {...row} />)
           ) : (
             <Text>Error loading ledger data.</Text>
           )}
