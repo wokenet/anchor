@@ -21,6 +21,8 @@ import {
   AlertIcon,
   CloseButton,
   Icon,
+  Divider,
+  Link,
 } from '@chakra-ui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { Scrollbars } from 'react-custom-scrollbars'
@@ -116,13 +118,28 @@ function AuthDrawer({ isOpen, onClose, finalFocusRef, onRegister, onLogin }) {
                   </Flex>
                 </VStack>
               </DrawerBody>
-              <DrawerFooter>
-                <Button variant="outline" mr={3} onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button type="submit" colorScheme="orangeYellow">
-                  {mode === 'register' ? 'Register' : 'Login'}
-                </Button>
+              <DrawerFooter flexDirection="column" w="full">
+                <Flex>
+                  <Button variant="outline" mr={3} onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" colorScheme="orangeYellow">
+                    {mode === 'register' ? 'Register' : 'Login'}
+                  </Button>
+                </Flex>
+                <Divider my={8} />
+                <Text color="gray.300">
+                  WOKE.NET is brand new and we're still ironing out bugs. If you
+                  run into any unexpected problems, please{' '}
+                  <Link
+                    href="https://github.com/wokenet/anchor/issues"
+                    color="orangeYellow.200"
+                    isExternal
+                  >
+                    let us know
+                  </Link>
+                  . :)
+                </Text>
               </DrawerFooter>
               <DrawerCloseButton />
             </Center>
