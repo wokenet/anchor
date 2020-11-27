@@ -271,7 +271,7 @@ function Home() {
               zIndex={200}
             >
               <Icon as={FaEye} color="flame.500" boxSize={5} mr={2} />
-              {onlineCount} online
+              {onlineCount} watching
             </Flex>
           )}
           <IntroOverlay isOpen={isIntroOpen} onClose={handleDismissIntro} />
