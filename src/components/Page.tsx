@@ -2,7 +2,7 @@ import * as React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Box, Flex, HStack, Icon, Link as ChakraLink } from '@chakra-ui/react'
+import { Flex, HStack, Icon, Link as ChakraLink } from '@chakra-ui/react'
 import {
   FaYoutube,
   FaFacebook,
@@ -15,7 +15,6 @@ import {
 
 import { GATag } from '../googleAnalytics'
 import LogoIcon from 'woke-content/images/logo.svg'
-import FooterLinks from '../components/FooterLinks'
 
 function NavLink({ href, children }) {
   const { pathname } = useRouter()
