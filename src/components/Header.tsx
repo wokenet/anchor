@@ -49,7 +49,14 @@ function NavLink({ href, children }) {
 
 function Platform({ url, icon }) {
   return (
-    <ChakraLink href={url} isExternal>
+    <ChakraLink
+      display="flex"
+      href={url}
+      px={2}
+      py={1}
+      borderRadius="sm"
+      isExternal
+    >
       <Icon
         as={icon}
         boxSize={6}
@@ -66,7 +73,6 @@ export default function Header() {
       as="header"
       bg="black"
       p={2}
-      pr={4}
       fontSize={{ base: 16, lg: 18 }}
       alignItems="center"
     >
@@ -84,7 +90,7 @@ export default function Header() {
       <NavLink href="/streams">streams</NavLink>
       <NavLink href="/about">about</NavLink>
       <Spacer flex="1" />
-      <HStack ml={4} spacing={4}>
+      <HStack ml={2} spacing={2}>
         <Platform url="https://www.youtube.com/StayWOKE" icon={FaYoutube} />
         <Platform url="https://www.facebook.com/watchwoke" icon={FaFacebook} />
         <Platform url="https://www.twitch.tv/woke" icon={FaTwitch} />

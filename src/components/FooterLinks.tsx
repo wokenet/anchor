@@ -9,6 +9,9 @@ function FooterLink({ href, children }) {
         color="orangeYellow.800"
         fontFamily="Oswald"
         fontSize="sm"
+        px={2}
+        py={1}
+        borderRadius="sm"
         _hover={{
           color: 'orangeYellow.600',
           textDecoration: 'none',
@@ -25,7 +28,7 @@ export default function FooterLinks(
   props: React.ComponentProps<typeof HStack>,
 ) {
   return (
-    <HStack flexShrink={0} spacing={6} px={4} h="14" bg="gray.950" {...props}>
+    <HStack flexShrink={0} spacing={4} px={4} h="14" bg="gray.950" {...props}>
       <FooterLink href="/contact">contact</FooterLink>
       <FooterLink href="/engage">engage</FooterLink>
       <FooterLink href="/report">DMCA</FooterLink>
