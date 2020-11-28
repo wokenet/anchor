@@ -15,6 +15,7 @@ import {
   IconButton,
   AspectRatio,
   Spinner,
+  useToken,
 } from '@chakra-ui/react'
 import Hls from 'hls.js'
 import {
@@ -48,6 +49,7 @@ const Video = forwardRef(
     { src, onUnmute, ...props }: VideoProps,
     ref: ForwardedRef<HTMLVideoElement>,
   ) => {
+    const orangeYellow300 = useToken('colors', 'orangeYellow.300')
     const containerRef = useRef<HTMLDivElement>()
     const videoRef = useRef<HTMLVideoElement>()
     const [isWaiting, setIsWaiting] = useState(true)
@@ -173,7 +175,7 @@ const Video = forwardRef(
             opacity={isPlaying && !isWaiting ? 0 : 1}
             _hover={{
               opacity: 1,
-              boxShadow: '0 0 20px rgba(255, 255, 255, .1) inset',
+              boxShadow: `0 0 20px ${orangeYellow300}1c inset`,
             }}
             transitionProperty="opacity"
             transitionDuration="normal"
