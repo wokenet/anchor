@@ -34,6 +34,7 @@ import FooterLinks from '../components/FooterLinks'
 import Message from '../components/Message'
 import View from '../components/View'
 import useAnchor from '../useAnchor'
+import Header from '../components/Header'
 import IntroOverlay from '../components/IntroOverlay'
 import useTinyCount from '../useTinyCount'
 
@@ -228,7 +229,7 @@ function Home() {
   }, [timeline])
 
   return (
-    <Page>
+    <Page noHeader>
       <Flex
         display="flex"
         flex="1"
@@ -240,6 +241,7 @@ function Home() {
           flex={{ base: 0, lg: 1 }}
           position="relative"
         >
+          <Header />
           {isAnnouncementOpen && (
             <Announcement onClose={onAnnouncementClose} zIndex={200}>
               {announcement}
@@ -275,6 +277,7 @@ function Home() {
           />
         </Flex>
         <Flex
+          display={!!timeline ? 'flex' : 'none'}
           flexDir="column"
           w={{ base: 'full', lg: 'sm' }}
           flex={{ base: 1, lg: 'none' }}
