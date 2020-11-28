@@ -172,9 +172,9 @@ const Video = forwardRef(
             templateRows="repeat(3, 1fr)"
             templateColumns="repeat(3, 1fr)"
             alignItems="end"
-            opacity={isPlaying && !isWaiting ? 0 : 1}
+            opacity={isPlaying && !isWaiting ? 0 : 0.9}
             _hover={{
-              opacity: 1,
+              opacity: 0.9,
               boxShadow: `0 0 20px ${orangeYellow300}1c inset`,
             }}
             transitionProperty="opacity"
