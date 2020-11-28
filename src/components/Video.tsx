@@ -221,7 +221,7 @@ const Video = forwardRef(
             ref={videoRef}
             opacity={isPlaying ? 1 : 0.5}
             transitionProperty="opacity"
-            transitionDuration="fast"
+            transitionDuration="faster"
             width="full"
             height="full"
             {...props}
