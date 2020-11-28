@@ -9,13 +9,11 @@ import {
 } from 'react'
 import {
   chakra,
-  Center,
   Flex,
   Grid,
   HStack,
   IconButton,
   AspectRatio,
-  GridItem,
   Spinner,
 } from '@chakra-ui/react'
 import Hls from 'hls.js'
