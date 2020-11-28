@@ -15,6 +15,7 @@ import {
 
 import { GATag } from '../googleAnalytics'
 import LogoIcon from 'woke-content/images/logo.svg'
+import FooterLinks from '../components/FooterLinks'
 
 function NavLink({ href, children }) {
   const { pathname } = useRouter()
@@ -72,7 +73,13 @@ export default function Page({ title, children }: PageProps) {
         <link rel="icon" href="/static/favicon.png"></link>
       </Head>
       <GATag />
-      <Flex direction="column" width="100vw" height="100vh" overflow="hidden">
+      <Flex
+        direction="column"
+        width="100vw"
+        height="100vh"
+        bg="gray.950"
+        overflow="hidden"
+      >
         <Flex
           as="header"
           bg="black"

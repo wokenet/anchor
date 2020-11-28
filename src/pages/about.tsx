@@ -17,6 +17,7 @@ import camelCase from 'lodash/camelCase'
 
 import WokeSticker from 'woke-content/images/woke-4x6.svg'
 import Page from 'src/components/Page'
+import FooterLinks from 'src/components/FooterLinks'
 
 const LEDGER_CSV_URL =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSiTpYFeMBAzabZ1BxB0RJfrtJFPReyS9zlhAJP14Xd_3T5TJHAF5jjJsLO1lC33qbdetzCUaU84B_Y/pub?gid=0&single=true&output=csv'
@@ -191,6 +192,7 @@ export default function AboutPage({
           )}
         </VStack>
       </Container>
+      <FooterLinks as="footer" />
     </Page>
   )
 }

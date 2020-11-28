@@ -29,6 +29,7 @@ import { Scrollbars } from 'react-custom-scrollbars'
 
 import { siteName, recaptchaSiteKey } from '../../constants.json'
 import Page from '../components/Page'
+import FooterLinks from '../components/FooterLinks'
 import Message from '../components/Message'
 import View from '../components/View'
 import useAnchor from '../useAnchor'
@@ -247,23 +248,26 @@ function Home() {
           <Center flex={1} overflow="hidden" backgroundColor="gray.950">
             {view?.kind && <View view={view} />}
           </Center>
-          {onlineCount !== undefined && (
-            <Flex
-              position="absolute"
-              bottom="0"
-              right={{ base: 'unset', lg: 0 }}
-              left={{ base: 0, lg: 'unset' }}
-              color="flame.100"
-              alignItems="center"
-              mx={4}
-              my={{ base: 2, lg: 4 }}
-              opacity={{ base: 0.5, lg: 1 }}
-              zIndex={200}
-            >
-              <Icon as={FaEye} color="flame.500" boxSize={5} mr={2} />
-              {onlineCount} watching
-            </Flex>
-          )}
+          <Flex>
+            <FooterLinks flex="1" display={{ base: 'none', lg: 'flex' }} />
+            {onlineCount !== undefined && (
+              <Flex
+                position="absolute"
+                bottom="0"
+                right={{ base: 'unset', lg: 0 }}
+                left={{ base: 0, lg: 'unset' }}
+                color="flame.100"
+                alignItems="center"
+                mx={4}
+                my={{ base: 2, lg: 4 }}
+                opacity={{ base: 0.5, lg: 1 }}
+                zIndex={200}
+              >
+                <Icon as={FaEye} color="flame.500" boxSize={5} mr={2} />
+                {onlineCount} watching
+              </Flex>
+            )}
+          </Flex>
           <IntroOverlay
             isOpen={isIntroOpen}
             onClose={handleDismissIntro}
