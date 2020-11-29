@@ -26,7 +26,6 @@ import {
   FaVolumeDown,
   FaVolumeMute,
 } from 'react-icons/fa'
-import { update } from 'lodash'
 
 const VideoEl = chakra('video')
 
