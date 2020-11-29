@@ -15,8 +15,9 @@ import {
   IconButton,
   AspectRatio,
   Spinner,
-  useToken,
+  useTheme,
 } from '@chakra-ui/react'
+import { transparentize } from '@chakra-ui/theme-tools'
 import Hls from 'hls.js'
 import {
   FaCompress,
@@ -48,7 +49,8 @@ const Video = forwardRef(
     { src, onUnmute, ...props }: VideoProps,
     ref: ForwardedRef<HTMLVideoElement>,
   ) => {
-    const orangeYellow300 = useToken('colors', 'orangeYellow.300')
+    const theme = useTheme()
+    const videoHighlightColor = transparentize('orangeYellow.300', 0.15)(theme)
     const containerRef = useRef<HTMLDivElement>()
     const videoRef = useRef<HTMLVideoElement>()
     const [isWaiting, setIsWaiting] = useState(true)
@@ -174,7 +176,7 @@ const Video = forwardRef(
             opacity={isPlaying && !isWaiting ? 0 : 0.9}
             _hover={{
               opacity: 0.9,
-              boxShadow: `0 0 20px ${orangeYellow300}1c inset`,
+              boxShadow: `0 0 20px ${videoHighlightColor} inset`,
             }}
             transitionProperty="opacity"
             transitionDuration="normal"

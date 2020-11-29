@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "@chakra-ui/react": "^1.0.0",
+    "@chakra-ui/theme-tools": "^1.0.1",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@sentry/react": "^5.27.4",
