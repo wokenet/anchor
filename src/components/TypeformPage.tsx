@@ -19,7 +19,7 @@ export default function TypeformPage({ title, formId }: TypeformPageProps) {
   }
 
   return (
-    <Page title={title}>
+    <Page title={title} noFooter>
       <Box
         ref={frame}
         as="iframe"

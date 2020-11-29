@@ -4,13 +4,20 @@ import { Flex } from '@chakra-ui/react'
 
 import { GATag } from '../googleAnalytics'
 import Header from '../components/Header'
+import FooterLinks from './FooterLinks'
 
 type PageProps = {
   title?: string
   noHeader?: boolean
+  noFooter?: boolean
   children: React.ReactNode
 }
-export default function Page({ title, noHeader, children }: PageProps) {
+export default function Page({
+  title,
+  noHeader,
+  noFooter,
+  children,
+}: PageProps) {
   return (
     <>
       <Head>
@@ -33,6 +40,7 @@ export default function Page({ title, noHeader, children }: PageProps) {
         <Flex flex={1} flexDirection="column" overflow="auto">
           {children}
         </Flex>
+        {!noFooter && <FooterLinks as="footer" />}
       </Flex>
     </>
   )

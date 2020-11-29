@@ -229,7 +229,7 @@ function Home() {
   }, [timeline])
 
   return (
-    <Page noHeader>
+    <Page noHeader noFooter>
       <Flex
         display="flex"
         flex="1"

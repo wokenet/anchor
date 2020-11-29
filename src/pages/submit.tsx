@@ -5,7 +5,7 @@ import Page from 'src/components/Page'
 
 export default function SubmitPage() {
   return (
-    <Page title="submit streams & videos">
+    <Page title="submit streams & videos" noFooter>
       <Box
         as="iframe"
         src="//docs.google.com/forms/d/e/1FAIpQLSfQqbjsj4oxNDh9cPE-FWMCwVIJ9i862JgeDnqoyF4HOwm98Q/viewform"
