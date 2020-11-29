@@ -259,10 +259,14 @@ function Home() {
                 right={{ base: 'unset', lg: 0 }}
                 left={{ base: 0, lg: 'unset' }}
                 color="flame.100"
+                background={{ base: 'gray.950', lg: 'none' }}
                 alignItems="center"
-                mx={4}
+                mx={2}
                 my={{ base: 2, lg: 4 }}
-                opacity={{ base: 0.5, lg: 1 }}
+                p={1}
+                px={2}
+                borderRadius="md"
+                opacity={{ base: 0.9, lg: 1 }}
                 zIndex={200}
               >
                 <Icon as={FaEye} color="flame.500" boxSize={5} mr={2} />
