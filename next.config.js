@@ -20,6 +20,16 @@ module.exports = {
       ],
     })
     config.module.rules.push({
+      test: /.*\.mp4$/i,
+      use: {
+        loader: 'file-loader',
+        options: {
+          publicPath: '/_next/static/',
+          outputPath: 'static/',
+        },
+      },
+    })
+    config.module.rules.push({
       test: /\.svg$/,
       use: [
         defaultLoaders.babel,

@@ -29,7 +29,7 @@ type UserInfo = {
 }
 
 export type ViewData = {
-  kind: 'hls' | 'embed'
+  kind: 'hls' | 'embed' | 'offline'
   url: string
   fill: boolean
 }

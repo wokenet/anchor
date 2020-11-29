@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { AspectRatio, Box } from '@chakra-ui/react'
 
 import Video from './Video'
+import OfflinePlaceholder from './OfflinePlaceholder'
 import { ViewData } from '../useAnchor'
 
 type ViewProps = {
@@ -10,6 +11,11 @@ type ViewProps = {
 }
 export default function View({ view: { kind, url, fill } }: ViewProps) {
   const [initialMuted, setInitialMuted] = useState(true)
+
+  if (!url || kind === 'offline') {
+    return <OfflinePlaceholder />
+  }
+
   if (kind === 'hls') {
     return (
       <Video

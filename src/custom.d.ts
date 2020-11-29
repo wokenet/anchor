@@ -9,3 +9,7 @@ declare module '*.svg' {
 declare module '*.png' {
   export default string
 }
+
+declare module '*.mp4' {
+  export default string
+}
