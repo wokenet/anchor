@@ -240,6 +240,7 @@ function Home() {
           flexDirection="column"
           flex={{ base: 0, lg: 1 }}
           position="relative"
+          overflow={{ base: 'visible', lg: 'hidden' }}
         >
           <Header />
           {isAnnouncementOpen && (
