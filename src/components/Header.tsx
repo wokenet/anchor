@@ -67,7 +67,7 @@ function Platform({ url, icon }) {
   )
 }
 
-export default function Header() {
+export default function Header(props: React.ComponentProps<typeof Flex>) {
   return (
     <Flex
       as="header"
@@ -75,6 +75,7 @@ export default function Header() {
       p={2}
       fontSize={{ base: 16, lg: 18 }}
       alignItems="center"
+      {...props}
     >
       <Link href="/" passHref>
         <Icon

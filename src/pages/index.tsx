@@ -242,7 +242,7 @@ function Home() {
           position="relative"
           overflow={{ base: 'visible', lg: 'hidden' }}
         >
-          <Header />
+          <Header zIndex={200} />
           {isAnnouncementOpen && (
             <Announcement onClose={onAnnouncementClose} zIndex={200}>
               {announcement}
