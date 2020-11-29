@@ -1,9 +1,11 @@
+const path = require('path')
 const { emoteSize } = require('./constants.json')
 
 module.exports = {
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push({
-      test: /emotes\/.*\.png$/i,
+      test: /.*\.png$/i,
+      include: /woke-content/,
       use: [
         {
           loader: 'webpack-image-resize-loader',
