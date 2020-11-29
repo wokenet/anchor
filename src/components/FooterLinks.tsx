@@ -29,9 +29,10 @@ export default function FooterLinks(
 ) {
   return (
     <HStack flexShrink={0} spacing={4} px={4} h="14" bg="gray.950" {...props}>
+      <FooterLink href="/about">about</FooterLink>
       <FooterLink href="/contact">contact</FooterLink>
-      <FooterLink href="/engage">engage</FooterLink>
       <FooterLink href="/report">DMCA</FooterLink>
+      <FooterLink href="/appeal">appeal</FooterLink>
     </HStack>
   )
 }

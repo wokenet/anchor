@@ -86,9 +86,9 @@ export default function Header() {
         />
       </Link>
       <NavLink href="/">watch</NavLink>
-      <NavLink href="/submit">submit</NavLink>
       <NavLink href="/streams">streams</NavLink>
-      <NavLink href="/about">about</NavLink>
+      <NavLink href="/submit">submit</NavLink>
+      <NavLink href="/engage">engage</NavLink>
       <Spacer flex="1" />
       <HStack ml={2} spacing={2}>
         <Platform url="https://www.youtube.com/StayWOKE" icon={FaYoutube} />
