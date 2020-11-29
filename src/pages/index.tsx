@@ -23,6 +23,7 @@ import {
   Icon,
   Divider,
   Link,
+  SkeletonText,
 } from '@chakra-ui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { Scrollbars } from 'react-custom-scrollbars'
@@ -234,6 +235,7 @@ function Home() {
         display="flex"
         flex="1"
         direction={{ base: 'column', lg: 'row' }}
+        bg="gray.950"
         overflow="hidden"
       >
         <Flex
@@ -282,7 +284,6 @@ function Home() {
           />
         </Flex>
         <Flex
-          display={!!timeline ? 'flex' : 'none'}
           flexDir="column"
           w={{ base: 'full', lg: 'sm' }}
           flex={{ base: 1, lg: 'none' }}
@@ -295,7 +296,7 @@ function Home() {
             autoHide
             universal
           >
-            {timeline &&
+            {timeline ? (
               timeline.map((ev) => {
                 if (
                   ev.getType() !== 'm.room.message' ||
@@ -312,7 +313,16 @@ function Home() {
                     _odd={{ backgroundColor: 'gray.900' }}
                   />
                 )
-              })}
+              })
+            ) : (
+              <SkeletonText
+                m={4}
+                noOfLines={10}
+                spacing={4}
+                startColor="gray.800"
+                endColor="gray.900"
+              />
+            )}
           </Scrollbars>
           {!userInfo ? null : userInfo.isGuest ? (
             <Button
