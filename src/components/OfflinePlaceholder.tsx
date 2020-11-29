@@ -14,6 +14,7 @@ export default function OfflinePlacholder() {
           fontSize="3xl"
           color="flame.600"
           textShadow="0 0 5px black"
+          whiteSpace="nowrap"
         >
           WOKE.NET is currently offline.
         </Text>
