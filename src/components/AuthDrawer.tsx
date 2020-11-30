@@ -53,7 +53,7 @@ function RulesPane({ onAccept }) {
             onChange={(ev) => setIsAccepted(ev.target.checked)}
             mb={8}
           >
-            Understood. 👍
+            Alright, understood. 👍
           </Checkbox>
           <Button
             colorScheme="orangeYellow"
