@@ -169,6 +169,7 @@ const Video = forwardRef(
             top="0"
             right="0"
             bottom="0"
+            height="full"
             p={2}
             templateRows="repeat(3, 1fr)"
             templateColumns="repeat(3, 1fr)"
