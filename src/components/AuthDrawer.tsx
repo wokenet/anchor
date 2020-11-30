@@ -32,39 +32,37 @@ const RECAPTCHA_HEIGHT = '78px'
 function RulesPane({ onAccept }) {
   const [isAccepted, setIsAccepted] = useState<boolean>(false)
   return (
-    <Center flexDir="column" h="full">
-      <Scrollbars
-        renderThumbVertical={(props) => (
-          <Box {...props} bgColor="gray.600" borderRadius="full" />
-        )}
-        autoHeightMax="100%"
-        autoHeight
-      >
-        <DrawerHeader textAlign="center">Community Rules</DrawerHeader>
-        <DrawerBody>
-          <VStack alignItems="flex-start" mb={2} spacing={4} color="gray.200">
-            <Rules />
-          </VStack>
-        </DrawerBody>
-        <DrawerFooter flexDirection="column">
-          <Checkbox
-            colorScheme="orangeYellow"
-            isChecked={isAccepted}
-            onChange={(ev) => setIsAccepted(ev.target.checked)}
-            mb={8}
-          >
-            Alright, understood. 👍
-          </Checkbox>
-          <Button
-            colorScheme="orangeYellow"
-            onClick={onAccept}
-            isDisabled={!isAccepted}
-          >
-            Let's chat!
-          </Button>
-        </DrawerFooter>
-      </Scrollbars>
-    </Center>
+    <Scrollbars
+      renderThumbVertical={(props) => (
+        <Box {...props} bgColor="gray.600" borderRadius="full" />
+      )}
+      autoHeightMax="100%"
+      autoHeight
+    >
+      <DrawerHeader textAlign="center">Community Rules</DrawerHeader>
+      <DrawerBody>
+        <VStack alignItems="flex-start" mb={2} spacing={4} color="gray.200">
+          <Rules />
+        </VStack>
+      </DrawerBody>
+      <DrawerFooter flexDirection="column">
+        <Checkbox
+          colorScheme="orangeYellow"
+          isChecked={isAccepted}
+          onChange={(ev) => setIsAccepted(ev.target.checked)}
+          mb={8}
+        >
+          Alright, understood. 👍
+        </Checkbox>
+        <Button
+          colorScheme="orangeYellow"
+          onClick={onAccept}
+          isDisabled={!isAccepted}
+        >
+          Let's chat!
+        </Button>
+      </DrawerFooter>
+    </Scrollbars>
   )
 }
 
