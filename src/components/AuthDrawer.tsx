@@ -26,6 +26,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { siteName, recaptchaSiteKey } from '../../constants.json'
 
 const RECAPTCHA_WIDTH = '304px'
+const RECAPTCHA_HEIGHT = '78px'
 
 function Rule({ title, children }) {
   return (
@@ -107,6 +108,7 @@ function AuthForm({ onRegister, onLogin, onCancel }) {
   const [mode, setMode] = useState<'login' | 'register'>('register')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [isCAPTCHALoaded, setIsCAPTCHALoaded] = useState(false)
   const [captchaToken, setCaptchaToken] = useState<string>()
 
   function handleToggleMode() {
@@ -147,11 +149,13 @@ function AuthForm({ onRegister, onLogin, onCancel }) {
               onChange={(ev) => setPassword(ev.target.value)}
             />
             {mode === 'register' && (
-              <ReCAPTCHA
-                sitekey={recaptchaSiteKey}
-                onChange={setCaptchaToken}
-                theme="dark"
-              />
+              <Box w={RECAPTCHA_WIDTH} h={RECAPTCHA_HEIGHT}>
+                <ReCAPTCHA
+                  sitekey={recaptchaSiteKey}
+                  onChange={setCaptchaToken}
+                  theme="dark"
+                />
+              </Box>
             )}
             <Flex alignItems="baseline" fontSize="md">
               <Text>
