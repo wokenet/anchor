@@ -32,12 +32,12 @@ export default function Page({
         <meta property="og:url" content="https://woke.net/" />
         <meta property="og:title" content="WOKE.NET LIVESTREAM - GET ENGAGED - STAY WOKE!" />
         <meta property="og:description" content="Watch live social movements, collective action &amp; civic engagement. We access, amplify and archive historic livestreams of the disenfranchised." />
-        <meta property="og:image" content="https://woke.net/static/woke-social.png" />
+        <meta property="og:image" content="https://woke.net/static/woke-social.jpg" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://woke.net/" />
         <meta property="twitter:title" content="WOKE.NET LIVESTREAM - GET ENGAGED - STAY WOKE!" />
         <meta property="twitter:description" content="Watch live social movements, collective action &amp; civic engagement. We access, amplify and archive historic livestreams of the disenfranchised." />
-        <meta property="twitter:image" content="https://woke.net/static/woke-social.png" />
+        <meta property="twitter:image" content="https://woke.net/static/woke-social.jpg" />
       </Head>
       <GATag />
       <Flex
