@@ -127,7 +127,7 @@ function Home() {
           <Center flex={1} overflow="hidden" backgroundColor="gray.950">
             {view?.kind && <View view={view} />}
           </Center>
-          <Flex>
+          <Flex zIndex={200}>
             <FooterLinks flex="1" display={{ base: 'none', lg: 'flex' }} />
             {onlineCount !== undefined && (
               <Flex
@@ -144,7 +144,6 @@ function Home() {
                 px={2}
                 borderRadius="md"
                 opacity={{ base: 0.9, lg: 1 }}
-                zIndex={200}
               >
                 <Icon as={FaEye} color="flame.500" boxSize={5} mr={2} />
                 {onlineCount} watching
