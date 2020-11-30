@@ -36,7 +36,7 @@ function RulesPane({ onAccept }) {
       renderThumbVertical={(props) => (
         <Box {...props} bgColor="gray.600" borderRadius="full" />
       )}
-      autoHeightMax="100%"
+      autoHeightMax="100vh"
       autoHeight
     >
       <DrawerHeader textAlign="center">Community Rules</DrawerHeader>
