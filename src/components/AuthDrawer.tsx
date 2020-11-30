@@ -160,7 +160,6 @@ function AuthForm({ onRegister, onLogin, onCancel }) {
             . :)
           </Text>
         </DrawerFooter>
-        <DrawerCloseButton />
       </Center>
     </form>
   )
@@ -193,6 +192,7 @@ export default function AuthDrawer({
               onCancel={onClose}
             />
           )}
+          <DrawerCloseButton />
         </DrawerContent>
       </DrawerOverlay>
     </Drawer>
