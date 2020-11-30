@@ -16,7 +16,7 @@ export default function RulesPage() {
           Hey, this is important! To participate in WOKE.NET, you must follow
           these ground rules:
         </Text>
-        <Rules w="xl" bg="gray.700" px={8} py={4} mb={0} />
+        <Rules w="xl" bg="gray.700" px={8} py={6} mb={0} />
         <Text w="xl" px={8} my={4} color="gray.300">
           Repeat violators will be permanently banned from participating in any
           of our communities. If you believe you were banned in error, see our{' '}
