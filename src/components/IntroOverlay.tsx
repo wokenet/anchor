@@ -31,7 +31,7 @@ export default function IntroOverlay({ isOpen, onClose, zIndex }) {
         bottom="0"
         background="rgba(0, 0, 0, .5)"
         overflow="hidden"
-        css={{ 'backdrop-filter': 'blur(10px)' }}
+        css={{ backdropFilter: 'blur(10px)' }}
         zIndex={zIndex}
         onClick={handleClickBackdrop}
       >
