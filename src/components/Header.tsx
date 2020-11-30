@@ -71,6 +71,7 @@ export default function Header(props: React.ComponentProps<typeof Flex>) {
   return (
     <Flex
       as="header"
+      flexShrink={0}
       bg="black"
       p={2}
       fontSize={{ base: 16, lg: 18 }}

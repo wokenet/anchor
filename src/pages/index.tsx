@@ -114,7 +114,7 @@ function Home() {
       >
         <Flex
           flexDirection="column"
-          flex={{ base: 0, lg: 1 }}
+          flex={{ base: 'initial', lg: 1 }}
           position="relative"
           overflow={{ base: 'visible', lg: 'hidden' }}
         >

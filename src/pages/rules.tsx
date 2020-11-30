@@ -8,7 +8,7 @@ import Rules from '../components/Rules'
 export default function RulesPage() {
   return (
     <Page title="Community Rules">
-      <Center color="gray.200" flex="1" flexDirection="column" mt={8}>
+      <Center color="gray.200" flex="1 0 auto" flexDirection="column" mt={8}>
         <Heading as="h1" size="lg">
           Community Rules
         </Heading>
