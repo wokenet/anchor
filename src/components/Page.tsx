@@ -23,7 +23,7 @@ export default function Page({
       <Head>
         <title>
           {title && title.toUpperCase()}
-          {title ? ' – ' : ''}WOKE.NET LIVESTREAM - GET ENGAGED - STAY WOKE!
+          {title ? ' – ' : ''}WOKE.NET LIVE STREAM - GET ENGAGED - STAY WOKE!
         </title>
         <link rel="icon" href="/static/favicon.png"></link>
         <meta name="description" content="Watch live social movements, collective action &amp; civic engagement. We access, amplify and archive historic livestreams of the disenfranchised." />
