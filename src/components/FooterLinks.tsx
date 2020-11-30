@@ -32,6 +32,7 @@ export default function FooterLinks(
       <FooterLink href="/about">about</FooterLink>
       <FooterLink href="/contact">contact</FooterLink>
       <FooterLink href="/report">DMCA</FooterLink>
+      <FooterLink href="/rules">rules</FooterLink>
       <FooterLink href="/appeal">appeal</FooterLink>
     </HStack>
   )
