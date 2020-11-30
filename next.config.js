@@ -11,8 +11,7 @@ module.exports = {
           loader: 'webpack-image-resize-loader',
           options: {
             width: emoteSize * 2,
-            format: 'webp',
-            quality: 80,
+            format: 'png',
             fileLoaderOptions: {
               publicPath: '/_next/static/emotes/',
               outputPath: 'static/emotes/',
