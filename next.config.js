@@ -3,19 +3,36 @@ const { emoteSize } = require('./constants.json')
 
 module.exports = {
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config.resolveLoader.modules.push(path.resolve(__dirname, 'src/loaders'))
     config.module.rules.push({
       test: /.*\.png$/i,
       include: /woke-content/,
+      use: {
+        loader: 'webpack-image-resize-loader',
+        options: {
+          width: emoteSize * 2,
+          fileLoaderOptions: {
+            publicPath: '/_next/static/emotes/',
+            outputPath: 'static/emotes/',
+          },
+        },
+      },
+    })
+    config.module.rules.push({
+      test: /.*\.gif$/i,
+      include: /woke-content/,
       use: [
         {
-          loader: 'webpack-image-resize-loader',
+          loader: 'file-loader',
           options: {
-            width: emoteSize * 2,
-            format: 'png',
-            fileLoaderOptions: {
-              publicPath: '/_next/static/emotes/',
-              outputPath: 'static/emotes/',
-            },
+            publicPath: '/_next/static/emotes/',
+            outputPath: 'static/emotes/',
+          },
+        },
+        {
+          loader: 'resize-gif-loader',
+          options: {
+            size: emoteSize * 2,
           },
         },
       ],

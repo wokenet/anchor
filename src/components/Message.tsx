@@ -5,10 +5,14 @@ import escapeStringRegexp from 'escape-string-regexp'
 import { emoteSize } from '../../constants.json'
 
 function loadEmotes() {
-  const emoteRequire = require.context('woke-content/emotes/', false, /\.png$/)
+  const emoteRequire = require.context(
+    'woke-content/emotes/',
+    false,
+    /\.(png|gif)$/,
+  )
   const emotes = new Map<string, string>(
     emoteRequire.keys().map((k) => {
-      const emoteText = k.match(/^\.\/(\w+)\.png$/)[1]
+      const emoteText = k.match(/^\.\/(\w+)\.\w+$/)[1]
       return [':' + emoteText.toLowerCase() + ':', emoteRequire(k).default]
     }),
   )

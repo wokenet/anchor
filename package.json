@@ -41,6 +41,7 @@
     "@types/react-google-recaptcha": "^2.1.0",
     "@types/webpack-env": "^1.15.3",
     "file-loader": "^6.2.0",
+    "gifsicle": "^5.1.0",
     "typescript": "^4.0.5",
     "webpack-image-resize-loader": "^3.0.3"
   },
