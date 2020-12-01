@@ -77,7 +77,7 @@ export default function View({ view: { kind, url, fill } }: ViewProps) {
       return iframe
     }
     return (
-      <AspectRatio width="full" ratio={16 / 9}>
+      <AspectRatio width="full" maxHeight="full" ratio={16 / 9}>
         {iframe}
       </AspectRatio>
     )
