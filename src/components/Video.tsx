@@ -16,6 +16,9 @@ import {
   AspectRatio,
   Spinner,
   useTheme,
+  Slider,
+  SliderFilledTrack,
+  SliderTrack,
 } from '@chakra-ui/react'
 import { transparentize } from '@chakra-ui/theme-tools'
 import Hls from 'hls.js'
@@ -24,9 +27,11 @@ import {
   FaExpand,
   FaPause,
   FaPlay,
-  FaVolumeDown,
   FaVolumeMute,
+  FaVolumeOff,
 } from 'react-icons/fa'
+
+const LAST_VOLUME_KEY = 'last_volume'
 
 const VideoEl = chakra('video')
 
@@ -56,6 +61,7 @@ const Video = forwardRef(
     const [isWaiting, setIsWaiting] = useState(true)
     const [isPlaying, setIsPlaying] = useState(false)
     const [isMuted, setIsMuted] = useState(false)
+    const [volume, setVolume] = useState(0)
     const [isFullscreen, setIsFullscreen] = useState(false)
 
     function handlePlay() {
@@ -79,6 +85,16 @@ const Video = forwardRef(
       onUnmute?.()
     }
 
+    function handleChangeVolume(value) {
+      if (videoRef.current) {
+        videoRef.current.volume = value
+        videoRef.current.muted = false
+      }
+      setIsMuted(value === 0 ? true : false)
+      setVolume(value)
+      localStorage.setItem(LAST_VOLUME_KEY, value)
+    }
+
     function handleFullscreen() {
       containerRef.current?.requestFullscreen()
     }
@@ -90,7 +106,7 @@ const Video = forwardRef(
     useEffect(() => {
       const video = videoRef.current
 
-      setIsMuted(video.muted)
+      video.volume = Number(localStorage.getItem(LAST_VOLUME_KEY) || '0.75')
 
       if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = src
@@ -122,7 +138,8 @@ const Video = forwardRef(
         setIsWaiting(false)
       }
 
-      function updateMuted() {
+      function updateVolume() {
+        setVolume(video.muted ? 0 : video.volume)
         setIsMuted(video.muted)
       }
 
@@ -134,18 +151,20 @@ const Video = forwardRef(
       video.addEventListener('pause', pause)
       video.addEventListener('waiting', setWaiting)
       video.addEventListener('playing', setNotWaiting)
-      video.addEventListener('volumechange', updateMuted)
+      video.addEventListener('volumechange', updateVolume)
       containerRef.current.addEventListener(
         'fullscreenchange',
         updateFullscreen,
       )
+
+      updateVolume()
 
       return () => {
         video?.removeEventListener('play', play)
         video?.removeEventListener('pause', pause)
         video?.removeEventListener('waiting', setWaiting)
         video?.removeEventListener('playing', setNotWaiting)
-        video?.removeEventListener('volumechange', updateMuted)
+        video?.removeEventListener('volumechange', updateVolume)
         containerRef.current?.removeEventListener(
           'fullscreenchange',
           updateFullscreen,
@@ -203,13 +222,30 @@ const Video = forwardRef(
               aria-label={isPlaying ? 'Pause' : 'Play'}
             />
             <HStack gridArea="3 / 3" justifyContent="flex-end">
-              <ControlButton
-                onClick={isMuted ? handleUnmute : handleMute}
-                icon={isMuted ? <FaVolumeMute /> : <FaVolumeDown />}
-                colorScheme={isMuted ? 'deepRed' : 'gray'}
-                size="md"
-                aria-label={isMuted ? 'Unmute' : 'Mute'}
-              />
+              <Flex mr="4">
+                <ControlButton
+                  onClick={isMuted ? handleUnmute : handleMute}
+                  icon={isMuted ? <FaVolumeMute /> : <FaVolumeOff />}
+                  colorScheme={isMuted ? 'deepRed' : 'gray'}
+                  size="md"
+                  mr="2"
+                  aria-label={isMuted ? 'Unmute' : 'Mute'}
+                />
+                <Slider
+                  colorScheme="gray"
+                  size="md"
+                  w="20"
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  value={volume}
+                  onChange={handleChangeVolume}
+                >
+                  <SliderTrack>
+                    <SliderFilledTrack bg="flame.600" />
+                  </SliderTrack>
+                </Slider>
+              </Flex>
               <ControlButton
                 onClick={isFullscreen ? handleExitFullscreen : handleFullscreen}
                 icon={isFullscreen ? <FaCompress /> : <FaExpand />}
