@@ -19,7 +19,7 @@ export default function OfflinePlacholder() {
         >
           Searching for livestreams...
         </Text>
-           <a href="/submit"><Button colorScheme="orange">Submit</Button></a>
+           <a href="/submit"><Button variant="outline" colorScheme="orange" size="sm">Submit</Button></a>
        </VStack>
       </Center>
       <VideoEl src={BackgroundVideo} opacity=".075" autoPlay muted loop />
