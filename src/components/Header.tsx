@@ -91,6 +91,7 @@ export default function Header(props: React.ComponentProps<typeof Flex>) {
       <NavLink href="/videos">videos</NavLink>
       <NavLink href="/streams">streams</NavLink>
       <NavLink href="/submit">submit</NavLink>
+      <NavLink href="/streamers">streamers</NavLink>
       <NavLink href="/engage">engage</NavLink>
       <Spacer flex="1" />
       <HStack ml={2} spacing={2}>
