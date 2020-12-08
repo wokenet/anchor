@@ -88,6 +88,7 @@ export default function Header(props: React.ComponentProps<typeof Flex>) {
         />
       </Link>
       <NavLink href="/">watch</NavLink>
+      <NavLink href="/videos">videos</NavLink>
       <NavLink href="/streams">streams</NavLink>
       <NavLink href="/submit">submit</NavLink>
       <NavLink href="/engage">engage</NavLink>
