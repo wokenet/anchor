@@ -5,7 +5,7 @@ import Page from 'src/components/Page'
 
 export default function StreamersPage() {
   return (
-    <Page title="streams" noFooter>
+    <Page title="streamers" noFooter>
       <Box
         as="iframe"
         src="//docs.google.com/spreadsheets/d/e/2PACX-1vShBTaX7y4SyR_BLwnu6dLCsg_tmPESi0nI-CEJxySfv8WOutEiKLSadCWwToXYDo0GVwnKYyQJQR4X/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"
