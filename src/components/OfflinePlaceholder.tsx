@@ -1,14 +1,6 @@
 import * as React from 'react'
 import Link from 'next/link'
-import {
-  Box,
-  Center,
-  Text,
-  chakra,
-  VStack,
-  Button,
-  ButtonGroup,
-} from '@chakra-ui/react'
+import { Center, Flex, Text, chakra, VStack, Button } from '@chakra-ui/react'
 
 import BackgroundVideo from 'woke-content/images/bg.mp4'
 
@@ -16,7 +8,7 @@ const VideoEl = chakra('video')
 
 export default function OfflinePlacholder() {
   return (
-    <Box position="relative" maxHeight="full">
+    <Flex position="relative" w="full" maxHeight="full" justifyContent="center">
       <Center position="absolute" w="full" h="full" zIndex={100}>
         <VStack mb={2}>
           <Text
@@ -42,6 +34,6 @@ export default function OfflinePlacholder() {
         </VStack>
       </Center>
       <VideoEl src={BackgroundVideo} opacity=".075" autoPlay muted loop />
-    </Box>
+    </Flex>
   )
 }
