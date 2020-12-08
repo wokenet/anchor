@@ -8,7 +8,7 @@ const VideoEl = chakra('video')
 export default function OfflinePlacholder() {
   return (
     <Box position="relative" maxHeight="full">
-      <Center position="absolute" w="full" h="full" zIndex={200}>
+      <Center position="absolute" w="full" h="full" zIndex={100}>
        <VStack>
            <Text
           fontFamily="Oswald"
