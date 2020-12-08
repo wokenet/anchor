@@ -1,4 +1,5 @@
 import * as React from 'react'
+import Link from 'next/link'
 import {
   Box,
   Center,
@@ -17,7 +18,7 @@ export default function OfflinePlacholder() {
   return (
     <Box position="relative" maxHeight="full">
       <Center position="absolute" w="full" h="full" zIndex={100}>
-        <VStack>
+        <VStack mb={2}>
           <Text
             fontFamily="Oswald"
             fontSize="3xl"
@@ -27,11 +28,17 @@ export default function OfflinePlacholder() {
           >
             Searching for livestreams...
           </Text>
-          <a href="/submit">
-            <Button variant="outline" colorScheme="orange" size="sm">
-              Submit
+          <Link href="/submit" passHref>
+            <Button
+              opacity="0.85"
+              variant="outline"
+              colorScheme="orange"
+              size="sm"
+              my={1}
+            >
+              Submit stream
             </Button>
-          </a>
+          </Link>
         </VStack>
       </Center>
       <VideoEl src={BackgroundVideo} opacity=".075" autoPlay muted loop />
