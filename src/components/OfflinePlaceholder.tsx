@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box, Center, Text, chakra, VStack } from '@chakra-ui/react'
+import { Box, Center, Text, chakra, VStack, Button, ButtonGroup } from '@chakra-ui/react'
 
 import BackgroundVideo from 'woke-content/images/bg.mp4'
 
@@ -8,7 +8,7 @@ const VideoEl = chakra('video')
 export default function OfflinePlacholder() {
   return (
     <Box position="relative" maxHeight="full">
-      <Center position="absolute" w="full" h="full" zIndex={100}>
+      <Center position="absolute" w="full" h="full" zIndex={200}>
        <VStack>
            <Text
           fontFamily="Oswald"
@@ -19,7 +19,7 @@ export default function OfflinePlacholder() {
         >
           Searching for livestreams...
         </Text>
-           <a href="/submit"><u>Submit New Streams</u></a>
+           <a href="/submit"><Button colorScheme="orange">Submit</Button></a>
        </VStack>
       </Center>
       <VideoEl src={BackgroundVideo} opacity=".075" autoPlay muted loop />
