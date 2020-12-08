@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/react'
 
 import Page from 'src/components/Page'
 
-export default function StreamsPage() {
+export default function VideosPage() {
   return (
     <Page title="streams" noFooter>
       <Box
