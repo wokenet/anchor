@@ -31,6 +31,7 @@ import {
   FaVolumeOff,
 } from 'react-icons/fa'
 
+const DEFAULT_VOLUME = 0.65
 const LAST_VOLUME_KEY = 'last_volume'
 
 const VideoEl = chakra('video')
@@ -79,8 +80,12 @@ const Video = forwardRef(
     }
 
     function handleUnmute() {
-      if (videoRef.current) {
-        videoRef.current.muted = false
+      const vid = videoRef.current
+      if (vid) {
+        vid.muted = false
+        if (vid.volume === 0) {
+          vid.volume = DEFAULT_VOLUME
+        }
       }
       onUnmute?.()
     }
@@ -106,7 +111,9 @@ const Video = forwardRef(
     useEffect(() => {
       const video = videoRef.current
 
-      video.volume = Number(localStorage.getItem(LAST_VOLUME_KEY) || '0.75')
+      video.volume = Number(
+        localStorage.getItem(LAST_VOLUME_KEY) || String(DEFAULT_VOLUME),
+      )
 
       if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = src
@@ -140,7 +147,7 @@ const Video = forwardRef(
 
       function updateVolume() {
         setVolume(video.muted ? 0 : video.volume)
-        setIsMuted(video.muted)
+        setIsMuted(video.muted || video.volume === 0)
       }
 
       function updateFullscreen(ev) {
