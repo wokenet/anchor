@@ -248,6 +248,10 @@ const Video = forwardRef(
                   orientation="vertical"
                   value={volume}
                   onChange={handleChangeVolume}
+                  opacity={isMuted ? 0 : 1}
+                  transform={isMuted ? 'translateY(1rem)' : null}
+                  transitionProperty="opacity, transform"
+                  transitionDuration="normal"
                 >
                   <SliderTrack bg="gray.700" w={3} borderRadius="full">
                     <SliderFilledTrack bg="flame.600" />
