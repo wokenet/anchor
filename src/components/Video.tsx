@@ -253,7 +253,14 @@ const Video = forwardRef(
                   transitionProperty="opacity, transform"
                   transitionDuration="normal"
                 >
-                  <SliderTrack bg="gray.700" w={3} borderRadius="full">
+                  <SliderTrack
+                    bg="gray.700"
+                    borderColor="flame.800"
+                    borderWidth="1px"
+                    borderStyle="solid"
+                    w={3}
+                    borderRadius="full"
+                  >
                     <SliderFilledTrack bg="flame.600" />
                   </SliderTrack>
                 </Slider>
