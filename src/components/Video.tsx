@@ -221,30 +221,35 @@ const Video = forwardRef(
               boxSize={20}
               aria-label={isPlaying ? 'Pause' : 'Play'}
             />
-            <HStack gridArea="3 / 3" justifyContent="flex-end">
-              <Flex mr="4">
+            <HStack
+              gridArea="3 / 3"
+              alignItems="flex-end"
+              justifyContent="flex-end"
+            >
+              <Flex flexDirection="column">
+                <Slider
+                  colorScheme="gray"
+                  size="lg"
+                  h="20"
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  orientation="vertical"
+                  value={volume}
+                  onChange={handleChangeVolume}
+                >
+                  <SliderTrack bg="gray.700" w={3} borderRadius="full">
+                    <SliderFilledTrack bg="flame.600" />
+                  </SliderTrack>
+                </Slider>
                 <ControlButton
                   onClick={isMuted ? handleUnmute : handleMute}
                   icon={isMuted ? <FaVolumeMute /> : <FaVolumeOff />}
                   colorScheme={isMuted ? 'deepRed' : 'gray'}
                   size="md"
-                  mr="2"
+                  mt="2"
                   aria-label={isMuted ? 'Unmute' : 'Mute'}
                 />
-                <Slider
-                  colorScheme="gray"
-                  size="md"
-                  w="20"
-                  min={0}
-                  max={1}
-                  step={0.01}
-                  value={volume}
-                  onChange={handleChangeVolume}
-                >
-                  <SliderTrack>
-                    <SliderFilledTrack bg="flame.600" />
-                  </SliderTrack>
-                </Slider>
               </Flex>
               <ControlButton
                 onClick={isFullscreen ? handleExitFullscreen : handleFullscreen}
