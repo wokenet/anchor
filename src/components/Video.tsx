@@ -64,6 +64,7 @@ const Video = forwardRef(
     const [isMuted, setIsMuted] = useState(false)
     const [volume, setVolume] = useState(0)
     const [isFullscreen, setIsFullscreen] = useState(false)
+    const [isInteractingControls, setIsInteractingControls] = useState(false)
 
     function handlePlay() {
       videoRef.current?.play()
@@ -181,6 +182,8 @@ const Video = forwardRef(
 
     useImperativeHandle(ref, () => videoRef.current)
 
+    const showControls = isInteractingControls || isWaiting
+
     return (
       <AspectRatio
         width="full"
@@ -200,13 +203,14 @@ const Video = forwardRef(
             templateRows="repeat(3, 1fr)"
             templateColumns="repeat(3, 1fr)"
             alignItems="end"
-            opacity={isPlaying && !isWaiting ? 0 : 0.9}
-            _hover={{
-              opacity: 0.9,
-              boxShadow: `0 0 20px ${videoHighlightColor} inset`,
-            }}
+            onMouseOver={() => setIsInteractingControls(true)}
+            onMouseOut={() => setIsInteractingControls(false)}
+            opacity={showControls ? 0.9 : 0}
             transitionProperty="opacity"
             transitionDuration="normal"
+            _hover={{
+              boxShadow: `0 0 20px ${videoHighlightColor} inset`,
+            }}
             zIndex={100}
           >
             <Spinner
