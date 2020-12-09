@@ -64,7 +64,7 @@ const Video = forwardRef(
     const [isMuted, setIsMuted] = useState(false)
     const [volume, setVolume] = useState(0)
     const [isFullscreen, setIsFullscreen] = useState(false)
-    const [isInteractingControls, setIsInteractingControls] = useState(false)
+    const [isInteractingControls, setIsInteractingControls] = useState(true)
 
     function handlePlay() {
       videoRef.current?.play()
