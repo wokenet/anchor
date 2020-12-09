@@ -219,6 +219,9 @@ const Video = forwardRef(
             onMouseMove={handleShowControls}
             onTouchStart={handleShowControls}
             onMouseOut={() => setIsInteractingControls(false)}
+            onDoubleClick={
+              isFullscreen ? handleExitFullscreen : handleFullscreen
+            }
             opacity={showControls ? 0.9 : 0}
             transitionProperty="opacity"
             transitionDuration="normal"
