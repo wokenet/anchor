@@ -252,10 +252,14 @@ const Video = forwardRef(
                 <ControlButton
                   onClick={isMuted ? handleUnmute : handleMute}
                   icon={isMuted ? <FaVolumeMute /> : <FaVolumeOff />}
-                  colorScheme={isMuted ? 'deepRed' : 'gray'}
                   size="md"
                   mt="2"
                   aria-label={isMuted ? 'Unmute' : 'Mute'}
+                  {...(isMuted && {
+                    bg: 'deepRed.700',
+                    _hover: { bg: 'deepRed.600' },
+                    _active: { bg: 'gray.600' },
+                  })}
                 />
               </Flex>
               <ControlButton
