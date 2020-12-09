@@ -109,6 +109,19 @@ const Video = forwardRef(
       document.exitFullscreen()
     }
 
+    function handleShowControls() {
+      setIsInteractingControls(true)
+    }
+    useEffect(() => {
+      if (!isInteractingControls) {
+        return
+      }
+      const timeout = setTimeout(() => {
+        setIsInteractingControls(false)
+      }, 2 * 1000)
+      return () => clearTimeout(timeout)
+    }, [isInteractingControls])
+
     useEffect(() => {
       const video = videoRef.current
 
@@ -203,7 +216,8 @@ const Video = forwardRef(
             templateRows="repeat(3, 1fr)"
             templateColumns="repeat(3, 1fr)"
             alignItems="end"
-            onMouseOver={() => setIsInteractingControls(true)}
+            onMouseMove={handleShowControls}
+            onTouchStart={handleShowControls}
             onMouseOut={() => setIsInteractingControls(false)}
             opacity={showControls ? 0.9 : 0}
             transitionProperty="opacity"
