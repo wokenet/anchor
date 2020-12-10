@@ -266,8 +266,7 @@ const Video = forwardRef(
                   value={volume}
                   onChange={handleChangeVolume}
                   opacity={isMuted ? 0 : 1}
-                  transform={isMuted ? 'translateY(1rem)' : null}
-                  transitionProperty="opacity, transform"
+                  transitionProperty="opacity"
                   transitionDuration="normal"
                 >
                   <SliderTrack
