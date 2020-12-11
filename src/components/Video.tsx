@@ -109,6 +109,17 @@ const Video = forwardRef(
       document.exitFullscreen()
     }
 
+    function handleDoubleClick(ev: Event) {
+      if (ev.target instanceof Element && !!ev.target.closest('button')) {
+        return
+      }
+      if (isFullscreen) {
+        handleExitFullscreen()
+      } else {
+        handleFullscreen()
+      }
+    }
+
     function handleShowControls() {
       setIsInteractingControls(true)
     }
@@ -219,9 +230,7 @@ const Video = forwardRef(
             onMouseMove={handleShowControls}
             onTouchStart={handleShowControls}
             onMouseOut={() => setIsInteractingControls(false)}
-            onDoubleClick={
-              isFullscreen ? handleExitFullscreen : handleFullscreen
-            }
+            onDoubleClick={handleDoubleClick}
             opacity={showControls ? 0.9 : 0}
             transitionProperty="opacity"
             transitionDuration="normal"
