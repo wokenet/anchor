@@ -18,7 +18,7 @@ import camelCase from 'lodash/camelCase'
 
 import WokeSticker from 'woke-content/images/woke-4x6.svg'
 import { rotate } from '../components/keyframes'
-import Page from 'src/components/Page'
+import Page from '../components/Page'
 
 const LEDGER_CSV_URL =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSiTpYFeMBAzabZ1BxB0RJfrtJFPReyS9zlhAJP14Xd_3T5TJHAF5jjJsLO1lC33qbdetzCUaU84B_Y/pub?gid=0&single=true&output=csv'
