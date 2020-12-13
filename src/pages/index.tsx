@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { FaEye } from 'react-icons/fa'
+import { senderColors } from '../../constants.json'
 
 import Page from '../components/Page'
 import FooterLinks from '../components/FooterLinks'
@@ -28,6 +29,8 @@ import IntroOverlay from '../components/IntroOverlay'
 import useTinyCount from '../useTinyCount'
 
 const INTRO_SEEN_KEY = 'intro_seen'
+
+let senderColorMap = new Map<string, string>();
 
 function Announcement({ onClose, children, zIndex }) {
   return (
@@ -62,6 +65,16 @@ function Home() {
         : false,
   })
   const [messageText, setMessageText] = useState('')
+
+  function getSenderColor(sender: string) {
+    if(senderColorMap[sender]) {
+      return senderColorMap[sender]
+    }
+    else {
+      senderColorMap[sender] = senderColors[Math.floor(Math.random() * senderColors.length)];
+      return senderColorMap[sender];
+    }
+  }
 
   function handleDismissIntro() {
     onIntroClose()
@@ -181,9 +194,10 @@ function Home() {
                   <Message
                     key={ev.event.event_id}
                     sender={ev.sender.name}
+                    senderColor={getSenderColor(ev.sender.name)}
                     body={ev.event.content.body}
                     px={4}
-                    _odd={{ backgroundColor: 'gray.900' }}
+                    backgroundColor='gray.900'
                   />
                 )
               })

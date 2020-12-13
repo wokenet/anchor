@@ -53,7 +53,7 @@ export function Emote({ emote }: { emote: string }) {
   )
 }
 
-export default function Message({ body, sender, ...props }: MessageProps) {
+export default function Message({ body, sender, senderColor, ...props }: MessageProps) {
   const parts = []
   for (const part of body.split(emoteRegexp)) {
     const emote = part.toLowerCase()
@@ -65,7 +65,7 @@ export default function Message({ body, sender, ...props }: MessageProps) {
   }
   return (
     <Text {...props}>
-      <Text display="inline" color="deepRed.300">
+      <Text display="inline" color={senderColor}>
         {sender}
       </Text>
       {': '}
