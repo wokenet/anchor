@@ -216,6 +216,8 @@ function Home() {
               onClick={onAuthOpen}
               mx={4}
               mb={4}
+              mt={2}
+              flexShrink={0}
             >
               Start chatting
             </Button>
