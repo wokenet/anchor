@@ -109,7 +109,7 @@ const Video = forwardRef(
       document.exitFullscreen()
     }
 
-    function handleDoubleClick(ev: Event) {
+    function handleDoubleClick(ev: React.MouseEvent) {
       if (ev.target instanceof Element && !!ev.target.closest('button')) {
         return
       }
