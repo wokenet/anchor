@@ -97,11 +97,11 @@ function useAnchor() {
         }
       })
 
+      await client.startClient()
       if (client.isGuest()) {
         await client.peekInRoom(announcementsRoomId)
         await client.peekInRoom(chatRoomId)
       } else {
-        await client.startClient()
         await once(client, 'sync')
         await client.joinRoom(chatRoomId)
         await client.peekInRoom(announcementsRoomId)
