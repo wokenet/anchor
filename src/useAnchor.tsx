@@ -97,7 +97,8 @@ function useAnchor() {
         }
       })
 
-      await client.startClient()
+      // Guest room peeking has a hardcoded limit of 20
+      await client.startClient({ initialSyncLimit: 20 })
       if (client.isGuest()) {
         await client.peekInRoom(announcementsRoomId)
         await client.peekInRoom(chatRoomId)
