@@ -43,6 +43,7 @@ function Home() {
   // TODO: registration/login error handling
   const messagesRef = useRef<Scrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
+  const isScrollPinned = useRef<boolean>(true)
   const { userInfo, timeline, announcement, view, room, actions } = useAnchor()
   const onlineCount = useTinyCount('https://get.woke.net/viewers/')
   const {
@@ -87,6 +88,10 @@ function Home() {
     await actions.sendMessage(messageText)
   }
 
+  function handleScrollMessages({ top }) {
+    isScrollPinned.current = top === 1
+  }
+
   useEffect(() => {
     if (announcement) {
       onAnnouncementOpen()
@@ -100,7 +105,9 @@ function Home() {
     if (!el) {
       return
     }
-    el.scrollToBottom()
+    if (isScrollPinned.current) {
+      el.scrollToBottom()
+    }
   }, [timeline])
 
   return (
@@ -166,6 +173,7 @@ function Home() {
             renderThumbVertical={(props) => (
               <Box {...props} bgColor="gray.600" borderRadius="full" />
             )}
+            onScrollFrame={handleScrollMessages}
             autoHide
             universal
           >
