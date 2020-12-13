@@ -167,6 +167,8 @@ function Home() {
           flexDir="column"
           w={{ base: 'full', lg: 'sm' }}
           flex={{ base: 1, lg: 'none' }}
+          justifyContent="flex-end"
+          overflow="hidden"
         >
           <Scrollbars
             ref={messagesRef}
@@ -174,6 +176,8 @@ function Home() {
               <Box {...props} bgColor="gray.600" borderRadius="full" />
             )}
             onScrollFrame={handleScrollMessages}
+            autoHeightMax="100%"
+            autoHeight
             autoHide
             universal
           >

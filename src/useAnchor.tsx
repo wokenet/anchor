@@ -101,7 +101,7 @@ function useAnchor() {
         await client.peekInRoom(announcementsRoomId)
         await client.peekInRoom(chatRoomId)
       } else {
-        await client.startClient({ initialSyncLimit: 40 })
+        await client.startClient()
         await once(client, 'sync')
         await client.joinRoom(chatRoomId)
         await client.peekInRoom(announcementsRoomId)
@@ -121,6 +121,7 @@ function useAnchor() {
       })
       setRoom(chatRoom)
       setTimeline(chatRoom?.timeline)
+      client.scrollback(chatRoom, 30)
 
       updateLatestAnnouncement()
 
