@@ -150,23 +150,25 @@ function Home() {
           <Center flex={1} overflow="hidden" backgroundColor="gray.950">
             {view?.kind && <View view={view} />}
           </Center>
-          <Flex zIndex={200}>
+          <Flex
+            zIndex={200}
+            borderBottomWidth={{ base: 1, lg: 0 }}
+            borderBottomColor="gray.700"
+            borderBottomStyle="solid"
+          >
             <FooterLinks flex="1" display={{ base: 'none', lg: 'flex' }} />
             {onlineCount !== undefined && (
               <Flex
-                position="absolute"
-                bottom="0"
+                position={{ base: 'static', lg: 'absolute' }}
+                bottom={{ base: 'unset', lg: 0 }}
                 right={{ base: 'unset', lg: 0 }}
-                left={{ base: 0, lg: 'unset' }}
                 color="flame.100"
-                background={{ base: 'gray.950', lg: 'none' }}
                 alignItems="center"
                 mx={2}
-                my={{ base: 2, lg: 4 }}
+                my={{ base: 0, lg: 3 }}
                 p={1}
                 px={2}
-                borderRadius="md"
-                opacity={{ base: 0.9, lg: 1 }}
+                borderRadius={{ base: 'none', lg: 'md' }}
               >
                 <Icon as={FaEye} color="flame.500" boxSize={5} mr={2} />
                 {onlineCount} watching
@@ -232,8 +234,7 @@ function Home() {
               colorScheme="orangeYellow"
               onClick={onAuthOpen}
               mx={4}
-              mb={4}
-              mt={2}
+              my={2}
               flexShrink={0}
             >
               Start chatting
