@@ -97,8 +97,13 @@ function useAnchor() {
         }
       })
 
+      // TODO: Add a way to disable this to matrix-js-sdk
+      // @ts-ignore
+      client._supportsVoip = false
+
       // Guest room peeking has a hardcoded limit of 20
       await client.startClient({ initialSyncLimit: 20 })
+
       if (client.isGuest()) {
         await client.peekInRoom(announcementsRoomId)
         await client.peekInRoom(chatRoomId)
