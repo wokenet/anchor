@@ -1,5 +1,11 @@
 import * as React from 'react'
-import { useEffect, useLayoutEffect, useState, useRef } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useRef,
+} from 'react'
 import {
   Box,
   Button,
@@ -26,6 +32,7 @@ import useAnchor from '../useAnchor'
 import Header from '../components/Header'
 import IntroOverlay from '../components/IntroOverlay'
 import useTinyCount from '../useTinyCount'
+import { update } from 'lodash'
 
 const INTRO_SEEN_KEY = 'intro_seen'
 
@@ -92,6 +99,23 @@ function Home() {
     isScrollPinned.current = top === 1
   }
 
+  const updateScroll = useCallback(() => {
+    const el = messagesRef.current
+    if (!el) {
+      return
+    }
+    if (isScrollPinned.current) {
+      el.scrollToBottom()
+    }
+  }, [messagesRef, isScrollPinned])
+
+  useEffect(() => {
+    window.addEventListener('resize', updateScroll)
+    return () => {
+      window.removeEventListener('resize', updateScroll)
+    }
+  })
+
   useEffect(() => {
     if (announcement) {
       onAnnouncementOpen()
@@ -100,15 +124,7 @@ function Home() {
     }
   }, [announcement])
 
-  useLayoutEffect(() => {
-    const el = messagesRef.current
-    if (!el) {
-      return
-    }
-    if (isScrollPinned.current) {
-      el.scrollToBottom()
-    }
-  }, [timeline])
+  useLayoutEffect(updateScroll, [timeline])
 
   return (
     <Page noHeader noFooter>
@@ -202,6 +218,7 @@ function Home() {
             ) : (
               <SkeletonText
                 m={4}
+                mb={12}
                 noOfLines={10}
                 spacing={4}
                 startColor="gray.800"
