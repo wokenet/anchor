@@ -1,4 +1,5 @@
 import * as React from 'react'
+import Color from 'color'
 import { useEffect, useLayoutEffect, useState, useRef } from 'react'
 import {
   Box,
@@ -29,8 +30,7 @@ import IntroOverlay from '../components/IntroOverlay'
 import useTinyCount from '../useTinyCount'
 
 const INTRO_SEEN_KEY = 'intro_seen'
-
-let senderColorMap = new Map<string, string>();
+const senderColorMap = new Map<string, string>();
 
 function Announcement({ onClose, children, zIndex }) {
   return (
@@ -66,14 +66,61 @@ function Home() {
   })
   const [messageText, setMessageText] = useState('')
 
+  // This is all a work in progress and needs cleanup and likely some of this code placed elsewhere - cory
   function getSenderColor(sender: string) {
     if(senderColorMap[sender]) {
       return senderColorMap[sender]
     }
     else {
-      senderColorMap[sender] = senderColors[Math.floor(Math.random() * senderColors.length)];
+      // [PROBLEM HERE] Commenting this line out and uncommenting the one after will get rid of the runtime error
+      senderColorMap[sender] = idColor(sender);
+      //senderColorMap[sender] = senderColors[Math.floor(Math.random() * senderColors.length)];
       return senderColorMap[sender];
     }
+  }
+
+  function setUserColor(userId: string) {
+    if(!senderColorMap[userId]) {
+      const color = localStorage.getItem('mx_user_color');
+      if(!color) {
+        const randomColor =  getSenderColor(userId);
+        localStorage.setItem('mx_user_color', randomColor);
+        senderColorMap[userId] = randomColor;
+      }
+      else {
+        senderColorMap[userId] = color;
+      }
+    }
+  }
+
+  // I added typings and semicolons but this is stolen from: https://github.com/streamwall/streamwall/blob/dbe63c6aef27171167e9546e5965916a160d2aa4/src/web/colors.js
+  function hashText(text: string, range: number) {
+    // DJBX33A-ish
+    // based on https://github.com/euphoria-io/heim/blob/978c921063e6b06012fc8d16d9fbf1b3a0be1191/client/lib/hueHash.js#L16-L45
+    let val = 0;
+    for (let i = 0; i < text.length; i++) {
+      // Multiply by an arbitrary prime number to spread out similar letters.
+      const charVal = (text.charCodeAt(i) * 401) % range;
+      // Multiply val by 33 while constraining within signed 32 bit int range.
+      // this keeps the value within Number.MAX_SAFE_INTEGER without throwing out
+      // information.
+      const origVal = val;
+      val = val << 5;
+      val += origVal;
+      // Add the character to the hash.
+      val += charVal;
+    }
+    return (val + range) % range;
+  }
+
+  // I added typings and semicolons but this is stolen from: https://github.com/streamwall/streamwall/blob/dbe63c6aef27171167e9546e5965916a160d2aa4/src/web/colors.js
+  function idColor(id: string) {
+    if (!id) {
+      return Color('white');
+    }
+    const h = hashText(id, 360);
+    const sPart = hashText(id, 40);
+    return Color({ h, s: 20 + sPart, l: 50 });
   }
 
   function handleDismissIntro() {
@@ -190,11 +237,15 @@ function Home() {
                 ) {
                   return
                 }
+
+                if(!senderColorMap[userInfo.userId]) {
+                  setUserColor(userInfo.userId);
+                }
                 return (
                   <Message
                     key={ev.event.event_id}
                     sender={ev.sender.name}
-                    senderColor={getSenderColor(ev.sender.name)}
+                    senderColor={getSenderColor(ev.sender.userId)}
                     body={ev.event.content.body}
                     px={4}
                     backgroundColor='gray.900'
