@@ -71,8 +71,7 @@ function Home() {
     if (senderColorMap[sender]) {
       return senderColorMap[sender]
     } else {
-      // [PROBLEM HERE] Commenting this line out and uncommenting the one after will get rid of the runtime error
-      senderColorMap[sender] = idColor(sender)
+      senderColorMap[sender] = idColor(sender).toHexString()
       //senderColorMap[sender] = senderColors[Math.floor(Math.random() * senderColors.length)];
       return senderColorMap[sender]
     }
