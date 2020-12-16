@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Color from 'color'
+import Color from 'tinycolor2'
 import { useEffect, useLayoutEffect, useState, useRef } from 'react'
 import {
   Box,

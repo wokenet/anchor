@@ -17,7 +17,6 @@
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@sentry/react": "^5.27.4",
-    "color": "^3.1.2",
     "escape-string-regexp": "^4.0.0",
     "events": "^3.2.0",
     "framer-motion": "^2.9.4",
@@ -31,6 +30,7 @@
     "react-dom": "^17.0.1",
     "react-google-recaptcha": "^2.1.0",
     "react-icons": "^3.11.0",
+    "tinycolor2": "^1.4.2",
     "woke-content": "git+https://github.com/wokenet/woke-content.git"
   },
   "devDependencies": {
