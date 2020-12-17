@@ -65,7 +65,7 @@ export default function Message({ body, sender, senderColor, boldUsername, ...pr
   }
   return (
     <Text {...props}>
-      <Text display="inline" color={senderColor} fontWeight={boldUsername ? 'bold' : 'normal'}>
+      <Text display="inline" color={senderColor}>
         {sender}
       </Text>
       {': '}

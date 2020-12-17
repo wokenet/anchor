@@ -36,11 +36,6 @@ import useTinyCount from '../useTinyCount'
 import { update } from 'lodash'
 
 const INTRO_SEEN_KEY = 'intro_seen'
-const adminUsers: string[] = [
-  '@wokebot:woke.net',
-  '@chromakode:woke.net',
-  '@tree:woke.net'
-]
 
 function Announcement({ onClose, children, zIndex }) {
   return (
@@ -258,7 +253,6 @@ function Home() {
                     body={ev.event.content.body.substring(0,500)}
                     px={4}
                     backgroundColor="gray.900"
-                    boldUsername={adminUsers.indexOf(ev.sender.userId) > -1}
                   />
                 )
               })
