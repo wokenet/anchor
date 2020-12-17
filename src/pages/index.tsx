@@ -29,7 +29,6 @@ import IntroOverlay from '../components/IntroOverlay'
 import useTinyCount from '../useTinyCount'
 
 const INTRO_SEEN_KEY = 'intro_seen'
-const senderColorMap = new Map<string, string>()
 const adminUsers: string[] = [
   '@wokebot:woke.net',
   '@chromakode:woke.net',
