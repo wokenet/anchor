@@ -255,7 +255,7 @@ function Home() {
                     key={ev.event.event_id}
                     sender={ev.sender.name}
                     senderColor={getSenderColor(ev.sender.userId)}
-                    body={ev.event.content.body}
+                    body={ev.event.content.body.substring(0,500)}
                     px={4}
                     backgroundColor="gray.900"
                     boldUsername={adminUsers.indexOf(ev.sender.userId) > -1}
