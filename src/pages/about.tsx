@@ -10,13 +10,15 @@ import {
   Stack,
   VStack,
   Heading,
+  keyframes,
 } from '@chakra-ui/react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import Papa from 'papaparse'
 import camelCase from 'lodash/camelCase'
 
 import WokeSticker from 'woke-content/images/woke-4x6.svg'
-import Page from 'src/components/Page'
+import { rotate } from '../components/keyframes'
+import Page from '../components/Page'
 
 const LEDGER_CSV_URL =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSiTpYFeMBAzabZ1BxB0RJfrtJFPReyS9zlhAJP14Xd_3T5TJHAF5jjJsLO1lC33qbdetzCUaU84B_Y/pub?gid=0&single=true&output=csv'
@@ -125,7 +127,18 @@ export default function AboutPage({
           alignItems="center"
           spacing={4}
         >
-          <Icon as={WokeSticker} w="auto" h="24rem" />
+          <Icon
+            as={WokeSticker}
+            w="auto"
+            h="24rem"
+            css={{
+              '#woke-4x6_svg__woke-lens': {
+                animation: `${rotate} 8s linear infinite`,
+                transformBox: 'fill-box',
+                transformOrigin: 'center center',
+              },
+            }}
+          />
           <VStack>
             <Text fontSize="xl">
               <strong>WOKE</strong> is a digital collective on a mission to

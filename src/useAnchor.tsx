@@ -8,7 +8,7 @@ import {
   MatrixClient,
   RoomMember,
 } from 'matrix-js-sdk'
-import findLast from 'lodash/findLast'
+import { debounce, findLast } from 'lodash'
 
 import { chatRoomId, announcementsRoomId } from '../constants.json'
 
@@ -84,24 +84,33 @@ function useAnchor() {
         setAnnouncement(latestAnnouncement?.getContent()?.body)
       }
 
-      client.on('Room.timeline', (event: MatrixEvent, room: Room) => {
-        if (room.roomId === chatRoomId) {
-          const roomUpdate = client.getRoom(chatRoomId)
-          if (!roomUpdate) {
-            return
+      client.on(
+        'Room.timeline',
+        debounce((event: MatrixEvent, room: Room) => {
+          if (room.roomId === chatRoomId) {
+            const roomUpdate = client.getRoom(chatRoomId)
+            if (!roomUpdate) {
+              return
+            }
+            setRoom(roomUpdate)
+            setTimeline([...roomUpdate?.timeline])
+          } else if (room.roomId === announcementsRoomId) {
+            updateLatestAnnouncement()
           }
-          setRoom(roomUpdate)
-          setTimeline([...roomUpdate?.timeline])
-        } else if (room.roomId === announcementsRoomId) {
-          updateLatestAnnouncement()
-        }
-      })
+        }),
+      )
+
+      // TODO: Add a way to disable this to matrix-js-sdk
+      // @ts-ignore
+      client._supportsVoip = false
+
+      // Guest room peeking has a hardcoded limit of 20
+      await client.startClient({ initialSyncLimit: 20 })
 
       if (client.isGuest()) {
         await client.peekInRoom(announcementsRoomId)
         await client.peekInRoom(chatRoomId)
       } else {
-        await client.startClient({ initialSyncLimit: 40 })
         await once(client, 'sync')
         await client.joinRoom(chatRoomId)
         await client.peekInRoom(announcementsRoomId)
@@ -121,6 +130,7 @@ function useAnchor() {
       })
       setRoom(chatRoom)
       setTimeline(chatRoom?.timeline)
+      client.scrollback(chatRoom, 30)
 
       updateLatestAnnouncement()
 

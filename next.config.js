@@ -55,9 +55,16 @@ module.exports = {
           loader: '@svgr/webpack',
           options: {
             svgoConfig: {
-              plugins: {
-                removeViewBox: false,
-              },
+              plugins: [
+                {
+                  cleanupIDs: {
+                    preservePrefixes: ['woke'],
+                  },
+                },
+                {
+                  removeViewBox: false,
+                },
+              ],
             },
           },
         },

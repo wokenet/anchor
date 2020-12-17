@@ -1,6 +1,12 @@
 import * as React from 'react'
 import Color from 'tinycolor2'
-import { useEffect, useLayoutEffect, useState, useRef } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useRef,
+} from 'react'
 import {
   Box,
   Button,
@@ -27,6 +33,7 @@ import useAnchor from '../useAnchor'
 import Header from '../components/Header'
 import IntroOverlay from '../components/IntroOverlay'
 import useTinyCount from '../useTinyCount'
+import { update } from 'lodash'
 
 const INTRO_SEEN_KEY = 'intro_seen'
 const adminUsers: string[] = [
@@ -49,6 +56,7 @@ function Home() {
   // TODO: registration/login error handling
   const messagesRef = useRef<Scrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
+  const isScrollPinned = useRef<boolean>(true)
   const { userInfo, timeline, announcement, view, room, actions } = useAnchor()
   const onlineCount = useTinyCount('https://get.woke.net/viewers/')
   const {
@@ -129,6 +137,27 @@ function Home() {
     await actions.sendMessage(messageText)
   }
 
+  function handleScrollMessages({ top }) {
+    isScrollPinned.current = top === 1
+  }
+
+  const updateScroll = useCallback(() => {
+    const el = messagesRef.current
+    if (!el) {
+      return
+    }
+    if (isScrollPinned.current) {
+      el.scrollToBottom()
+    }
+  }, [messagesRef, isScrollPinned])
+
+  useEffect(() => {
+    window.addEventListener('resize', updateScroll)
+    return () => {
+      window.removeEventListener('resize', updateScroll)
+    }
+  })
+
   useEffect(() => {
     if (announcement) {
       onAnnouncementOpen()
@@ -137,13 +166,7 @@ function Home() {
     }
   }, [announcement])
 
-  useLayoutEffect(() => {
-    const el = messagesRef.current
-    if (!el) {
-      return
-    }
-    el.scrollToBottom()
-  }, [timeline])
+  useLayoutEffect(updateScroll, [timeline])
 
   return (
     <Page noHeader noFooter>
@@ -169,23 +192,25 @@ function Home() {
           <Center flex={1} overflow="hidden" backgroundColor="gray.950">
             {view?.kind && <View view={view} />}
           </Center>
-          <Flex zIndex={200}>
+          <Flex
+            zIndex={200}
+            borderBottomWidth={{ base: 1, lg: 0 }}
+            borderBottomColor="gray.700"
+            borderBottomStyle="solid"
+          >
             <FooterLinks flex="1" display={{ base: 'none', lg: 'flex' }} />
             {onlineCount !== undefined && (
               <Flex
-                position="absolute"
-                bottom="0"
+                position={{ base: 'static', lg: 'absolute' }}
+                bottom={{ base: 'unset', lg: 0 }}
                 right={{ base: 'unset', lg: 0 }}
-                left={{ base: 0, lg: 'unset' }}
                 color="flame.100"
-                background={{ base: 'gray.950', lg: 'none' }}
                 alignItems="center"
                 mx={2}
-                my={{ base: 2, lg: 4 }}
+                my={{ base: 0, lg: 3 }}
                 p={1}
                 px={2}
-                borderRadius="md"
-                opacity={{ base: 0.9, lg: 1 }}
+                borderRadius={{ base: 'none', lg: 'md' }}
               >
                 <Icon as={FaEye} color="flame.500" boxSize={5} mr={2} />
                 {onlineCount} watching
@@ -202,12 +227,17 @@ function Home() {
           flexDir="column"
           w={{ base: 'full', lg: 'sm' }}
           flex={{ base: 1, lg: 'none' }}
+          justifyContent="flex-end"
+          overflow="hidden"
         >
           <Scrollbars
             ref={messagesRef}
             renderThumbVertical={(props) => (
               <Box {...props} bgColor="gray.600" borderRadius="full" />
             )}
+            onScrollFrame={handleScrollMessages}
+            autoHeightMax="100%"
+            autoHeight
             autoHide
             universal
           >
@@ -235,6 +265,7 @@ function Home() {
             ) : (
               <SkeletonText
                 m={4}
+                mb={12}
                 noOfLines={10}
                 spacing={4}
                 startColor="gray.800"
@@ -248,7 +279,8 @@ function Home() {
               colorScheme="orangeYellow"
               onClick={onAuthOpen}
               mx={4}
-              mb={4}
+              my={2}
+              flexShrink={0}
             >
               Start chatting
             </Button>

@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 
 import Eye from 'woke-content/images/eye.svg'
+import { rotate } from './keyframes'
 
 export default function IntroOverlay({ isOpen, onClose, zIndex }) {
   function handleClickBackdrop(ev) {
@@ -50,7 +51,19 @@ export default function IntroOverlay({ isOpen, onClose, zIndex }) {
             overflow="hidden"
             alignItems="center"
           >
-            <Icon as={Eye} w="auto" h={{ base: '4rem', sm: '150%' }} ml={-1} />
+            <Icon
+              as={Eye}
+              w="auto"
+              h={{ base: '4rem', sm: '150%' }}
+              ml={-1}
+              css={{
+                '#eye_svg__woke-lens': {
+                  animation: `${rotate} 2s linear infinite`,
+                  transformBox: 'fill-box',
+                  transformOrigin: 'center center',
+                },
+              }}
+            />
             <Box m={4} ml={{ base: 2, sm: 4 }} color="gray.200">
               <CloseButton
                 position="absolute"
