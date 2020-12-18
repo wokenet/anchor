@@ -53,7 +53,12 @@ export function Emote({ emote }: { emote: string }) {
   )
 }
 
-export default function Message({ body, sender, senderColor, ...props }: MessageProps) {
+export default function Message({
+  body,
+  sender,
+  senderColor,
+  ...props
+}: MessageProps) {
   const parts = []
   for (const part of body.split(emoteRegexp)) {
     const emote = part.toLowerCase()
