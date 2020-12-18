@@ -246,6 +246,7 @@ function Home() {
               Start chatting
             </Button>
           ) : (
+            // The `pr` attribute below is because of this bug: https://github.com/chakra-ui/chakra-ui/commit/d95cdc6469695676d4da1710f365b485052a044a
             <form onSubmit={handleSend} style={{ display: 'flex' }}>
               <InputGroup>
                 <Input
@@ -256,11 +257,14 @@ function Home() {
                   placeholder="Say something"
                   value={messageText}
                   maxLength={maximumMessageSize}
+                  pr={messageText.length <= 250 ? 0 : null}
                   onChange={(ev) => setMessageText(ev.target.value)}
                 />
+                { messageText.length <= 250 ? null : (
                 <InputRightElement flexShrink={0} width={50} height={50}>
-                  {messageText.length > 250 ? <small>{maximumMessageSize-messageText.length}</small> : null}
+                  <small>{maximumMessageSize-messageText.length}</small>
                 </InputRightElement>
+                )}
               </InputGroup>
             </form>
           )}
