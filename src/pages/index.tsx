@@ -20,6 +20,9 @@ import {
   CloseButton,
   Icon,
   SkeletonText,
+  useToken,
+  InputGroup,
+  InputRightElement,
 } from '@chakra-ui/react'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { FaEye } from 'react-icons/fa'
@@ -103,6 +106,8 @@ function Home() {
     if (!id) {
       return Color('white')
     }
+
+    //const orangeYellow = useToken('colors', 'orangeYellow.600')
     const h = hashText(id, 60)
     const sPart = hashText(id, 60)
     return Color({ h, s: 70 + sPart, l: 60 })
@@ -280,17 +285,21 @@ function Home() {
             </Button>
           ) : (
             <form onSubmit={handleSend} style={{ display: 'flex' }}>
-              <Input
-                m={2}
-                px={2}
-                flex={1}
-                focusBorderColor="flame.600"
-                placeholder="Say something"
-                value={messageText}
-                maxLength={500}
-                onChange={(ev) => setMessageText(ev.target.value)}
-              />
-              {messageText.length > 250 ? <small>{messageText.length}/500</small> : null}
+              <InputGroup>
+                <Input
+                  m={2}
+                  px={2}
+                  flex={1}
+                  focusBorderColor="flame.600"
+                  placeholder="Say something"
+                  value={messageText}
+                  maxLength={500}
+                  onChange={(ev) => setMessageText(ev.target.value)}
+                />
+                <InputRightElement flexShrink={0} width={50} height={50}>
+                  {messageText.length > 250 ? <small>{500-messageText.length}</small> : null}
+                </InputRightElement>
+              </InputGroup>
             </form>
           )}
         </Flex>
