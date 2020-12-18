@@ -219,7 +219,7 @@ function Home() {
                     senderColor={getSenderColor(ev.sender.userId)}
                     body={ev.event.content.body.substring(0, maximumMessageSize)}
                     px={4}
-                    backgroundColor="gray.900"
+                    _odd={{ backgroundColor: 'gray.900' }}
                   />
                 )
               })
