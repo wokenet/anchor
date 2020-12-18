@@ -217,7 +217,10 @@ function Home() {
                     key={ev.event.event_id}
                     sender={ev.sender.name}
                     senderColor={getSenderColor(ev.sender.userId)}
-                    body={ev.event.content.body.substring(0, maximumMessageSize)}
+                    body={ev.event.content.body.substring(
+                      0,
+                      maximumMessageSize,
+                    )}
                     px={4}
                     _odd={{ backgroundColor: 'gray.900' }}
                   />
@@ -260,10 +263,15 @@ function Home() {
                   pr={messageText.length <= 250 ? 0 : null}
                   onChange={(ev) => setMessageText(ev.target.value)}
                 />
-                { messageText.length <= 250 ? null : (
-                <InputRightElement flexShrink={0} width={50} height={50} pointerEvents="none">
-                  <small>{maximumMessageSize-messageText.length}</small>
-                </InputRightElement>
+                {messageText.length <= 250 ? null : (
+                  <InputRightElement
+                    flexShrink={0}
+                    width={50}
+                    height={50}
+                    pointerEvents="none"
+                  >
+                    <small>{maximumMessageSize - messageText.length}</small>
+                  </InputRightElement>
                 )}
               </InputGroup>
             </form>
