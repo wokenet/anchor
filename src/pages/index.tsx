@@ -1,5 +1,4 @@
 import * as React from 'react'
-import Color from 'tinycolor2'
 import {
   useCallback,
   useEffect,
@@ -36,7 +35,8 @@ import useAnchor from '../useAnchor'
 import Header from '../components/Header'
 import IntroOverlay from '../components/IntroOverlay'
 import useTinyCount from '../useTinyCount'
-import { update } from 'lodash'
+import { maximumMessageSize } from '../../constants.json'
+import { getSenderColor } from '../colors'
 
 const INTRO_SEEN_KEY = 'intro_seen'
 
@@ -74,44 +74,6 @@ function Home() {
         : false,
   })
   const [messageText, setMessageText] = useState('')
-
-  function getSenderColor(sender: string) {
-    if(sender === '@wokebot:woke.net') {
-      return 'orangeYellow.500';
-    }
-
-      return idColor(sender).toHexString()
-  }
-
-  function hashText(text: string, range: number) {
-    // DJBX33A-ish
-    // based on https://github.com/euphoria-io/heim/blob/978c921063e6b06012fc8d16d9fbf1b3a0be1191/client/lib/hueHash.js#L16-L45
-    let val = 0
-    for (let i = 0; i < text.length; i++) {
-      // Multiply by an arbitrary prime number to spread out similar letters.
-      const charVal = (text.charCodeAt(i) * 401) % range
-      // Multiply val by 33 while constraining within signed 32 bit int range.
-      // this keeps the value within Number.MAX_SAFE_INTEGER without throwing out
-      // information.
-      const origVal = val
-      val = val << 5
-      val += origVal
-      // Add the character to the hash.
-      val += charVal
-    }
-    return (val + range) % range
-  }
-
-  function idColor(id: string) {
-    if (!id) {
-      return Color('white')
-    }
-
-    //const orangeYellow = useToken('colors', 'orangeYellow.600')
-    const h = hashText(id, 60)
-    const sPart = hashText(id, 60)
-    return Color({ h, s: 70 + sPart, l: 60 })
-  }
 
   function handleDismissIntro() {
     onIntroClose()
@@ -255,7 +217,7 @@ function Home() {
                     key={ev.event.event_id}
                     sender={ev.sender.name}
                     senderColor={getSenderColor(ev.sender.userId)}
-                    body={ev.event.content.body.substring(0,500)}
+                    body={ev.event.content.body.substring(0, maximumMessageSize)}
                     px={4}
                     backgroundColor="gray.900"
                   />
@@ -293,11 +255,11 @@ function Home() {
                   focusBorderColor="flame.600"
                   placeholder="Say something"
                   value={messageText}
-                  maxLength={500}
+                  maxLength={maximumMessageSize}
                   onChange={(ev) => setMessageText(ev.target.value)}
                 />
                 <InputRightElement flexShrink={0} width={50} height={50}>
-                  {messageText.length > 250 ? <small>{500-messageText.length}</small> : null}
+                  {messageText.length > 250 ? <small>{maximumMessageSize-messageText.length}</small> : null}
                 </InputRightElement>
               </InputGroup>
             </form>
