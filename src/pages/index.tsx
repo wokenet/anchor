@@ -261,7 +261,7 @@ function Home() {
                   onChange={(ev) => setMessageText(ev.target.value)}
                 />
                 { messageText.length <= 250 ? null : (
-                <InputRightElement flexShrink={0} width={50} height={50}>
+                <InputRightElement flexShrink={0} width={50} height={50} pointerEvents="none">
                   <small>{maximumMessageSize-messageText.length}</small>
                 </InputRightElement>
                 )}
