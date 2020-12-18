@@ -19,6 +19,9 @@ import {
   CloseButton,
   Icon,
   SkeletonText,
+  useToken,
+  InputGroup,
+  InputRightElement,
 } from '@chakra-ui/react'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { FaEye } from 'react-icons/fa'
@@ -32,7 +35,8 @@ import useAnchor from '../useAnchor'
 import Header from '../components/Header'
 import IntroOverlay from '../components/IntroOverlay'
 import useTinyCount from '../useTinyCount'
-import { update } from 'lodash'
+import { maximumMessageSize } from '../../constants.json'
+import { getSenderColor } from '../colors'
 
 const INTRO_SEEN_KEY = 'intro_seen'
 
@@ -207,11 +211,16 @@ function Home() {
                 ) {
                   return
                 }
+
                 return (
                   <Message
                     key={ev.event.event_id}
                     sender={ev.sender.name}
-                    body={ev.event.content.body}
+                    senderColor={getSenderColor(ev.sender.userId)}
+                    body={ev.event.content.body.substring(
+                      0,
+                      maximumMessageSize,
+                    )}
                     px={4}
                     _odd={{ backgroundColor: 'gray.900' }}
                   />
@@ -240,16 +249,31 @@ function Home() {
               Start chatting
             </Button>
           ) : (
+            // The `pr` attribute below is because of this bug: https://github.com/chakra-ui/chakra-ui/commit/d95cdc6469695676d4da1710f365b485052a044a
             <form onSubmit={handleSend} style={{ display: 'flex' }}>
-              <Input
-                m={2}
-                px={2}
-                flex={1}
-                focusBorderColor="flame.600"
-                placeholder="Say something"
-                value={messageText}
-                onChange={(ev) => setMessageText(ev.target.value)}
-              />
+              <InputGroup>
+                <Input
+                  m={2}
+                  px={2}
+                  flex={1}
+                  focusBorderColor="flame.600"
+                  placeholder="Say something"
+                  value={messageText}
+                  maxLength={maximumMessageSize}
+                  pr={messageText.length <= 250 ? 2 : null}
+                  onChange={(ev) => setMessageText(ev.target.value)}
+                />
+                {messageText.length <= 250 ? null : (
+                  <InputRightElement
+                    flexShrink={0}
+                    width={50}
+                    height={50}
+                    pointerEvents="none"
+                  >
+                    <small>{maximumMessageSize - messageText.length}</small>
+                  </InputRightElement>
+                )}
+              </InputGroup>
             </form>
           )}
         </Flex>
