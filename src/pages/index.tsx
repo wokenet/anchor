@@ -260,7 +260,7 @@ function Home() {
                   placeholder="Say something"
                   value={messageText}
                   maxLength={maximumMessageSize}
-                  pr={messageText.length <= 250 ? 0 : null}
+                  pr={messageText.length <= 250 ? 2 : null}
                   onChange={(ev) => setMessageText(ev.target.value)}
                 />
                 {messageText.length <= 250 ? null : (
