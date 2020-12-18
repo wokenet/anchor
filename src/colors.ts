@@ -24,7 +24,7 @@ function hashText(text: string, range: number, start: number = 0) {
     // Add the character to the hash.
     start += charVal
   }
-  return (start + range) % range
+  return ((start % range) + range) % range
 }
 
 function redOrangeYellowColor(id: string) {
@@ -32,7 +32,7 @@ function redOrangeYellowColor(id: string) {
     return Color('white')
   }
 
-  const h = Math.abs(hashText(id, 60))
+  const h = hashText(id, 60)
   const sPart = hashText(id, 60)
   return Color({ h, s: 70 + sPart, l: 60 })
 }
