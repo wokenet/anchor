@@ -1,12 +1,15 @@
-import { useToken } from '@chakra-ui/react'
-import Color from 'tinycolor2'
+import Color, { mix } from 'tinycolor2'
+import { hpluvToHex } from 'hsluv'
 
-export function getSenderColor(sender: string) {
-  if (sender === '@wokebot:woke.net') {
-    return 'orangeYellow.500'
+export function getSenderColor(sender: string, baseColor: string): string {
+  if (!sender || sender === '@wokebot:woke.net') {
+    return baseColor
   }
 
-  return redOrangeYellowColor(sender).toHexString()
+  const hueCount = 10
+  const h = hashText(sender, hueCount) * (360 / hueCount)
+  const userColor = Color(hpluvToHex([h, 100, 50]))
+  return mix(userColor, baseColor, 15).toHexString()
 }
 
 function hashText(text: string, range: number, start: number = 0) {
@@ -25,14 +28,4 @@ function hashText(text: string, range: number, start: number = 0) {
     start += charVal
   }
   return ((start % range) + range) % range
-}
-
-function redOrangeYellowColor(id: string) {
-  if (!id) {
-    return Color('white')
-  }
-
-  const h = hashText(id, 60)
-  const sPart = hashText(id, 60)
-  return Color({ h, s: 70 + sPart, l: 60 })
 }
