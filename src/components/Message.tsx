@@ -55,9 +55,14 @@ export function Emote({ emote }: { emote: string }) {
   )
 }
 
-export default function Message({ body, sender, ...props }: MessageProps) {
+export default function Message({
+  body,
+  sender,
+  senderId,
+  ...props
+}: MessageProps) {
   const baseSenderColor = useToken('colors', 'orangeYellow.500')
-  const senderColor = getSenderColor(sender, baseSenderColor)
+  const senderColor = getSenderColor(senderId, baseSenderColor)
 
   const parts = []
   for (const part of body.split(emoteRegexp)) {
