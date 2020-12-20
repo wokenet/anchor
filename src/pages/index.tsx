@@ -36,7 +36,6 @@ import Header from '../components/Header'
 import IntroOverlay from '../components/IntroOverlay'
 import useTinyCount from '../useTinyCount'
 import { maximumMessageSize } from '../../constants.json'
-import { getSenderColor } from '../colors'
 
 const INTRO_SEEN_KEY = 'intro_seen'
 
@@ -216,7 +215,7 @@ function Home() {
                   <Message
                     key={ev.event.event_id}
                     sender={ev.sender.name}
-                    senderColor={getSenderColor(ev.sender.userId)}
+                    senderId={ev.sender.userId}
                     body={ev.event.content.body.substring(
                       0,
                       maximumMessageSize,
@@ -254,6 +253,7 @@ function Home() {
               <InputGroup flex={1} m={2}>
                 <Input
                   px={2}
+                  color="gray.200"
                   focusBorderColor="flame.600"
                   placeholder="Say something"
                   value={messageText}

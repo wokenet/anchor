@@ -1,8 +1,9 @@
 import * as React from 'react'
-import { Img, Text } from '@chakra-ui/react'
+import { Img, Text, useToken } from '@chakra-ui/react'
 import escapeStringRegexp from 'escape-string-regexp'
 
 import { emoteSize } from '../../constants.json'
+import { getSenderColor } from '../colors'
 
 function loadEmotes() {
   const emoteRequire = require.context(
@@ -38,6 +39,7 @@ const { emotes, emoteRegexp } = loadEmotes()
 
 type MessageProps = React.ComponentProps<typeof Text> & {
   body: string
+  senderId: string
   sender: string
 }
 
@@ -53,12 +55,10 @@ export function Emote({ emote }: { emote: string }) {
   )
 }
 
-export default function Message({
-  body,
-  sender,
-  senderColor,
-  ...props
-}: MessageProps) {
+export default function Message({ body, sender, ...props }: MessageProps) {
+  const baseSenderColor = useToken('colors', 'orangeYellow.500')
+  const senderColor = getSenderColor(sender, baseSenderColor)
+
   const parts = []
   for (const part of body.split(emoteRegexp)) {
     const emote = part.toLowerCase()
@@ -68,8 +68,9 @@ export default function Message({
       parts.push(part)
     }
   }
+
   return (
-    <Text {...props}>
+    <Text color="gray.200" {...props}>
       <Text display="inline" color={senderColor}>
         {sender}
       </Text>
