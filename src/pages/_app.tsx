@@ -114,8 +114,10 @@ function App({ Component, pageProps }: AppProps) {
   )
 }
 
-Sentry.init({
-  dsn: sentryDSN,
-})
+if (process.env.NODE_ENV === 'production') {
+  Sentry.init({
+    dsn: sentryDSN,
+  })
+}
 
 export default App
