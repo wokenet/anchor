@@ -43,6 +43,10 @@ type MessageProps = React.ComponentProps<typeof Text> & {
   sender: string
 }
 
+type MessageTextProps = React.ComponentProps<typeof Text> & {
+  children: string
+}
+
 export function Emote({ emote }: { emote: string }) {
   // TODO: implement https://github.com/Sorunome/matrix-doc/blob/b41c091dce3c29b3ade749f18d3350597a567512/proposals/2545-emotes.md
   return (
@@ -55,6 +59,19 @@ export function Emote({ emote }: { emote: string }) {
   )
 }
 
+export function MessageText({ children, ...props }: MessageTextProps) {
+  const parts = []
+  for (const part of children.split(emoteRegexp)) {
+    const emote = part.toLowerCase()
+    if (emotes.has(emote)) {
+      parts.push(<Emote key={parts.length} emote={emote} />)
+    } else {
+      parts.push(part)
+    }
+  }
+  return <Text {...props}>{parts}</Text>
+}
+
 export default function Message({
   body,
   sender,
@@ -63,24 +80,13 @@ export default function Message({
 }: MessageProps) {
   const baseSenderColor = useToken('colors', 'orangeYellow.500')
   const senderColor = getSenderColor(senderId, baseSenderColor)
-
-  const parts = []
-  for (const part of body.split(emoteRegexp)) {
-    const emote = part.toLowerCase()
-    if (emotes.has(emote)) {
-      parts.push(<Emote key={parts.length} emote={emote} />)
-    } else {
-      parts.push(part)
-    }
-  }
-
   return (
     <Text color="gray.200" {...props}>
       <Text display="inline" color={senderColor}>
         {sender}
       </Text>
       {': '}
-      {parts}
+      <MessageText display="inline">{body}</MessageText>
     </Text>
   )
 }

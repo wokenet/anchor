@@ -29,7 +29,7 @@ import { FaEye } from 'react-icons/fa'
 import Page from '../components/Page'
 import FooterLinks from '../components/FooterLinks'
 import AuthDrawer from '../components/AuthDrawer'
-import Message from '../components/Message'
+import Message, { MessageText } from '../components/Message'
 import View from '../components/View'
 import useAnchor from '../useAnchor'
 import Header from '../components/Header'
@@ -43,7 +43,9 @@ function Announcement({ onClose, children, zIndex }) {
   return (
     <Alert status="info" bg="gray.700" flexShrink={0} zIndex={zIndex}>
       <AlertIcon color="orangeYellow.500" />
-      <AlertDescription>{children}</AlertDescription>
+      <AlertDescription>
+        <MessageText>{children}</MessageText>
+      </AlertDescription>
       <CloseButton onClick={onClose} position="absolute" right="8px" />
     </Alert>
   )
