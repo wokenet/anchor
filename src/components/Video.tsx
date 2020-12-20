@@ -134,6 +134,7 @@ const Video = forwardRef(
     }, [isInteractingControls])
 
     useEffect(() => {
+      let hls
       const video = videoRef.current
 
       video.volume = Number(
@@ -146,7 +147,7 @@ const Video = forwardRef(
           video.play()
         })
       } else if (Hls.isSupported()) {
-        var hls = new Hls()
+        hls = new Hls()
         hls.loadSource(src)
         hls.attachMedia(video)
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -201,6 +202,9 @@ const Video = forwardRef(
           'fullscreenchange',
           updateFullscreen,
         )
+        if (hls) {
+          hls.detachMedia(video)
+        }
       }
     }, [src])
 
