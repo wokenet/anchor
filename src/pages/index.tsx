@@ -251,11 +251,9 @@ function Home() {
           ) : (
             // The `pr` attribute below is because of this bug: https://github.com/chakra-ui/chakra-ui/commit/d95cdc6469695676d4da1710f365b485052a044a
             <form onSubmit={handleSend} style={{ display: 'flex' }}>
-              <InputGroup>
+              <InputGroup flex={1} m={2}>
                 <Input
-                  m={2}
                   px={2}
-                  flex={1}
                   focusBorderColor="flame.600"
                   placeholder="Say something"
                   value={messageText}
@@ -266,11 +264,11 @@ function Home() {
                 {messageText.length <= 250 ? null : (
                   <InputRightElement
                     flexShrink={0}
-                    width={50}
-                    height={50}
+                    fontSize="sm"
+                    color="flame.300"
                     pointerEvents="none"
                   >
-                    <small>{maximumMessageSize - messageText.length}</small>
+                    {maximumMessageSize - messageText.length}
                   </InputRightElement>
                 )}
               </InputGroup>
