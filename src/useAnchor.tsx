@@ -8,9 +8,9 @@ import {
   MatrixClient,
   RoomMember,
 } from 'matrix-js-sdk'
-import { debounce, findLast } from 'lodash'
+import { debounce } from 'lodash'
 
-import { chatRoomId, announcementsRoomId } from '../constants.json'
+import { chatRoomId } from '../constants.json'
 
 type AnchorActions = {
   register: (
@@ -72,16 +72,13 @@ function useAnchor() {
       }
 
       function updateLatestAnnouncement() {
-        const announcementsRoom = client.getRoom(announcementsRoomId)
-        if (!announcementsRoom?.timeline) {
-          return
-        }
-        const latestAnnouncement = findLast(
-          announcementsRoom.timeline,
-          (ev) => ev.getType() === 'm.room.message',
-        )
+        const chatRoom = client.getRoom(chatRoomId)
+        const topicEvent = chatRoom.currentState.getStateEvents(
+          'm.room.topic',
+          '',
+        ) as MatrixEvent
         // @ts-ignore
-        setAnnouncement(latestAnnouncement?.getContent()?.body)
+        setAnnouncement(topicEvent.getContent()?.topic)
       }
 
       client.on(
@@ -94,7 +91,6 @@ function useAnchor() {
             }
             setRoom(roomUpdate)
             setTimeline([...roomUpdate?.timeline])
-          } else if (room.roomId === announcementsRoomId) {
             updateLatestAnnouncement()
           }
         }),
@@ -108,12 +104,10 @@ function useAnchor() {
       await client.startClient({ initialSyncLimit: 20 })
 
       if (client.isGuest()) {
-        await client.peekInRoom(announcementsRoomId)
         await client.peekInRoom(chatRoomId)
       } else {
         await once(client, 'sync')
         await client.joinRoom(chatRoomId)
-        await client.peekInRoom(announcementsRoomId)
       }
 
       client.on('RoomState.events', (event) => {
