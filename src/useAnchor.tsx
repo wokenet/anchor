@@ -77,6 +77,9 @@ function useAnchor() {
           'm.room.topic',
           '',
         ) as MatrixEvent
+        if (!topicEvent) {
+          return
+        }
         // @ts-ignore
         setAnnouncement(topicEvent.getContent()?.topic)
       }
