@@ -243,15 +243,14 @@ const Video = forwardRef(
             }}
             zIndex={100}
           >
-            <Spinner
-              gridArea="2 / 2"
-              alignSelf="center"
-              justifySelf="center"
-              boxSize={24}
-              opacity={isWaiting ? 1 : 0}
-              transitionProperty="opacity"
-              transitionDuration="normal"
-            />
+            {isWaiting && (
+              <Spinner
+                gridArea="2 / 2"
+                alignSelf="center"
+                justifySelf="center"
+                boxSize={24}
+              />
+            )}
             <ControlButton
               gridArea="3 / 2"
               justifySelf="center"
