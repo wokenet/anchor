@@ -135,8 +135,10 @@ function useAnchor() {
         AnchorViewEventType,
         '',
       ) as MatrixEvent
-      // @ts-ignore
-      setView(anchorViewEvent.getContent())
+      if (anchorViewEvent) {
+        // @ts-ignore
+        setView(anchorViewEvent.getContent())
+      }
 
       setActions({
         register: async (username, password, captchaToken) => {
