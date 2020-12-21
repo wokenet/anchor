@@ -1,8 +1,10 @@
 import Color, { mix } from 'tinycolor2'
 import { hpluvToHex } from 'hsluv'
 
+import { botUserId } from '../constants.json'
+
 export function getSenderColor(sender: string, baseColor: string): string {
-  if (!sender || sender === '@wokebot:woke.net') {
+  if (!sender || sender === botUserId) {
     return baseColor
   }
 
