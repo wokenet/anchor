@@ -100,8 +100,9 @@ function Home() {
     await actions.sendMessage(messageText)
   }
 
-  function handleScrollMessages({ top }) {
-    isScrollPinned.current = top === 1
+  function handleScrollMessages({ scrollTop, clientHeight, scrollHeight }) {
+    const pxFromBottom = scrollHeight - (scrollTop + clientHeight)
+    isScrollPinned.current = pxFromBottom <= 15
   }
 
   const updateScroll = useCallback(() => {
