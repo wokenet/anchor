@@ -2,8 +2,9 @@ import * as React from 'react'
 import { Img, Text, useToken } from '@chakra-ui/react'
 import escapeStringRegexp from 'escape-string-regexp'
 
-import { emoteSize } from '../../constants.json'
+import { emoteSize, maximumMessageSize, botUserId } from '../../constants.json'
 import { getSenderColor } from '../colors'
+import { MatrixEvent } from 'matrix-js-sdk'
 
 function loadEmotes() {
   const emoteRequire = require.context(
@@ -37,16 +38,6 @@ function loadEmotes() {
 
 const { emotes, emoteRegexp } = loadEmotes()
 
-type MessageProps = React.ComponentProps<typeof Text> & {
-  body: string
-  senderId: string
-  sender: string
-}
-
-type MessageTextProps = React.ComponentProps<typeof Text> & {
-  children: string
-}
-
 export function Emote({ emote }: { emote: string }) {
   // TODO: implement https://github.com/Sorunome/matrix-doc/blob/b41c091dce3c29b3ade749f18d3350597a567512/proposals/2545-emotes.md
   return (
@@ -57,6 +48,10 @@ export function Emote({ emote }: { emote: string }) {
       title={emote}
     />
   )
+}
+
+type MessageTextProps = React.ComponentProps<typeof Text> & {
+  children: string
 }
 
 export function MessageText({ children, ...props }: MessageTextProps) {
@@ -72,12 +67,13 @@ export function MessageText({ children, ...props }: MessageTextProps) {
   return <Text {...props}>{parts}</Text>
 }
 
-export default function Message({
-  body,
-  sender,
-  senderId,
-  ...props
-}: MessageProps) {
+type MessageProps = React.ComponentProps<typeof Text> & {
+  body: string
+  senderId: string
+  sender: string
+}
+
+export function Message({ body, sender, senderId, ...props }: MessageProps) {
   const baseSenderColor = useToken('colors', 'orangeYellow.500')
   const senderColor = getSenderColor(senderId, baseSenderColor)
   return (
@@ -88,5 +84,58 @@ export default function Message({
       {': '}
       <MessageText display="inline">{body}</MessageText>
     </Text>
+  )
+}
+
+type BotNoticeProps = React.ComponentProps<typeof Text> & {
+  body: string
+  sender: string
+}
+
+export function BotNotice({ body, sender, ...props }: BotNoticeProps) {
+  return (
+    <MessageText
+      color="orangeYellow.500"
+      textAlign="center"
+      borderColor="orangeYellow.600"
+      borderStyle="solid"
+      borderTopWidth="1px"
+      borderBottomWidth="1px"
+      {...props}
+    >
+      {body}
+    </MessageText>
+  )
+}
+
+export function renderEvent(ev: MatrixEvent) {
+  if (ev.getType() !== 'm.room.message' || !ev.event.content.body) {
+    return
+  }
+
+  // @ts-ignore
+  const content = ev.getContent()
+  if (content?.msgtype === 'm.notice' && ev.sender.userId === botUserId) {
+    return (
+      <BotNotice
+        key={ev.event.event_id}
+        sender={ev.sender.name}
+        body={content.body}
+        px={4}
+        py={2}
+        my={2}
+      />
+    )
+  }
+
+  return (
+    <Message
+      key={ev.event.event_id}
+      sender={ev.sender.name}
+      senderId={ev.sender.userId}
+      body={content.body.substring(0, maximumMessageSize)}
+      px={4}
+      _odd={{ backgroundColor: 'gray.900' }}
+    />
   )
 }

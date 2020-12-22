@@ -29,7 +29,7 @@ import { FaEye } from 'react-icons/fa'
 import Page from '../components/Page'
 import FooterLinks from '../components/FooterLinks'
 import AuthDrawer from '../components/AuthDrawer'
-import Message, { MessageText } from '../components/Message'
+import { MessageText, renderEvent } from '../components/messages'
 import View from '../components/View'
 import useAnchor from '../useAnchor'
 import Header from '../components/Header'
@@ -206,28 +206,7 @@ function Home() {
             universal
           >
             {timeline ? (
-              timeline.map((ev) => {
-                if (
-                  ev.getType() !== 'm.room.message' ||
-                  !ev.event.content.body
-                ) {
-                  return
-                }
-
-                return (
-                  <Message
-                    key={ev.event.event_id}
-                    sender={ev.sender.name}
-                    senderId={ev.sender.userId}
-                    body={ev.event.content.body.substring(
-                      0,
-                      maximumMessageSize,
-                    )}
-                    px={4}
-                    _odd={{ backgroundColor: 'gray.900' }}
-                  />
-                )
-              })
+              timeline.map(renderEvent)
             ) : (
               <SkeletonText
                 m={4}
