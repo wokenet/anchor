@@ -177,6 +177,7 @@ export default function AuthDrawer({
       placement="right"
       isOpen={isOpen}
       onClose={onClose}
+      autoFocus={rulesAccepted}
       finalFocusRef={finalFocusRef}
     >
       <DrawerOverlay>
