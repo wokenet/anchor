@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Img, Text, useToken } from '@chakra-ui/react'
+import { Flex, Img, Text, useToken } from '@chakra-ui/react'
 import escapeStringRegexp from 'escape-string-regexp'
 
 import { emoteSize, maximumMessageSize, botUserId } from '../../constants.json'
@@ -87,6 +87,44 @@ export function Message({ body, sender, senderId, ...props }: MessageProps) {
   )
 }
 
+export function ReplyMessage({
+  body,
+  sender,
+  senderId,
+  ...props
+}: MessageProps) {
+  const lines = body.split('\n')
+  let quoteSenderId
+  let quoteLines = []
+  let line
+  while ((line = lines.shift())) {
+    if (line === '') {
+      break
+    }
+    const match = line.match(/^>\s?\*?\s?(?:<([^>]+)>)?\s?(.*)/)
+    if (!match) {
+      continue
+    }
+    if (match[1]) {
+      quoteSenderId = match[1]
+    }
+    quoteLines.push(match[2])
+  }
+  return (
+    <Flex direction="column" flex="1" {...props}>
+      <Flex fontSize="xs" mt={0.5} mb={-1} opacity=".75">
+        <Text color="gray.200">re:&nbsp;</Text>
+        <Message
+          body={quoteLines.join('\n')}
+          sender={quoteSenderId.substr(1).split(':')[0]}
+          senderId={quoteSenderId}
+        />
+      </Flex>
+      <Message body={lines.join('\n')} sender={sender} senderId={senderId} />
+    </Flex>
+  )
+}
+
 type BotNoticeProps = React.ComponentProps<typeof Text> & {
   body: string
   sender: string
@@ -115,6 +153,7 @@ export function renderEvent(ev: MatrixEvent) {
 
   // @ts-ignore
   const content = ev.getContent()
+
   if (content?.msgtype === 'm.notice' && ev.sender.userId === botUserId) {
     return (
       <BotNotice
@@ -128,12 +167,27 @@ export function renderEvent(ev: MatrixEvent) {
     )
   }
 
+  const body = content.body.substring(0, maximumMessageSize)
+
+  if (content?.['m.relates_to']?.['m.in_reply_to']) {
+    return (
+      <ReplyMessage
+        key={ev.event.event_id}
+        sender={ev.sender.name}
+        senderId={ev.sender.userId}
+        body={body}
+        px={4}
+        _odd={{ backgroundColor: 'gray.900' }}
+      />
+    )
+  }
+
   return (
     <Message
       key={ev.event.event_id}
       sender={ev.sender.name}
       senderId={ev.sender.userId}
-      body={content.body.substring(0, maximumMessageSize)}
+      body={body}
       px={4}
       _odd={{ backgroundColor: 'gray.900' }}
     />
