@@ -99,7 +99,7 @@ export const socialPlatforms = (
 )
 
 export default function Header(props: React.ComponentProps<typeof Flex>) {
-  const isDesktop = useBreakpointValue({ base: false, lg: true })
+  const isDesktop = useBreakpointValue({ base: false, lg: true }) ?? true
   const {
     isOpen: isMenuOpen,
     onOpen: onMenuOpen,
@@ -131,20 +131,24 @@ export default function Header(props: React.ComponentProps<typeof Flex>) {
         <NavLink href="/engage">engage</NavLink>
       </HStack>
       <Spacer flex="1" />
-      <HStack ml={2} spacing={2} display={{ base: 'none', lg: 'flex' }}>
-        {socialPlatforms}
-      </HStack>
-      {!isDesktop && (
-        <IconButton
-          variant="ghost"
-          color="gray.400"
-          icon={<FaBars />}
-          fontSize="xl"
-          aria-label="Show navigation"
-          onClick={onMenuOpen}
-        />
+      {isDesktop && (
+        <HStack ml={2} spacing={2}>
+          {socialPlatforms}
+        </HStack>
       )}
-      {!isDesktop && <MenuDrawer isOpen={isMenuOpen} onClose={onMenuClose} />}
+      {!isDesktop && (
+        <>
+          <IconButton
+            variant="ghost"
+            color="gray.400"
+            icon={<FaBars />}
+            fontSize="xl"
+            aria-label="Show navigation"
+            onClick={onMenuOpen}
+          />
+          <MenuDrawer isOpen={isMenuOpen} onClose={onMenuClose} />
+        </>
+      )}
     </Flex>
   )
 }
