@@ -248,7 +248,7 @@ const Video = forwardRef(
                 gridArea="2 / 2"
                 alignSelf="center"
                 justifySelf="center"
-                boxSize={24}
+                boxSize={{ base: 16, md: 24 }}
               />
             )}
             <ControlButton
