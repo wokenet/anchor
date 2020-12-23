@@ -4,6 +4,7 @@
   "sentryDSN": "https://3a361bb162ab4b2c85ec99c2ee0d3957@o480736.ingest.sentry.io/5528257",
   "googleAnalyticsId": "UA-168767157-1",
   "emoteSize": 24,
+  "matrixServer": "https://matrix.woke.net",
   "chatRoomId": "!doYmXmbbmJCuwjKvff:woke.net",
   "botUserId": "@wokebot:woke.net",
   "maximumMessageSize": 500

@@ -2,6 +2,7 @@ import * as React from 'react'
 import Head from 'next/head'
 import { Flex } from '@chakra-ui/react'
 
+import { matrixServer } from '../../constants.json'
 import { GATag } from '../googleAnalytics'
 import Header from '../components/Header'
 import FooterLinks from './FooterLinks'
@@ -31,6 +32,8 @@ export default function Page({
           content="Watch live social movements, collective action &amp; civic engagement. We access, amplify and archive historic livestreams of the disenfranchised."
         />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <link rel="preconnect" href={matrixServer} />
+        <link rel="dns-prefetch" href={matrixServer} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://woke.net/" />
         <meta

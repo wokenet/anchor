@@ -10,7 +10,7 @@ import {
 } from 'matrix-js-sdk'
 import { debounce } from 'lodash'
 
-import { chatRoomId } from '../constants.json'
+import { chatRoomId, matrixServer } from '../constants.json'
 
 type AnchorActions = {
   register: (
@@ -69,7 +69,7 @@ function useAnchor() {
       let accessToken = localStorage.getItem('mx_access_token')
       if (!userId || !accessToken) {
         client = createClient({
-          baseUrl: 'https://matrix.woke.net',
+          baseUrl: matrixServer,
         })
         const reg = await client.registerGuest()
         userId = reg['user_id']
