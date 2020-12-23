@@ -73,7 +73,7 @@ export default function Page({
           {children}
         </Flex>
         {!noFooter && (
-          <FooterLinks as="footer" display={{ base: 'none', lg: 'initial' }} />
+          <FooterLinks as="footer" display={{ base: 'none', lg: 'flex' }} />
         )}
       </Flex>
     </>
