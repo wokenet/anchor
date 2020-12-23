@@ -31,7 +31,7 @@ export default function TypeformPage({ title, formId }: TypeformPageProps) {
         as="footer"
         position="absolute"
         bottom="0"
-        display={{ base: 'none', lg: 'initial' }}
+        display={{ base: 'none', lg: 'flex' }}
       />
     </Page>
   )
