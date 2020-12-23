@@ -268,6 +268,7 @@ const Video = forwardRef(
                 value={volume}
                 onChange={handleChangeVolume}
                 opacity={isMuted ? 0 : 1}
+                pointerEvents={isMuted ? 'none' : 'initial'}
                 transitionProperty="opacity"
                 transitionDuration="normal"
               >
