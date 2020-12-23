@@ -43,7 +43,7 @@ const INTRO_SEEN_KEY = 'intro_seen'
 function Announcement({ onClose, children, zIndex }) {
   return (
     <Alert status="info" bg="gray.700" flexShrink={0} zIndex={zIndex}>
-      <AlertIcon color="orangeYellow.500" />
+      <AlertIcon color="orangeYellow.500" flexShrink={0} />
       <AlertDescription mr={6}>
         <MessageText>{children}</MessageText>
       </AlertDescription>
