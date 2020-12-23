@@ -48,6 +48,7 @@ function Announcement({ isOpen, onClose, children, zIndex }) {
       {isOpen && (
         <motion.div
           key="announcement"
+          transition={{ type: 'tween' }}
           initial={{ height: 0, overflow: 'hidden' }}
           animate={{ height: 'auto' }}
           exit={{ height: 0 }}
