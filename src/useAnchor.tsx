@@ -36,6 +36,23 @@ export type ViewData = {
 
 const AnchorViewEventType = 'net.woke.anchor.view' as EventType
 
+function greedyLoadState<T>(
+  client: MatrixClient,
+  eventType: EventType,
+  callback: (T) => void,
+) {
+  // Helper for greedily racing single state event fetches with client sync. No-ops if client syncs before fetch finishes, so we don't use stale results.
+  client.getStateEvent(chatRoomId, eventType, '').then((data: any) => {
+    // If the client has already synced, no-op.
+    // @ts-ignore
+    if (client.isInitialSyncComplete()) {
+      return
+    }
+
+    callback(data)
+  })
+}
+
 function useAnchor() {
   let client: MatrixClient
   const [userInfo, setUserInfo] = useState<UserInfo>()
@@ -70,6 +87,12 @@ function useAnchor() {
       if (userMode === 'guest') {
         client.setGuest(true)
       }
+
+      // Immediately fetch these room state values in the background to render them before the entire chat sync finishes.
+      greedyLoadState(client, AnchorViewEventType, setView)
+      greedyLoadState(client, 'm.room.topic', ({ topic }) =>
+        setAnnouncement(topic),
+      )
 
       function updateLatestAnnouncement() {
         const chatRoom = client.getRoom(chatRoomId)
