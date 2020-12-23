@@ -236,7 +236,7 @@ function Home() {
           ) : (
             <SkeletonText
               m={4}
-              mb={12}
+              mb={14}
               noOfLines={10}
               spacing={4}
               startColor="gray.800"
