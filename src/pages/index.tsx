@@ -22,6 +22,7 @@ import {
   useToken,
   InputGroup,
   InputRightElement,
+  Skeleton,
 } from '@chakra-ui/react'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { FaEye } from 'react-icons/fa'
@@ -154,7 +155,16 @@ function Home() {
             </Announcement>
           )}
           <Center flex={1} overflow="hidden" backgroundColor="gray.950">
-            {view?.kind && <View view={view} />}
+            {view?.kind ? (
+              <View view={view} />
+            ) : (
+              <Skeleton
+                width="full"
+                height={{ base: `${100 * (9 / 16)}vw`, lg: 'full' }}
+                startColor="gray.800"
+                endColor="gray.900"
+              />
+            )}
           </Center>
           <Flex
             zIndex={200}
@@ -194,30 +204,30 @@ function Home() {
           justifyContent="flex-end"
           overflow="hidden"
         >
-          <Scrollbars
-            ref={messagesRef}
-            renderThumbVertical={(props) => (
-              <Box {...props} bgColor="gray.600" borderRadius="full" />
-            )}
-            onScrollFrame={handleScrollMessages}
-            autoHeightMax="100%"
-            autoHeight
-            autoHide
-            universal
-          >
-            {timeline ? (
-              timeline.map(renderEvent)
-            ) : (
-              <SkeletonText
-                m={4}
-                mb={12}
-                noOfLines={10}
-                spacing={4}
-                startColor="gray.800"
-                endColor="gray.900"
-              />
-            )}
-          </Scrollbars>
+          {timeline ? (
+            <Scrollbars
+              ref={messagesRef}
+              renderThumbVertical={(props) => (
+                <Box {...props} bgColor="gray.600" borderRadius="full" />
+              )}
+              onScrollFrame={handleScrollMessages}
+              autoHeightMax="100%"
+              autoHeight
+              autoHide
+              universal
+            >
+              {timeline.map(renderEvent)}
+            </Scrollbars>
+          ) : (
+            <SkeletonText
+              m={4}
+              mb={12}
+              noOfLines={10}
+              spacing={4}
+              startColor="gray.800"
+              endColor="gray.900"
+            />
+          )}
           {!userInfo ? null : userInfo.isGuest ? (
             <Button
               ref={authButtonRef}

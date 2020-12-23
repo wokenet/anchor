@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { AspectRatio, Box } from '@chakra-ui/react'
+import { AspectRatio, Box, useBreakpointValue } from '@chakra-ui/react'
 
 import Video from './Video'
 import OfflinePlaceholder from './OfflinePlaceholder'
@@ -10,14 +10,15 @@ type ViewProps = {
   view: ViewData
 }
 export default function View({ view: { kind, url, fill } }: ViewProps) {
+  const isDesktop = useBreakpointValue({ base: false, lg: true })
   const [initialMuted, setInitialMuted] = useState(true)
 
+  let content
   if (!url || kind === 'offline') {
-    return <OfflinePlaceholder />
-  }
-
-  if (kind === 'hls') {
-    return (
+    fill = true
+    content = <OfflinePlaceholder />
+  } else if (kind === 'hls') {
+    content = (
       <Video
         src={url}
         muted={initialMuted}
@@ -63,7 +64,7 @@ export default function View({ view: { kind, url, fill } }: ViewProps) {
         embedURL.searchParams.set('show_text', 'false')
       }
     }
-    const iframe = (
+    content = (
       <Box
         as="iframe"
         src={embedURL.toString()}
@@ -73,13 +74,15 @@ export default function View({ view: { kind, url, fill } }: ViewProps) {
         allowFullScreen
       />
     )
-    if (fill) {
-      return iframe
-    }
-    return (
-      <AspectRatio width="full" maxHeight="full" ratio={16 / 9}>
-        {iframe}
-      </AspectRatio>
-    )
   }
+
+  if (isDesktop && fill) {
+    return content
+  }
+
+  return (
+    <AspectRatio width="full" maxHeight="full" ratio={16 / 9}>
+      {content}
+    </AspectRatio>
+  )
 }

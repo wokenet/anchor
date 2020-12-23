@@ -8,7 +8,7 @@ const VideoEl = chakra('video')
 
 export default function OfflinePlacholder() {
   return (
-    <Flex position="relative" w="full" h="full">
+    <>
       <Center position="absolute" w="full" h="full" zIndex={100}>
         <VStack mb={2}>
           <Text
@@ -36,12 +36,13 @@ export default function OfflinePlacholder() {
       <VideoEl
         src={BackgroundVideo}
         w="full"
+        h="full"
         opacity=".075"
         objectFit="cover"
         autoPlay
         muted
         loop
       />
-    </Flex>
+    </>
   )
 }

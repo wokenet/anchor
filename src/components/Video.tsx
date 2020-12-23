@@ -13,7 +13,6 @@ import {
   Grid,
   HStack,
   IconButton,
-  AspectRatio,
   Spinner,
   useTheme,
   Slider,
@@ -213,118 +212,108 @@ const Video = forwardRef(
     const showControls = isInteractingControls || isWaiting
 
     return (
-      <AspectRatio
-        width="full"
-        maxHeight="full"
-        ratio={16 / 9}
-        boxShadow="0 0 4rem black inset"
-      >
-        <Flex ref={containerRef}>
-          <Grid
-            position="absolute"
-            left="0"
-            top="0"
-            right="0"
-            bottom="0"
-            height="full"
-            p={2}
-            templateRows="repeat(3, 1fr)"
-            templateColumns="repeat(3, 1fr)"
-            alignItems="end"
-            onMouseMove={handleShowControls}
-            onTouchStart={handleShowControls}
-            onMouseOut={() => setIsInteractingControls(false)}
-            onDoubleClick={handleDoubleClick}
-            opacity={showControls ? 0.9 : 0}
-            transitionProperty="opacity"
-            transitionDuration="normal"
-            _hover={{
-              boxShadow: `0 0 20px ${videoHighlightColor} inset`,
-            }}
-            zIndex={100}
-          >
-            {isWaiting && (
-              <Spinner
-                gridArea="2 / 2"
-                alignSelf="center"
-                justifySelf="center"
-                boxSize={{ base: 16, md: 24 }}
-              />
-            )}
-            <ControlButton
-              gridArea="3 / 2"
+      <Flex ref={containerRef} boxShadow="0 0 1.5rem black inset">
+        <Grid
+          position="absolute"
+          left="0"
+          top="0"
+          right="0"
+          bottom="0"
+          height="full"
+          p={2}
+          templateRows="repeat(3, 1fr)"
+          templateColumns="repeat(3, 1fr)"
+          alignItems="end"
+          onMouseMove={handleShowControls}
+          onTouchStart={handleShowControls}
+          onMouseOut={() => setIsInteractingControls(false)}
+          onDoubleClick={handleDoubleClick}
+          opacity={showControls ? 0.9 : 0}
+          transitionProperty="opacity"
+          transitionDuration="normal"
+          zIndex={100}
+        >
+          {isWaiting && (
+            <Spinner
+              gridArea="2 / 2"
+              alignSelf="center"
               justifySelf="center"
-              onClick={isPlaying ? handlePause : handlePlay}
-              icon={isPlaying ? <FaPause /> : <FaPlay />}
-              size="lg"
-              fontSize="3xl"
-              boxSize={20}
-              aria-label={isPlaying ? 'Pause' : 'Play'}
+              boxSize={{ base: 16, md: 24 }}
             />
-            <HStack
-              gridArea="3 / 3"
-              alignItems="flex-end"
-              justifyContent="flex-end"
-            >
-              <Flex flexDirection="column">
-                <Slider
-                  colorScheme="gray"
-                  size="lg"
-                  h="20"
-                  min={0}
-                  max={1}
-                  step={0.01}
-                  orientation="vertical"
-                  value={volume}
-                  onChange={handleChangeVolume}
-                  opacity={isMuted ? 0 : 1}
-                  transitionProperty="opacity"
-                  transitionDuration="normal"
-                >
-                  <SliderTrack
-                    bg="gray.700"
-                    borderColor="flame.800"
-                    borderWidth="1px"
-                    borderStyle="solid"
-                    w={3}
-                    borderRadius="full"
-                  >
-                    <SliderFilledTrack bg="flame.600" />
-                  </SliderTrack>
-                </Slider>
-                <ControlButton
-                  onClick={isMuted ? handleUnmute : handleMute}
-                  icon={isMuted ? <FaVolumeMute /> : <FaVolumeOff />}
-                  size="md"
-                  mt="2"
-                  aria-label={isMuted ? 'Unmute' : 'Mute'}
-                  {...(isMuted && {
-                    bg: 'deepRed.700',
-                    _hover: { bg: 'deepRed.600' },
-                    _active: { bg: 'gray.600' },
-                  })}
-                />
-              </Flex>
-              <ControlButton
-                onClick={isFullscreen ? handleExitFullscreen : handleFullscreen}
-                icon={isFullscreen ? <FaCompress /> : <FaExpand />}
-                size="md"
-                aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-              />
-            </HStack>
-          </Grid>
-          <VideoEl
-            key={src}
-            ref={videoRef}
-            opacity={isPlaying ? 1 : 0.5}
-            transitionProperty="opacity"
-            transitionDuration="faster"
-            width="full"
-            height="full"
-            {...props}
+          )}
+          <ControlButton
+            gridArea="3 / 2"
+            justifySelf="center"
+            onClick={isPlaying ? handlePause : handlePlay}
+            icon={isPlaying ? <FaPause /> : <FaPlay />}
+            size="lg"
+            fontSize="3xl"
+            boxSize={20}
+            aria-label={isPlaying ? 'Pause' : 'Play'}
           />
-        </Flex>
-      </AspectRatio>
+          <HStack
+            gridArea="3 / 3"
+            alignItems="flex-end"
+            justifyContent="flex-end"
+          >
+            <Flex flexDirection="column">
+              <Slider
+                colorScheme="gray"
+                size="lg"
+                h="20"
+                min={0}
+                max={1}
+                step={0.01}
+                orientation="vertical"
+                value={volume}
+                onChange={handleChangeVolume}
+                opacity={isMuted ? 0 : 1}
+                transitionProperty="opacity"
+                transitionDuration="normal"
+              >
+                <SliderTrack
+                  bg="gray.700"
+                  borderColor="flame.800"
+                  borderWidth="1px"
+                  borderStyle="solid"
+                  w={3}
+                  borderRadius="full"
+                >
+                  <SliderFilledTrack bg="flame.600" />
+                </SliderTrack>
+              </Slider>
+              <ControlButton
+                onClick={isMuted ? handleUnmute : handleMute}
+                icon={isMuted ? <FaVolumeMute /> : <FaVolumeOff />}
+                size="md"
+                mt="2"
+                aria-label={isMuted ? 'Unmute' : 'Mute'}
+                {...(isMuted && {
+                  bg: 'deepRed.700',
+                  _hover: { bg: 'deepRed.600' },
+                  _active: { bg: 'gray.600' },
+                })}
+              />
+            </Flex>
+            <ControlButton
+              onClick={isFullscreen ? handleExitFullscreen : handleFullscreen}
+              icon={isFullscreen ? <FaCompress /> : <FaExpand />}
+              size="md"
+              aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+            />
+          </HStack>
+        </Grid>
+        <VideoEl
+          key={src}
+          ref={videoRef}
+          opacity={isPlaying ? 1 : 0.5}
+          transitionProperty="opacity"
+          transitionDuration="faster"
+          width="full"
+          height="full"
+          {...props}
+        />
+      </Flex>
     )
   },
 )

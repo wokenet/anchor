@@ -125,11 +125,11 @@ function useAnchor() {
         userId: client.credentials.userId,
         isGuest: client.isGuest(),
       })
+      updateLatestAnnouncement()
       setRoom(chatRoom)
       setTimeline(chatRoom?.timeline)
-      client.scrollback(chatRoom, 30)
 
-      updateLatestAnnouncement()
+      client.scrollback(chatRoom, 30)
 
       const anchorViewEvent = chatRoom.currentState.getStateEvents(
         AnchorViewEventType,
