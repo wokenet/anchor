@@ -80,7 +80,7 @@ function useAnchor() {
       }
 
       client = createClient({
-        baseUrl: 'https://matrix.woke.net',
+        baseUrl: matrixServer,
         userId,
         accessToken,
       })
