@@ -82,13 +82,18 @@ function Home() {
     onOpen: onAnnouncementOpen,
     onClose: onAnnouncementClose,
   } = useDisclosure()
-  const { isOpen: isIntroOpen, onClose: onIntroClose } = useDisclosure({
-    defaultIsOpen:
-      typeof localStorage !== 'undefined'
-        ? !localStorage.getItem(INTRO_SEEN_KEY)
-        : false,
-  })
+  const {
+    isOpen: isIntroOpen,
+    onOpen: onIntroOpen,
+    onClose: onIntroClose,
+  } = useDisclosure()
   const [messageText, setMessageText] = useState('')
+
+  useEffect(() => {
+    if (!localStorage.getItem(INTRO_SEEN_KEY)) {
+      onIntroOpen()
+    }
+  }, [])
 
   function handleDismissIntro() {
     onIntroClose()
@@ -179,6 +184,11 @@ function Home() {
                 endColor="gray.900"
               />
             )}
+            <IntroOverlay
+              isOpen={isIntroOpen}
+              onClose={handleDismissIntro}
+              zIndex={100}
+            />
           </Center>
           <Flex
             zIndex={200}
@@ -205,11 +215,6 @@ function Home() {
               </Flex>
             )}
           </Flex>
-          <IntroOverlay
-            isOpen={isIntroOpen}
-            onClose={handleDismissIntro}
-            zIndex={100}
-          />
         </Flex>
         <Flex
           ref={chatRef}
