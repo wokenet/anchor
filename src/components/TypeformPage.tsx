@@ -27,7 +27,12 @@ export default function TypeformPage({ title, formId }: TypeformPageProps) {
         h="full"
         onLoad={handleLoad}
       />
-      <FooterLinks as="footer" position="absolute" bottom="0" />
+      <FooterLinks
+        as="footer"
+        position="absolute"
+        bottom="0"
+        display={{ base: 'none', lg: 'initial' }}
+      />
     </Page>
   )
 }

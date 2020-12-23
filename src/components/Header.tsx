@@ -5,8 +5,11 @@ import {
   Flex,
   HStack,
   Icon,
+  IconButton,
   Link as ChakraLink,
   Spacer,
+  useBreakpointValue,
+  useDisclosure,
 } from '@chakra-ui/react'
 import {
   FaYoutube,
@@ -16,11 +19,19 @@ import {
   FaTwitch,
   FaDiscord,
   FaRedditAlien,
+  FaBars,
 } from 'react-icons/fa'
 
 import LogoIcon from 'woke-content/images/logo.svg'
+import MenuDrawer from './MenuDrawer'
 
-function NavLink({ href, children }) {
+type NavLinkProps = {
+  href: string
+  desktopOnly?: boolean
+  children: React.ComponentProps<typeof ChakraLink>['children']
+}
+
+export function NavLink({ href, children }: NavLinkProps) {
   const { pathname } = useRouter()
   const isActive = pathname === href
 
@@ -38,7 +49,6 @@ function NavLink({ href, children }) {
         }}
         px={2}
         py={1}
-        mx={1}
         textTransform="uppercase"
       >
         {children}
@@ -67,7 +77,35 @@ function Platform({ url, icon }) {
   )
 }
 
+export const secondaryHeaderLinks = (
+  <>
+    <NavLink href="/videos">videos</NavLink>
+    <NavLink href="/streams">streams</NavLink>
+    <NavLink href="/submit">submit</NavLink>
+    <NavLink href="/streamers">streamers</NavLink>
+  </>
+)
+
+export const socialPlatforms = (
+  <>
+    <Platform url="https://www.youtube.com/StayWOKE" icon={FaYoutube} />
+    <Platform url="https://www.facebook.com/watchwoke" icon={FaFacebook} />
+    <Platform url="https://www.twitch.tv/woke" icon={FaTwitch} />
+    <Platform url="https://twitter.com/watchwoke" icon={FaTwitter} />
+    <Platform url="https://www.periscope.tv/watchwoke" icon={FaPeriscope} />
+    <Platform url="https://www.reddit.com/r/woke" icon={FaRedditAlien} />
+    <Platform url="https://discord.gg/woke" icon={FaDiscord} />
+  </>
+)
+
 export default function Header(props: React.ComponentProps<typeof Flex>) {
+  const isDesktop = useBreakpointValue({ base: false, lg: true })
+  const {
+    isOpen: isMenuOpen,
+    onOpen: onMenuOpen,
+    onClose: onMenuClose,
+  } = useDisclosure()
+
   return (
     <Flex
       as="header"
@@ -87,22 +125,26 @@ export default function Header(props: React.ComponentProps<typeof Flex>) {
           cursor="pointer"
         />
       </Link>
-      <NavLink href="/">watch</NavLink>
-      <NavLink href="/videos">videos</NavLink>
-      <NavLink href="/streams">streams</NavLink>
-      <NavLink href="/submit">submit</NavLink>
-      <NavLink href="/streamers">streamers</NavLink>
-      <NavLink href="/engage">engage</NavLink>
-      <Spacer flex="1" />
-      <HStack ml={2} spacing={2}>
-        <Platform url="https://www.youtube.com/StayWOKE" icon={FaYoutube} />
-        <Platform url="https://www.facebook.com/watchwoke" icon={FaFacebook} />
-        <Platform url="https://www.twitch.tv/woke" icon={FaTwitch} />
-        <Platform url="https://twitter.com/watchwoke" icon={FaTwitter} />
-        <Platform url="https://www.periscope.tv/watchwoke" icon={FaPeriscope} />
-        <Platform url="https://www.reddit.com/r/woke" icon={FaRedditAlien} />
-        <Platform url="https://discord.gg/woke" icon={FaDiscord} />
+      <HStack spacing="2">
+        <NavLink href="/">watch</NavLink>
+        {isDesktop && secondaryHeaderLinks}
+        <NavLink href="/engage">engage</NavLink>
       </HStack>
+      <Spacer flex="1" />
+      <HStack ml={2} spacing={2} display={{ base: 'none', lg: 'flex' }}>
+        {socialPlatforms}
+      </HStack>
+      {!isDesktop && (
+        <IconButton
+          variant="ghost"
+          color="gray.400"
+          icon={<FaBars />}
+          fontSize="xl"
+          aria-label="Show navigation"
+          onClick={onMenuOpen}
+        />
+      )}
+      {!isDesktop && <MenuDrawer isOpen={isMenuOpen} onClose={onMenuClose} />}
     </Flex>
   )
 }

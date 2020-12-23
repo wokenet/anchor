@@ -51,7 +51,9 @@ export default function Page({
         <Flex flex={1} flexDirection="column" overflow="auto">
           {children}
         </Flex>
-        {!noFooter && <FooterLinks as="footer" />}
+        {!noFooter && (
+          <FooterLinks as="footer" display={{ base: 'none', lg: 'initial' }} />
+        )}
       </Flex>
     </>
   )

@@ -6,7 +6,6 @@ function FooterLink({ href, children }) {
   return (
     <Link href={href} passHref>
       <ChakraLink
-        color="orangeYellow.800"
         fontFamily="Oswald"
         fontSize="sm"
         px={2}
@@ -24,16 +23,30 @@ function FooterLink({ href, children }) {
   )
 }
 
+export const footerLinks = (
+  <>
+    <FooterLink href="/about">about</FooterLink>
+    <FooterLink href="/contact">contact</FooterLink>
+    <FooterLink href="/report">DMCA</FooterLink>
+    <FooterLink href="/rules">rules</FooterLink>
+    <FooterLink href="/appeal">appeal</FooterLink>
+  </>
+)
+
 export default function FooterLinks(
   props: React.ComponentProps<typeof HStack>,
 ) {
   return (
-    <HStack flexShrink={0} spacing={4} px={4} h="14" bg="gray.950" {...props}>
-      <FooterLink href="/about">about</FooterLink>
-      <FooterLink href="/contact">contact</FooterLink>
-      <FooterLink href="/report">DMCA</FooterLink>
-      <FooterLink href="/rules">rules</FooterLink>
-      <FooterLink href="/appeal">appeal</FooterLink>
+    <HStack
+      flexShrink={0}
+      spacing={4}
+      px={4}
+      h="14"
+      bg="gray.950"
+      color="orangeYellow.800"
+      {...props}
+    >
+      {footerLinks}
     </HStack>
   )
 }
