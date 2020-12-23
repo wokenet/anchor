@@ -19,7 +19,7 @@
     "@sentry/react": "^5.27.4",
     "escape-string-regexp": "^4.0.0",
     "events": "^3.2.0",
-    "framer-motion": "^2.9.4",
+    "framer-motion": "^2.9.5",
     "hls.js": "^0.14.16",
     "hsluv": "^0.1.0",
     "lodash": "^4.17.20",
@@ -32,6 +32,7 @@
     "react-google-recaptcha": "^2.1.0",
     "react-icons": "^3.11.0",
     "tinycolor2": "^1.4.2",
+    "use-resize-observer": "^7.0.0",
     "woke-content": "git+https://github.com/wokenet/woke-content.git"
   },
   "devDependencies": {

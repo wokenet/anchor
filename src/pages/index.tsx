@@ -24,7 +24,9 @@ import {
   InputRightElement,
   Skeleton,
 } from '@chakra-ui/react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Scrollbars } from 'react-custom-scrollbars'
+import useResizeObserver from 'use-resize-observer'
 import { FaEye } from 'react-icons/fa'
 
 import Page from '../components/Page'
@@ -40,15 +42,26 @@ import { maximumMessageSize } from '../../constants.json'
 
 const INTRO_SEEN_KEY = 'intro_seen'
 
-function Announcement({ onClose, children, zIndex }) {
+function Announcement({ isOpen, onClose, children, zIndex }) {
   return (
-    <Alert status="info" bg="gray.700" flexShrink={0} zIndex={zIndex}>
-      <AlertIcon color="orangeYellow.500" flexShrink={0} />
-      <AlertDescription mr={6}>
-        <MessageText>{children}</MessageText>
-      </AlertDescription>
-      <CloseButton onClick={onClose} position="absolute" right="8px" />
-    </Alert>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          key="announcement"
+          initial={{ height: 0, overflow: 'hidden' }}
+          animate={{ height: 'auto' }}
+          exit={{ height: 0 }}
+        >
+          <Alert status="info" bg="gray.700" flexShrink={0} zIndex={zIndex}>
+            <AlertIcon color="orangeYellow.500" flexShrink={0} />
+            <AlertDescription mr={6}>
+              <MessageText>{children}</MessageText>
+            </AlertDescription>
+            <CloseButton onClick={onClose} position="absolute" right="8px" />
+          </Alert>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
 
@@ -116,12 +129,13 @@ function Home() {
     }
   }, [messagesRef, isScrollPinned])
 
-  useEffect(() => {
-    window.addEventListener('resize', updateScroll)
-    return () => {
-      window.removeEventListener('resize', updateScroll)
-    }
+  const { ref: chatRef } = useResizeObserver({
+    onResize: () => {
+      requestAnimationFrame(updateScroll)
+    },
   })
+
+  useLayoutEffect(updateScroll, [timeline])
 
   useEffect(() => {
     if (announcement) {
@@ -130,8 +144,6 @@ function Home() {
       onAnnouncementClose()
     }
   }, [announcement])
-
-  useLayoutEffect(updateScroll, [timeline])
 
   return (
     <Page noHeader noFooter>
@@ -149,11 +161,13 @@ function Home() {
           overflow={{ base: 'visible', lg: 'hidden' }}
         >
           <Header zIndex={200} />
-          {isAnnouncementOpen && (
-            <Announcement onClose={onAnnouncementClose} zIndex={200}>
-              {announcement}
-            </Announcement>
-          )}
+          <Announcement
+            isOpen={isAnnouncementOpen}
+            onClose={onAnnouncementClose}
+            zIndex={200}
+          >
+            {announcement}
+          </Announcement>
           <Center flex={1} overflow="hidden" backgroundColor="gray.950">
             {view?.kind ? (
               <View view={view} />
@@ -198,6 +212,7 @@ function Home() {
           />
         </Flex>
         <Flex
+          ref={chatRef}
           flexDir="column"
           w={{ base: 'full', lg: 'sm' }}
           flex={{ base: 1, lg: 'none' }}
