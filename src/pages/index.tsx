@@ -27,7 +27,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion'
 import { Scrollbars } from 'react-custom-scrollbars'
 import useResizeObserver from 'use-resize-observer'
-import { FaEye } from 'react-icons/fa'
+import { FaBullhorn, FaEye } from 'react-icons/fa'
 
 import Page from '../components/Page'
 import FooterLinks from '../components/FooterLinks'
@@ -53,7 +53,11 @@ function Announcement({ isOpen, onClose, children, zIndex }) {
           exit={{ height: 0 }}
         >
           <Alert status="info" bg="gray.700" flexShrink={0} zIndex={zIndex}>
-            <AlertIcon color="orangeYellow.500" flexShrink={0} />
+            <AlertIcon
+              as={FaBullhorn}
+              color="orangeYellow.500"
+              flexShrink={0}
+            />
             <AlertDescription mr={6}>
               <MessageText>{children}</MessageText>
             </AlertDescription>
