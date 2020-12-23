@@ -173,7 +173,12 @@ function Home() {
           >
             {announcement}
           </Announcement>
-          <Center flex={1} overflow="hidden" backgroundColor="gray.950">
+          <Center
+            position="relative"
+            flex={1}
+            overflow="hidden"
+            backgroundColor="gray.950"
+          >
             {view?.kind ? (
               <View view={view} />
             ) : (
