@@ -63,7 +63,7 @@ export default function Page({
           content="https://woke.net/static/woke-social.jpg"
         />
       </Head>
-      <GATag />
+      {process.env.NODE_ENV === 'production' && <GATag />}
       <Flex
         direction="column"
         width="100vw"

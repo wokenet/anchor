@@ -105,7 +105,9 @@ const customTheme = extendTheme({
 })
 
 function App({ Component, pageProps }: AppProps) {
-  useGAPageviewTracking()
+  if (process.env.NODE_ENV === 'production') {
+    useGAPageviewTracking()
+  }
 
   return (
     <ChakraProvider theme={customTheme}>
