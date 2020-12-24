@@ -117,13 +117,15 @@ export default function Header(props: React.ComponentProps<typeof Flex>) {
       {...props}
     >
       <Link href="/" passHref>
-        <Icon
-          as={LogoIcon}
-          h={{ base: 8, lg: 12 }}
-          w="auto"
-          mr={{ base: 4, lg: 6 }}
-          cursor="pointer"
-        />
+        <ChakraLink tabIndex={-1} _focus={{ outline: 'none' }}>
+          <Icon
+            as={LogoIcon}
+            h={{ base: 8, lg: 12 }}
+            w="auto"
+            mr={{ base: 4, lg: 6 }}
+            cursor="pointer"
+          />
+        </ChakraLink>
       </Link>
       <HStack spacing="2">
         <NavLink href="/">watch</NavLink>
