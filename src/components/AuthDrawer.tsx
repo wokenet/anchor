@@ -18,7 +18,6 @@ import {
   Text,
   Box,
   Checkbox,
-  Heading,
 } from '@chakra-ui/react'
 import { Scrollbars } from 'react-custom-scrollbars'
 import ReCAPTCHA from 'react-google-recaptcha'
@@ -70,7 +69,6 @@ function AuthForm({ onRegister, onLogin, onCancel }) {
   const [mode, setMode] = useState<'login' | 'register'>('register')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [isCAPTCHALoaded, setIsCAPTCHALoaded] = useState(false)
   const [captchaToken, setCaptchaToken] = useState<string>()
 
   function handleToggleMode() {
