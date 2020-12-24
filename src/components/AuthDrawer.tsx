@@ -102,7 +102,7 @@ function AuthForm({ onRegister, onLogin, onCancel }) {
 
   function handleToggleMode() {
     setMode(mode === 'register' ? 'login' : 'register')
-    clearErrors('server')
+    clearErrors()
   }
 
   async function performAuth({ username, password, captchaToken }) {
