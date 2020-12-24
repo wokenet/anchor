@@ -183,7 +183,7 @@ function useAnchor() {
               response: captchaToken,
             })
           } catch (err) {
-            if (err.errCode) {
+            if (err.errcode) {
               throw err
             }
             authSessionId = err.data.session
