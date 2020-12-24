@@ -132,8 +132,8 @@ function useAnchor() {
       if (client.isGuest()) {
         await client.peekInRoom(chatRoomId)
       } else {
-        await once(client, 'sync')
         await client.joinRoom(chatRoomId)
+        await once(client, 'sync')
       }
 
       client.on('RoomState.events', (event) => {
