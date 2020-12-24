@@ -30,6 +30,7 @@
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^17.0.1",
     "react-google-recaptcha": "^2.1.0",
+    "react-hook-form": "^6.13.1",
     "react-icons": "^3.11.0",
     "tinycolor2": "^1.4.2",
     "use-resize-observer": "^7.0.0",

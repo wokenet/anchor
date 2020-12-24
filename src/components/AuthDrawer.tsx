@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Drawer,
   DrawerOverlay,
@@ -21,9 +21,12 @@ import {
 } from '@chakra-ui/react'
 import { Scrollbars } from 'react-custom-scrollbars'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { useForm } from 'react-hook-form'
+import { motion, AnimatePresence } from 'framer-motion'
 
 import { siteName, recaptchaSiteKey } from '../../constants.json'
 import Rules from './Rules'
+import { MatrixError } from 'matrix-js-sdk'
 
 const RECAPTCHA_WIDTH = '304px'
 const RECAPTCHA_HEIGHT = '78px'
@@ -67,52 +70,102 @@ function RulesPane({ onAccept }) {
 
 function AuthForm({ onRegister, onLogin, onCancel }) {
   const [mode, setMode] = useState<'login' | 'register'>('register')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [captchaToken, setCaptchaToken] = useState<string>()
+  const {
+    register: registerField,
+    unregister: unregisterField,
+    handleSubmit,
+    setValue,
+    setError,
+    clearErrors,
+    errors,
+    formState: { isSubmitting },
+  } = useForm({
+    defaultValues: {
+      username: '',
+      password: '',
+      captchaToken: '',
+      server: null,
+    },
+  })
+
+  useEffect(() => {
+    if (mode === 'register') {
+      registerField('captchaToken', {
+        required: 'Please complete the CAPTCHA.',
+      })
+    } else {
+      unregisterField('captchaToken')
+    }
+  }, [mode, registerField, unregisterField])
+
+  const firstError = Object.values(errors)[0]
 
   function handleToggleMode() {
     setMode(mode === 'register' ? 'login' : 'register')
+    clearErrors('server')
   }
 
-  function handleSubmit(ev: React.SyntheticEvent) {
-    ev.preventDefault()
-    if (mode === 'register') {
-      onRegister(username, password, captchaToken)
-    } else {
-      onLogin(username, password)
+  async function performAuth({ username, password, captchaToken }) {
+    try {
+      if (mode === 'register') {
+        await onRegister(username, password, captchaToken)
+      } else {
+        await onLogin(username, password)
+      }
+    } catch (err) {
+      if (!(err instanceof MatrixError)) {
+        throw err
+      }
+      let field: string = 'server'
+      let { name, message } = err
+      if (err.name === 'M_USER_IN_USE') {
+        field = 'username'
+        name = 'taken'
+        message = 'Username taken.'
+      } else if (err.name === 'M_INVALID_USERNAME') {
+        field = 'username'
+        name = 'invalid'
+      }
+      if (!message.endsWith('.')) {
+        message = message + '.'
+      }
+      setError(field, { type: name, message: message })
     }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={(ev) => {
+        clearErrors('server')
+        handleSubmit(performAuth)(ev)
+      }}
+    >
       <Center flexDir="column">
         <DrawerHeader>
           {mode === 'register'
             ? `Create a ${siteName} account`
             : `Log in to ${siteName}`}
         </DrawerHeader>
-
-        <DrawerBody>
+        <DrawerBody overflow="hidden">
           <VStack spacing={4} px={0} w={RECAPTCHA_WIDTH} alignItems="center">
             <Input
+              name="username"
               focusBorderColor="orangeYellow.300"
               placeholder="Username"
-              value={username}
-              onChange={(ev) => setUsername(ev.target.value)}
+              ref={registerField({ required: 'Please enter a username.' })}
             />
             <Input
+              name="password"
               focusBorderColor="orangeYellow.300"
               placeholder="Password"
               type="password"
-              value={password}
-              onChange={(ev) => setPassword(ev.target.value)}
+              ref={registerField({ required: 'Please enter a password.' })}
             />
             {mode === 'register' && (
               <Box w={RECAPTCHA_WIDTH} h={RECAPTCHA_HEIGHT}>
                 <ReCAPTCHA
                   sitekey={recaptchaSiteKey}
-                  onChange={setCaptchaToken}
+                  onChange={(token) => setValue('captchaToken', token)}
                   theme="dark"
                 />
               </Box>
@@ -132,13 +185,38 @@ function AuthForm({ onRegister, onLogin, onCancel }) {
               <Text>.</Text>
             </Flex>
           </VStack>
+          <AnimatePresence>
+            {firstError && (
+              <motion.div
+                key="error"
+                transition={{ type: 'spring', duration: 0.5 }}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+              >
+                <Text
+                  color="deepRed.500"
+                  fontWeight="bold"
+                  textAlign="center"
+                  pt={4}
+                >
+                  {firstError.message}
+                </Text>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </DrawerBody>
         <DrawerFooter flexDirection="column" w="full">
           <Flex>
             <Button variant="outline" mr={3} onClick={onCancel}>
               Cancel
             </Button>
-            <Button type="submit" colorScheme="orangeYellow">
+            <Button
+              type="submit"
+              isLoading={isSubmitting}
+              disabled={isSubmitting}
+              colorScheme="orangeYellow"
+            >
               {mode === 'register' ? 'Register' : 'Login'}
             </Button>
           </Flex>
