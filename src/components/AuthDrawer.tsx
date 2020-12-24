@@ -146,8 +146,8 @@ function AuthForm({ onRegister, onLogin, onCancel }) {
             ? `Create a ${siteName} account`
             : `Log in to ${siteName}`}
         </DrawerHeader>
-        <DrawerBody overflow="hidden">
-          <VStack spacing={4} px={0} w={RECAPTCHA_WIDTH} alignItems="center">
+        <DrawerBody w={RECAPTCHA_WIDTH} px={0} overflow="hidden">
+          <VStack spacing={4} px={0} alignItems="center">
             <Input
               name="username"
               focusBorderColor="orangeYellow.300"
