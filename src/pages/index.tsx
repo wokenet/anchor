@@ -71,7 +71,6 @@ function Announcement({ isOpen, onClose, children, zIndex }) {
 }
 
 function Home() {
-  // TODO: registration/login error handling
   const messagesRef = useRef<Scrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
   const isScrollPinned = useRef<boolean>(true)
