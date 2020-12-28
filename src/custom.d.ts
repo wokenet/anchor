@@ -1,4 +1,4 @@
-// vio https://github.com/gregberge/svgr/issues/38#issuecomment-359218610
+// via https://github.com/gregberge/svgr/issues/38#issuecomment-359218610
 interface SvgrComponent
   extends React.StatelessComponent<React.SVGAttributes<SVGElement>> {}
 declare module '*.svg' {
