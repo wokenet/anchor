@@ -28,11 +28,17 @@ type UserInfo = {
   isGuest: boolean
 }
 
-export type ViewData = {
-  kind: 'hls' | 'embed' | 'offline'
-  url: string
-  fill: boolean
-}
+export type ViewData =
+  | {
+      kind: 'hls' | 'embed' | 'offline'
+      url: string
+      fill: boolean
+    }
+  | {
+      kind: 'live'
+      hls: string
+      dash: string
+    }
 
 const AnchorViewEventType = 'net.woke.anchor.view' as EventType
 

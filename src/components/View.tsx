@@ -1,31 +1,39 @@
 import * as React from 'react'
 import { useState } from 'react'
 import { AspectRatio, Box, useBreakpointValue } from '@chakra-ui/react'
+import dynamic from 'next/dynamic'
 
-import Video from './Video'
 import OfflinePlaceholder from './OfflinePlaceholder'
 import { ViewData } from '../useAnchor'
+
+const Video = dynamic(() => import('./Video'), {
+  ssr: false,
+})
 
 type ViewProps = {
   view: ViewData
 }
-export default function View({ view: { kind, url, fill } }: ViewProps) {
+export default function View({ view }: ViewProps) {
+  let fill = false
   const isDesktop = useBreakpointValue({ base: false, lg: true })
   const [initialMuted, setInitialMuted] = useState(true)
 
   let content
-  if (!url || kind === 'offline') {
+  if (view.kind === 'offline') {
     fill = true
     content = <OfflinePlaceholder />
-  } else if (kind === 'hls') {
+  } else if (view.kind === 'live') {
     content = (
       <Video
-        src={url}
+        dash={view.dash}
+        hls={view.hls}
         muted={initialMuted}
         onUnmute={() => setInitialMuted(false)}
       />
     )
-  } else if (kind === 'embed') {
+  } else if (view.kind === 'embed') {
+    const { url } = view
+    fill = view.fill
     let embedURL: URL
     try {
       embedURL = new URL(url)

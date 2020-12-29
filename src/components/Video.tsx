@@ -20,7 +20,7 @@ import {
   SliderTrack,
 } from '@chakra-ui/react'
 import { transparentize } from '@chakra-ui/theme-tools'
-import Hls from 'hls.js'
+import dashjs from 'dashjs'
 import {
   FaCompress,
   FaExpand,
@@ -48,10 +48,14 @@ function ControlButton(props: React.ComponentProps<typeof IconButton>) {
   )
 }
 
-type VideoProps = React.ComponentProps<typeof VideoEl> & { onUnmute: () => {} }
+type VideoProps = React.ComponentProps<typeof VideoEl> & {
+  dash: string
+  hls: string
+  onUnmute: () => {}
+}
 const Video = forwardRef(
   (
-    { src, onUnmute, ...props }: VideoProps,
+    { dash, hls, onUnmute, ...props }: VideoProps,
     ref: ForwardedRef<HTMLVideoElement>,
   ) => {
     const containerRef = useRef<HTMLDivElement>()
@@ -131,25 +135,41 @@ const Video = forwardRef(
     }, [isInteractingControls])
 
     useEffect(() => {
-      let hls
+      let dashPlayer
       const video = videoRef.current
 
       video.volume = Number(
         localStorage.getItem(LAST_VOLUME_KEY) || String(DEFAULT_VOLUME),
       )
 
-      if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = src
+      if (dashjs.isSupported()) {
+        dashPlayer = dashjs.MediaPlayer().create()
+        dashPlayer.updateSettings({
+          streaming: {
+            selectionModeForInitialTrack: 'highestEfficiency',
+            fastSwitchEnabled: true,
+            abr: {
+              limitBitrateByPortal: true,
+            },
+            retryIntervals: {
+              MPD: 2000,
+            },
+          },
+        })
+        dashPlayer.on(dashjs.MediaPlayer.events['ERROR'], (err) => {
+          console.log('dash.js error; reloading...', err)
+          setTimeout(() => {
+            dashPlayer.attachView(video)
+          }, 1000)
+        })
+        dashPlayer.initialize(video, dash, true)
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = hls
         video.addEventListener('loadedmetadata', () => {
           video.play()
         })
-      } else if (Hls.isSupported()) {
-        hls = new Hls()
-        hls.loadSource(src)
-        hls.attachMedia(video)
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          video.play()
-        })
+      } else {
+        throw new Error('Unable to stream video. DASH/HLS support not found.')
       }
 
       function play() {
@@ -199,11 +219,11 @@ const Video = forwardRef(
           'fullscreenchange',
           updateFullscreen,
         )
-        if (hls) {
-          hls.detachMedia(video)
+        if (dashPlayer) {
+          dashPlayer.destroy()
         }
       }
-    }, [src])
+    }, [dash, hls])
 
     useImperativeHandle(ref, () => videoRef.current)
 
@@ -303,7 +323,6 @@ const Video = forwardRef(
           </HStack>
         </Grid>
         <VideoEl
-          key={src}
           ref={videoRef}
           opacity={isPlaying ? 1 : 0.5}
           transitionProperty="opacity"
