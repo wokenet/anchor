@@ -17,7 +17,7 @@
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@sentry/react": "^5.27.4",
-    "dashjs": "^3.2.0",
+    "dashjs": "git+https://github.com/chromakode/dash.js.git#wokenet-release",
     "escape-string-regexp": "^4.0.0",
     "events": "^3.2.0",
     "framer-motion": "^2.9.5",
