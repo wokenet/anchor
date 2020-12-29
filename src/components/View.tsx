@@ -18,6 +18,13 @@ export default function View({ view }: ViewProps) {
   const isDesktop = useBreakpointValue({ base: false, lg: true })
   const [initialMuted, setInitialMuted] = useState(true)
 
+  // HAX
+  view = {
+    kind: 'live',
+    dash: 'https://get.woke.net/live/dash.mpd',
+    hls: 'https://get.woke.net/live/hls.m3u8',
+  } as ViewData
+
   let content
   if (view.kind === 'offline') {
     fill = true
