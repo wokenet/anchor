@@ -54,8 +54,6 @@ const Video = forwardRef(
     { src, onUnmute, ...props }: VideoProps,
     ref: ForwardedRef<HTMLVideoElement>,
   ) => {
-    const theme = useTheme()
-    const videoHighlightColor = transparentize('orangeYellow.300', 0.15)(theme)
     const containerRef = useRef<HTMLDivElement>()
     const videoRef = useRef<HTMLVideoElement>()
     const [isWaiting, setIsWaiting] = useState(true)
