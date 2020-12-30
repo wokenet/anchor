@@ -332,6 +332,7 @@ const Video = forwardRef(
           transitionDuration="faster"
           width="full"
           height="full"
+          playsInline
           {...props}
         />
       </Flex>
