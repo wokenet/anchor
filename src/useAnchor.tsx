@@ -31,11 +31,13 @@ type UserInfo = {
 export type ViewData =
   | {
       kind: 'hls' | 'embed' | 'offline'
+      title?: string
       url: string
       fill: boolean
     }
   | {
       kind: 'live'
+      title?: string
       hls: string
       dash: string
     }
