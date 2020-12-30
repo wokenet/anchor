@@ -150,6 +150,7 @@ const Video = forwardRef(
             fastSwitchEnabled: true,
             abr: {
               limitBitrateByPortal: true,
+              usePixelRatioInLimitBitrateByPortal: true,
             },
             retryIntervals: {
               MPD: 2000,
