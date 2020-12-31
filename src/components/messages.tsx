@@ -46,6 +46,7 @@ export function Emote({ emote }: { emote: string }) {
       src={emotes.get(emote)}
       boxSize="1.5em"
       title={emote}
+      verticalAlign="bottom"
     />
   )
 }
