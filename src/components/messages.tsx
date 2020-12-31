@@ -129,10 +129,9 @@ export function ReplyMessage({
 
 type BotNoticeProps = React.ComponentProps<typeof Text> & {
   body: string
-  sender: string
 }
 
-export function BotNotice({ body, sender, ...props }: BotNoticeProps) {
+export function BotNotice({ body, ...props }: BotNoticeProps) {
   return (
     <MessageText
       color="orangeYellow.500"
