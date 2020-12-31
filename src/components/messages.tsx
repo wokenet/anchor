@@ -77,6 +77,10 @@ type MessageProps = React.ComponentProps<typeof Text> & {
 export function Message({ body, sender, senderId, ...props }: MessageProps) {
   const baseSenderColor = useToken('colors', 'orangeYellow.500')
   const senderColor = getSenderColor(senderId, baseSenderColor)
+
+  // Hide discord nick tag if present
+  sender = sender.replace(/ \(discord\)$/, '')
+
   // Note: we use as="div" below so the _odd styling relies on :nth-of-type, which requires all elements to have the same node name.
   return (
     <Text as="div" color="gray.200" {...props}>
