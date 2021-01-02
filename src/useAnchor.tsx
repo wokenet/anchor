@@ -12,7 +12,7 @@ import { debounce } from 'lodash'
 
 import { chatRoomId, matrixServer } from '../constants.json'
 
-type AnchorActions = {
+export type AnchorActions = {
   register: (
     username: string,
     password: string,
@@ -21,6 +21,13 @@ type AnchorActions = {
   login: (username: string, password: string) => Promise<void>
   logout: () => Promise<void>
   sendMessage: (body: string) => Promise<void>
+  mxcURL: (
+    mxcURL: string,
+    width?: number,
+    height?: number,
+    resizeMethod?: 'crop' | 'scale',
+    allowDirectLinks?: boolean,
+  ) => string
 }
 
 type UserInfo = {
@@ -107,6 +114,70 @@ function useAnchor() {
         setAnnouncement(topic),
       )
 
+      setActions({
+        register: async (username, password, captchaToken) => {
+          let authSessionId
+          const doRegister = (sessionId, auth) => {
+            return client.register(
+              username,
+              password,
+              sessionId,
+              auth,
+              null,
+              // FIXME: results in "M_UNKNOWN: No row found (users)" from server. Why?
+              //userMode === 'guest' ? client.getAccessToken() : null,
+            )
+          }
+          try {
+            await doRegister(null, {
+              type: 'm.login.recaptcha',
+              response: captchaToken,
+            })
+          } catch (err) {
+            if (err.errcode) {
+              throw err
+            }
+            authSessionId = err.data.session
+          }
+
+          // We must submit a second time to satisfy the Matrix dummy login flow.
+          const res = await doRegister(authSessionId, {
+            type: 'm.login.dummy',
+          })
+
+          localStorage.setItem('mx_user_mode', 'account')
+          localStorage.setItem('mx_user_id', res['user_id'])
+          localStorage.setItem('mx_access_token', res['access_token'])
+          await connect()
+        },
+        login: async (username, password) => {
+          const res = await client.loginWithPassword(username, password)
+          localStorage.setItem('mx_user_mode', 'account')
+          localStorage.setItem('mx_user_id', res['user_id'])
+          localStorage.setItem('mx_access_token', res['access_token'])
+          await connect()
+        },
+        logout: async () => {
+          await client.logout()
+          localStorage.removeItem('mx_user_mode')
+          localStorage.removeItem('mx_user_id')
+          localStorage.removeItem('mx_access_token')
+          await connect()
+        },
+        sendMessage: async (body) => {
+          await client.sendTextMessage(chatRoomId, body, '')
+        },
+        mxcURL: (mxcURL, width, height, resizeMethod, allowDirectLinks) => {
+          return client.mxcUrlToHttp(
+            mxcURL,
+            width,
+            height,
+            resizeMethod,
+            allowDirectLinks,
+          )
+        },
+      })
+
       function updateLatestAnnouncement() {
         const chatRoom = client.getRoom(chatRoomId)
         const topicEvent = chatRoom.currentState.getStateEvents(
@@ -175,61 +246,6 @@ function useAnchor() {
         // @ts-ignore
         setView(anchorViewEvent.getContent())
       }
-
-      setActions({
-        register: async (username, password, captchaToken) => {
-          let authSessionId
-          const doRegister = (sessionId, auth) => {
-            return client.register(
-              username,
-              password,
-              sessionId,
-              auth,
-              null,
-              // FIXME: results in "M_UNKNOWN: No row found (users)" from server. Why?
-              //userMode === 'guest' ? client.getAccessToken() : null,
-            )
-          }
-          try {
-            await doRegister(null, {
-              type: 'm.login.recaptcha',
-              response: captchaToken,
-            })
-          } catch (err) {
-            if (err.errcode) {
-              throw err
-            }
-            authSessionId = err.data.session
-          }
-
-          // We must submit a second time to satisfy the Matrix dummy login flow.
-          const res = await doRegister(authSessionId, {
-            type: 'm.login.dummy',
-          })
-
-          localStorage.setItem('mx_user_mode', 'account')
-          localStorage.setItem('mx_user_id', res['user_id'])
-          localStorage.setItem('mx_access_token', res['access_token'])
-          await connect()
-        },
-        login: async (username, password) => {
-          const res = await client.loginWithPassword(username, password)
-          localStorage.setItem('mx_user_mode', 'account')
-          localStorage.setItem('mx_user_id', res['user_id'])
-          localStorage.setItem('mx_access_token', res['access_token'])
-          await connect()
-        },
-        logout: async () => {
-          await client.logout()
-          localStorage.removeItem('mx_user_mode')
-          localStorage.removeItem('mx_user_id')
-          localStorage.removeItem('mx_access_token')
-          await connect()
-        },
-        sendMessage: async (body) => {
-          await client.sendTextMessage(chatRoomId, body, '')
-        },
-      })
     }
 
     connect()

@@ -4,7 +4,9 @@ import escapeStringRegexp from 'escape-string-regexp'
 
 import { emoteSize, maximumMessageSize, botUserId } from '../../constants.json'
 import { getSenderColor } from '../colors'
-import { MatrixEvent } from 'matrix-js-sdk'
+import { MatrixEvent, RoomMember } from 'matrix-js-sdk'
+
+import type { AnchorActions } from '../useAnchor'
 
 function loadEmotes() {
   const emoteRequire = require.context(
@@ -68,6 +70,25 @@ export function MessageText({ children, ...props }: MessageTextProps) {
   return <Text {...props}>{parts}</Text>
 }
 
+type SenderProps = React.ComponentProps<typeof Text> & {
+  senderId: string
+  sender: string
+}
+
+function Sender({ sender, senderId, ...props }) {
+  const baseSenderColor = useToken('colors', 'orangeYellow.500')
+  const senderColor = getSenderColor(senderId, baseSenderColor)
+
+  // Hide discord nick tag if present
+  sender = sender.replace(/ \(discord\)$/, '')
+
+  return (
+    <Text color={senderColor} {...props}>
+      {sender}
+    </Text>
+  )
+}
+
 type MessageProps = React.ComponentProps<typeof Text> & {
   body: string
   senderId: string
@@ -75,21 +96,39 @@ type MessageProps = React.ComponentProps<typeof Text> & {
 }
 
 export function Message({ body, sender, senderId, ...props }: MessageProps) {
-  const baseSenderColor = useToken('colors', 'orangeYellow.500')
-  const senderColor = getSenderColor(senderId, baseSenderColor)
-
-  // Hide discord nick tag if present
-  sender = sender.replace(/ \(discord\)$/, '')
-
   // Note: we use as="div" below so the _odd styling relies on :nth-of-type, which requires all elements to have the same node name.
   return (
     <Text as="div" color="gray.200" {...props}>
-      <Text display="inline" color={senderColor}>
-        {sender}
-      </Text>
+      <Sender display="inline" sender={sender} senderId={senderId} />
       {': '}
       <MessageText display="inline">{body}</MessageText>
     </Text>
+  )
+}
+
+type ImageMessageProps = React.ComponentProps<typeof Flex> & {
+  senderId: string
+  sender: string
+  url: string
+  imageWidth: number
+  imageHeight: number
+}
+
+export function ImageMessage({
+  sender,
+  senderId,
+  url,
+  imageWidth,
+  imageHeight,
+  ...props
+}: ImageMessageProps) {
+  return (
+    <Flex direction="column" flex="1" {...props}>
+      <Text color="gray.200">
+        <Sender display="inline" sender={sender} senderId={senderId} />:
+      </Text>
+      <Img src={url} htmlWidth={imageWidth} htmlHeight={imageHeight} mb={2} />
+    </Flex>
   )
 }
 
@@ -151,7 +190,11 @@ export function BotNotice({ body, ...props }: BotNoticeProps) {
   )
 }
 
-export function renderEvent(ev: MatrixEvent) {
+export function renderEvent(
+  ev: MatrixEvent,
+  member: RoomMember,
+  mxcURL: AnchorActions['mxcURL'],
+) {
   if (ev.getType() !== 'm.room.message' || !ev.event.content.body) {
     return
   }
@@ -168,6 +211,21 @@ export function renderEvent(ev: MatrixEvent) {
         px={4}
         py={2}
         my={2}
+      />
+    )
+  }
+
+  if (content?.msgtype === 'm.image' && member.powerLevel > 10) {
+    return (
+      <ImageMessage
+        key={ev.event.event_id}
+        sender={ev.sender.name}
+        senderId={ev.sender.userId}
+        url={mxcURL(content.info.thumbnail_url)}
+        imageWidth={content.info.thumbnail_info.w}
+        imageHeight={content.info.thumbnail_info.h}
+        px={4}
+        _odd={{ backgroundColor: 'gray.900' }}
       />
     )
   }

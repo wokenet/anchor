@@ -245,7 +245,13 @@ function Home() {
               autoHide
               universal
             >
-              {timeline.map(renderEvent)}
+              {timeline.map((ev) =>
+                renderEvent(
+                  ev,
+                  room.getMember(ev.getSender()),
+                  actions?.mxcURL,
+                ),
+              )}
             </Scrollbars>
           ) : (
             <SkeletonText
