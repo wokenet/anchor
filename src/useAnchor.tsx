@@ -50,15 +50,20 @@ function greedyLoadState<T>(
   callback: (T) => void,
 ) {
   // Helper for greedily racing single state event fetches with client sync. No-ops if client syncs before fetch finishes, so we don't use stale results.
-  client.getStateEvent(chatRoomId, eventType, '').then((data: any) => {
-    // If the client has already synced, no-op.
-    // @ts-ignore
-    if (client.isInitialSyncComplete()) {
-      return
-    }
+  client
+    .getStateEvent(chatRoomId, eventType, '')
+    .then((data: any) => {
+      // If the client has already synced, no-op.
+      // @ts-ignore
+      if (client.isInitialSyncComplete()) {
+        return
+      }
 
-    callback(data)
-  })
+      callback(data)
+    })
+    .catch((err) =>
+      console.warn('Error prefetching initial state:', eventType, err),
+    )
 }
 
 function useAnchor() {
