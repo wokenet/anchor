@@ -148,6 +148,7 @@ const Video = forwardRef(
           streaming: {
             selectionModeForInitialTrack: 'highestEfficiency',
             fastSwitchEnabled: true,
+            fragmentRequestTimeout: 4000,
             abr: {
               limitBitrateByPortal: true,
               usePixelRatioInLimitBitrateByPortal: true,
