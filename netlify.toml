@@ -10,3 +10,7 @@
   from = "/.well-known/matrix/*"
   to = "https://matrix.woke.net/.well-known/matrix/:splat"
   status = 200
+
+[[redirects]]
+  from = "/discord"
+  to = "https://discord.com/invite/woke"
