@@ -84,7 +84,7 @@ function Sender({ sender, senderId, ...props }) {
   sender = sender.replace(/ \(discord\)$/, '')
 
   return (
-    <Text color={senderColor} {...props}>
+    <Text as="span" color={senderColor} {...props}>
       {sender}
     </Text>
   )
