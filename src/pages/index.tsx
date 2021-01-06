@@ -1,11 +1,5 @@
 import * as React from 'react'
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useState,
-  useRef,
-} from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import {
   Box,
   Button,
@@ -26,6 +20,7 @@ import {
 } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Scrollbars } from 'react-custom-scrollbars'
+import { useForm } from 'react-hook-form'
 import useResizeObserver from 'use-resize-observer'
 import { FaBullhorn, FaEye } from 'react-icons/fa'
 
@@ -70,6 +65,53 @@ function Announcement({ isOpen, onClose, children, zIndex }) {
   )
 }
 
+function ChatEntry({ onSend }) {
+  const {
+    register: registerField,
+    watch: watchField,
+    setValue: setFieldValue,
+    handleSubmit,
+  } = useForm({
+    defaultValues: { message: '' },
+  })
+
+  const messageText = watchField('message')
+
+  return (
+    // The `pr` attribute below is because of this bug: https://github.com/chakra-ui/chakra-ui/commit/d95cdc6469695676d4da1710f365b485052a044a
+    <form
+      onSubmit={(ev) => {
+        handleSubmit(onSend)(ev)
+        setFieldValue('message', '')
+      }}
+      style={{ display: 'flex' }}
+    >
+      <InputGroup flex={1} m={2}>
+        <Input
+          name="message"
+          px={2}
+          color="gray.200"
+          focusBorderColor="flame.600"
+          placeholder="Say something"
+          maxLength={maximumMessageSize}
+          pr={messageText.length <= 250 ? 2 : null}
+          ref={registerField}
+        />
+        {messageText.length <= 250 ? null : (
+          <InputRightElement
+            flexShrink={0}
+            fontSize="sm"
+            color="flame.300"
+            pointerEvents="none"
+          >
+            {maximumMessageSize - messageText.length}
+          </InputRightElement>
+        )}
+      </InputGroup>
+    </form>
+  )
+}
+
 function Home() {
   const messagesRef = useRef<Scrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
@@ -91,7 +133,6 @@ function Home() {
     onOpen: onIntroOpen,
     onClose: onIntroClose,
   } = useDisclosure()
-  const [messageText, setMessageText] = useState('')
 
   useEffect(() => {
     if (!localStorage.getItem(INTRO_SEEN_KEY)) {
@@ -114,13 +155,11 @@ function Home() {
     onAuthClose()
   }
 
-  async function handleSend(ev: React.SyntheticEvent) {
-    ev.preventDefault()
-    setMessageText('')
-    if (!messageText.length) {
+  async function handleSend({ message }) {
+    if (!message.length) {
       return
     }
-    await actions.sendMessage(messageText)
+    await actions.sendMessage(message)
   }
 
   function handleScrollMessages({ scrollTop, clientHeight, scrollHeight }) {
@@ -277,31 +316,7 @@ function Home() {
               Start chatting
             </Button>
           ) : (
-            // The `pr` attribute below is because of this bug: https://github.com/chakra-ui/chakra-ui/commit/d95cdc6469695676d4da1710f365b485052a044a
-            <form onSubmit={handleSend} style={{ display: 'flex' }}>
-              <InputGroup flex={1} m={2}>
-                <Input
-                  px={2}
-                  color="gray.200"
-                  focusBorderColor="flame.600"
-                  placeholder="Say something"
-                  value={messageText}
-                  maxLength={maximumMessageSize}
-                  pr={messageText.length <= 250 ? 2 : null}
-                  onChange={(ev) => setMessageText(ev.target.value)}
-                />
-                {messageText.length <= 250 ? null : (
-                  <InputRightElement
-                    flexShrink={0}
-                    fontSize="sm"
-                    color="flame.300"
-                    pointerEvents="none"
-                  >
-                    {maximumMessageSize - messageText.length}
-                  </InputRightElement>
-                )}
-              </InputGroup>
-            </form>
+            <ChatEntry onSend={handleSend} />
           )}
         </Flex>
         <AuthDrawer
