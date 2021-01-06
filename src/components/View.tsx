@@ -53,7 +53,10 @@ export default function View({ view }: ViewProps) {
         embedURL.searchParams.set('mute', '1')
       }
     } else if (embedURL.hostname.endsWith('twitch.tv')) {
-      if (embedURL.hostname === 'www.twitch.tv') {
+      if (
+        embedURL.hostname === 'twitch.tv' ||
+        embedURL.hostname === 'www.twitch.tv'
+      ) {
         embedURL = new URL(
           `https://player.twitch.tv?channel=${embedURL.pathname.substr(1)}`,
         )
