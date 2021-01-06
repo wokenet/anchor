@@ -217,14 +217,24 @@ export function ChatEventContent({ ev, member, mxcURL }: ChatEventProps) {
   }
 
   if (content?.msgtype === 'm.image' && member.powerLevel > 10) {
+    let imageURL, imageWidth, imageHeight
+    if (content.info.thumbnail_url) {
+      imageURL = content.info.thumbnail_url
+      imageWidth = content.info.thumbnail_info.w
+      imageHeight = content.info.thumbnail_info.h
+    } else {
+      imageURL = content.url
+      imageWidth = content.info.w
+      imageHeight = content.info.h
+    }
     return (
       <ImageMessage
         key={ev.event.event_id}
         sender={ev.sender.name}
         senderId={ev.sender.userId}
-        url={mxcURL(content.info.thumbnail_url)}
-        imageWidth={content.info.thumbnail_info.w}
-        imageHeight={content.info.thumbnail_info.h}
+        url={mxcURL(imageURL)}
+        imageWidth={imageWidth}
+        imageHeight={imageHeight}
         px={4}
         _odd={{ backgroundColor: 'gray.900' }}
       />
