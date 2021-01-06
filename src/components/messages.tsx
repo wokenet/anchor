@@ -206,7 +206,6 @@ export function ChatEventContent({ ev, member, mxcURL }: ChatEventProps) {
   if (content?.msgtype === 'm.notice' && ev.sender.userId === botUserId) {
     return (
       <BotNotice
-        key={ev.event.event_id}
         sender={ev.sender.name}
         body={content.body}
         px={4}
@@ -229,7 +228,6 @@ export function ChatEventContent({ ev, member, mxcURL }: ChatEventProps) {
     }
     return (
       <ImageMessage
-        key={ev.event.event_id}
         sender={ev.sender.name}
         senderId={ev.sender.userId}
         url={mxcURL(imageURL)}
@@ -246,7 +244,6 @@ export function ChatEventContent({ ev, member, mxcURL }: ChatEventProps) {
   if (content?.['m.relates_to']?.['m.in_reply_to']) {
     return (
       <ReplyMessage
-        key={ev.event.event_id}
         sender={ev.sender.name}
         senderId={ev.sender.userId}
         body={body}
@@ -258,7 +255,6 @@ export function ChatEventContent({ ev, member, mxcURL }: ChatEventProps) {
 
   return (
     <Message
-      key={ev.event.event_id}
       sender={ev.sender.name}
       senderId={ev.sender.userId}
       body={body}

@@ -247,6 +247,8 @@ function Home() {
             >
               {timeline.map((ev) => (
                 <ChatEvent
+                  // @ts-ignore
+                  key={ev.getId()}
                   ev={ev}
                   member={room.getMember(ev.getSender())}
                   mxcURL={actions?.mxcURL}
