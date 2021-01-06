@@ -191,6 +191,14 @@ function useAnchor() {
         setAnnouncement(topicEvent.getContent()?.topic)
       }
 
+      function updateTimeline(timeline) {
+        // TODO: filter these server-side?
+        const filteredEvents = timeline.filter(
+          (ev) => ev.getType() === 'm.room.message' && ev.event.content.body,
+        )
+        setTimeline(filteredEvents)
+      }
+
       client.on(
         'Room.timeline',
         debounce((event: MatrixEvent, room: Room) => {
@@ -200,7 +208,7 @@ function useAnchor() {
               return
             }
             setRoom(roomUpdate)
-            setTimeline([...roomUpdate?.timeline])
+            updateTimeline(roomUpdate?.timeline)
             updateLatestAnnouncement()
           }
         }),
@@ -234,7 +242,7 @@ function useAnchor() {
       })
       updateLatestAnnouncement()
       setRoom(chatRoom)
-      setTimeline(chatRoom?.timeline)
+      updateTimeline(chatRoom?.timeline)
 
       client.scrollback(chatRoom, 30)
 

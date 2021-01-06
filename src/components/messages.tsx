@@ -200,10 +200,6 @@ export function MessageFallback() {
 }
 
 export function ChatEventContent({ ev, member, mxcURL }: ChatEventProps) {
-  if (ev.getType() !== 'm.room.message' || !ev.event.content.body) {
-    return
-  }
-
   // @ts-ignore
   const content = ev.getContent()
 
