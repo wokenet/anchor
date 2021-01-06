@@ -51,26 +51,29 @@ export type ViewData =
 
 const AnchorViewEventType = 'net.woke.anchor.view' as EventType
 
-function greedyLoadState<T>(
-  client: MatrixClient,
+async function greedyLoadState<T>(
+  isSynced: () => boolean,
   eventType: EventType,
   callback: (T) => void,
 ) {
   // Helper for greedily racing single state event fetches with client sync. No-ops if client syncs before fetch finishes, so we don't use stale results.
-  client
-    .getStateEvent(chatRoomId, eventType, '')
-    .then((data: any) => {
-      // If the client has already synced, no-op.
-      // @ts-ignore
-      if (client.isInitialSyncComplete()) {
-        return
-      }
-
-      callback(data)
-    })
-    .catch((err) =>
-      console.warn('Error prefetching initial state:', eventType, err),
+  try {
+    const resp = await fetch(
+      `${matrixServer}/_matrix/client/r0/rooms/${encodeURIComponent(
+        chatRoomId,
+      )}/state/${eventType}/`,
     )
+    const data = await resp.json()
+
+    // If the client has already synced, no-op.
+    if (isSynced()) {
+      return
+    }
+
+    callback(data)
+  } catch (err) {
+    console.warn('Error prefetching initial state:', eventType, err)
+  }
 }
 
 function useAnchor() {
@@ -84,6 +87,14 @@ function useAnchor() {
 
   useEffect(() => {
     async function connect() {
+      // @ts-ignore
+      let isSynced = () => client.isInitialSyncComplete()
+      // Immediately fetch these room state values in the background to render them before the entire chat sync finishes.
+      greedyLoadState(isSynced, AnchorViewEventType, setView)
+      greedyLoadState(isSynced, 'm.room.topic', ({ topic }) =>
+        setAnnouncement(topic),
+      )
+
       let userMode = localStorage.getItem('mx_user_mode') || 'guest'
       let userId = localStorage.getItem('mx_user_id')
       let accessToken = localStorage.getItem('mx_access_token')
@@ -107,12 +118,6 @@ function useAnchor() {
       if (userMode === 'guest') {
         client.setGuest(true)
       }
-
-      // Immediately fetch these room state values in the background to render them before the entire chat sync finishes.
-      greedyLoadState(client, AnchorViewEventType, setView)
-      greedyLoadState(client, 'm.room.topic', ({ topic }) =>
-        setAnnouncement(topic),
-      )
 
       setActions({
         register: async (username, password, captchaToken) => {
