@@ -32,7 +32,7 @@ import { FaBullhorn, FaEye } from 'react-icons/fa'
 import Page from '../components/Page'
 import FooterLinks from '../components/FooterLinks'
 import AuthDrawer from '../components/AuthDrawer'
-import { MessageText, renderEvent } from '../components/messages'
+import { MessageText, ChatEvent } from '../components/messages'
 import View from '../components/View'
 import useAnchor from '../useAnchor'
 import Header from '../components/Header'
@@ -245,13 +245,13 @@ function Home() {
               autoHide
               universal
             >
-              {timeline.map((ev) =>
-                renderEvent(
-                  ev,
-                  room.getMember(ev.getSender()),
-                  actions?.mxcURL,
-                ),
-              )}
+              {timeline.map((ev) => (
+                <ChatEvent
+                  ev={ev}
+                  member={room.getMember(ev.getSender())}
+                  mxcURL={actions?.mxcURL}
+                />
+              ))}
             </Scrollbars>
           ) : (
             <SkeletonText

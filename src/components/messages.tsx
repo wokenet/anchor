@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Flex, Img, Text, useToken } from '@chakra-ui/react'
 import escapeStringRegexp from 'escape-string-regexp'
+import { ErrorBoundary } from 'react-error-boundary'
 
 import { emoteSize, maximumMessageSize, botUserId } from '../../constants.json'
 import { getSenderColor } from '../colors'
@@ -190,11 +191,15 @@ export function BotNotice({ body, ...props }: BotNoticeProps) {
   )
 }
 
-export function renderEvent(
-  ev: MatrixEvent,
-  member: RoomMember,
-  mxcURL: AnchorActions['mxcURL'],
-) {
+export function MessageFallback() {
+  return (
+    <Text as="div" color="gray.500" px={4}>
+      Error displaying message.
+    </Text>
+  )
+}
+
+export function ChatEventContent({ ev, member, mxcURL }: ChatEventProps) {
   if (ev.getType() !== 'm.room.message' || !ev.event.content.body) {
     return
   }
@@ -254,5 +259,19 @@ export function renderEvent(
       px={4}
       _odd={{ backgroundColor: 'gray.900' }}
     />
+  )
+}
+
+type ChatEventProps = {
+  ev: MatrixEvent
+  member: RoomMember
+  mxcURL: AnchorActions['mxcURL']
+}
+
+export function ChatEvent({ ev, member, mxcURL }: ChatEventProps) {
+  return (
+    <ErrorBoundary FallbackComponent={MessageFallback}>
+      <ChatEventContent ev={ev} member={member} mxcURL={mxcURL} />
+    </ErrorBoundary>
   )
 }
