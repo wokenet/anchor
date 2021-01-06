@@ -178,8 +178,7 @@ function useAnchor() {
         },
       })
 
-      function updateLatestAnnouncement() {
-        const chatRoom = client.getRoom(chatRoomId)
+      function updateLatestAnnouncement(chatRoom) {
         const topicEvent = chatRoom.currentState.getStateEvents(
           'm.room.topic',
           '',
@@ -209,7 +208,7 @@ function useAnchor() {
             }
             setRoom(roomUpdate)
             updateTimeline(roomUpdate?.timeline)
-            updateLatestAnnouncement()
+            updateLatestAnnouncement(roomUpdate)
           }
         }),
       )
@@ -240,7 +239,7 @@ function useAnchor() {
         userId: client.credentials.userId,
         isGuest: client.isGuest(),
       })
-      updateLatestAnnouncement()
+      updateLatestAnnouncement(chatRoom)
       setRoom(chatRoom)
       updateTimeline(chatRoom?.timeline)
 
