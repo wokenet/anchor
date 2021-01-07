@@ -84,6 +84,7 @@ function ChatEntry({ onSend }) {
         handleSubmit(onSend)(ev)
         setFieldValue('message', '')
       }}
+      autoComplete="off"
       style={{ display: 'flex' }}
     >
       <InputGroup flex={1} m={2}>
