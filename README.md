@@ -15,6 +15,24 @@ Our grid of livestreams is curated using [Streamwall][streamwall]. Curators use
 [anchorbot][anchorbot] commands to update announcements and the livestream.
 
 
+## Developing
+
+Getting up and running is easy:
+
+1. `npm install`
+2. `npm run dev`
+
+
+This will start a fully featured local instance of the site with working chat and live video. The chat will connect to the WOKE.NET public chatroom (you can set an alternate in [constants.json](https://github.com/wokenet/anchor/blob/17138cbfc272def345033dc930dd184909055cfe/constants.json#L8)). Changes made to React components will live update.
+
+We use Matrix state events to determine what content to display on the front page. Check out [anchorbot][anchorbot] to see how this works.
+
+
+## Deploying
+
+This website is deployed using Netlify. Commits to the [`release`](https://github.com/wokenet/anchor/tree/release) branch will auto-deploy to the site.
+
+
 ## How to contribute
 
 Want to add a feature, fix a bug, or discuss an idea? We'd love to collaborate!
