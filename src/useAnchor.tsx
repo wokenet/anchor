@@ -201,8 +201,8 @@ function useAnchor() {
           (ev) => ev.getType() === 'm.room.message' && ev.event.content.body,
         )
         /* filter number of messages */
-        if (filteredEvents.length > 21) {
-          filteredEvents = filteredEvents.slice(filteredEvents.length-20, filteredEvents.length);
+        if (filteredEvents.length > 41) {
+          filteredEvents = filteredEvents.slice(filteredEvents.length-40, filteredEvents.length);
         }
         setTimeline(filteredEvents)
       }
