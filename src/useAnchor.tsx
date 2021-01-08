@@ -197,9 +197,13 @@ function useAnchor() {
 
       function updateTimeline(timeline) {
         // TODO: filter these server-side?
-        const filteredEvents = timeline.filter(
+        let filteredEvents = timeline.filter(
           (ev) => ev.getType() === 'm.room.message' && ev.event.content.body,
         )
+        /* filter number of messages */
+        if (filteredEvents.length > 21) {
+          filteredEvents = filteredEvents.slice(filteredEvents.length-20, filteredEvents.length);
+        }
         setTimeline(filteredEvents)
       }
 
