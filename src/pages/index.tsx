@@ -78,7 +78,6 @@ function ChatEntry({ onSend }) {
   const messageText = watchField('message')
 
   return (
-    // The `pr` attribute below is because of this bug: https://github.com/chakra-ui/chakra-ui/commit/d95cdc6469695676d4da1710f365b485052a044a
     <form
       onSubmit={(ev) => {
         handleSubmit(onSend)(ev)
@@ -95,7 +94,6 @@ function ChatEntry({ onSend }) {
           focusBorderColor="flame.600"
           placeholder="Say something"
           maxLength={maximumMessageSize}
-          pr={messageText.length <= 250 ? 2 : null}
           ref={registerField}
         />
         {messageText.length <= 250 ? null : (
