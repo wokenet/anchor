@@ -10,7 +10,7 @@ import {
 } from 'matrix-js-sdk'
 import { debounce } from 'lodash'
 
-import { chatRoomId, matrixServer } from '../constants.json'
+import { chatRoomId, matrixServer, matrixGuestServer } from '../constants.json'
 
 export type AnchorActions = {
   register: (
@@ -98,22 +98,11 @@ function useAnchor() {
       let userMode = localStorage.getItem('mx_user_mode') || 'guest'
       let userId = localStorage.getItem('mx_user_id')
       let accessToken = localStorage.getItem('mx_access_token')
-      if (!userId || !accessToken) {
-        client = createClient({
-          baseUrl: matrixServer,
-        })
-        const reg = await client.registerGuest()
-        userId = reg['user_id']
-        accessToken = reg['access_token']
-        localStorage.setItem('mx_user_mode', 'guest')
-        localStorage.setItem('mx_user_id', userId)
-        localStorage.setItem('mx_access_token', accessToken)
-      }
 
       client = createClient({
-        baseUrl: matrixServer,
+        baseUrl: userMode === 'guest' ? matrixGuestServer : matrixServer,
         userId,
-        accessToken,
+        accessToken: userMode === 'guest' ? 'guest' : accessToken,
       })
       if (userMode === 'guest') {
         client.setGuest(true)

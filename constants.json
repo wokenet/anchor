@@ -5,6 +5,7 @@
   "googleAnalyticsId": "UA-168767157-1",
   "emoteSize": 24,
   "matrixServer": "https://matrix.woke.net",
+  "matrixGuestServer": "https://matrix-guest.woke.net",
   "chatRoomId": "!doYmXmbbmJCuwjKvff:woke.net",
   "botUserId": "@wokebot:woke.net",
   "maximumMessageSize": 500
