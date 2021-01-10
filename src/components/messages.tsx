@@ -3,7 +3,7 @@ import { Flex, Img, Text, useToken } from '@chakra-ui/react'
 import escapeStringRegexp from 'escape-string-regexp'
 import { ErrorBoundary } from 'react-error-boundary'
 
-import { emoteSize, maximumMessageSize, botUserId } from '../../constants.json'
+import { emoteSize, maxMessageSize, botUserId } from '../../constants.json'
 import { getSenderColor } from '../colors'
 import { MatrixEvent, RoomMember } from 'matrix-js-sdk'
 
@@ -239,7 +239,7 @@ export function ChatEventContent({ ev, member, mxcURL }: ChatEventProps) {
     )
   }
 
-  const body = content.body.substring(0, maximumMessageSize)
+  const body = content.body.substring(0, maxMessageSize)
 
   if (content?.['m.relates_to']?.['m.in_reply_to']) {
     return (

@@ -8,5 +8,5 @@
   "matrixGuestServer": "https://matrix-guest.woke.net",
   "chatRoomId": "!doYmXmbbmJCuwjKvff:woke.net",
   "botUserId": "@wokebot:woke.net",
-  "maximumMessageSize": 500
+  "maxMessageSize": 500
 }

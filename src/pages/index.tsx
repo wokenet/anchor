@@ -17,6 +17,7 @@ import {
   InputGroup,
   InputRightElement,
   Skeleton,
+  Text,
 } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Scrollbars } from 'react-custom-scrollbars'
@@ -33,7 +34,7 @@ import useAnchor from '../useAnchor'
 import Header from '../components/Header'
 import IntroOverlay from '../components/IntroOverlay'
 import useTinyCount from '../useTinyCount'
-import { maximumMessageSize } from '../../constants.json'
+import { maxMessageSize } from '../../constants.json'
 
 const INTRO_SEEN_KEY = 'intro_seen'
 
@@ -76,6 +77,7 @@ function ChatEntry({ onSend }) {
   })
 
   const messageText = watchField('message')
+  const showLengthWarning = messageText.length > maxMessageSize * 0.75
 
   return (
     <form
@@ -93,19 +95,16 @@ function ChatEntry({ onSend }) {
           color="gray.200"
           focusBorderColor="flame.600"
           placeholder="Say something"
-          maxLength={maximumMessageSize}
+          maxLength={maxMessageSize}
           ref={registerField}
         />
-        {messageText.length <= 250 ? null : (
-          <InputRightElement
-            flexShrink={0}
-            fontSize="sm"
-            color="flame.300"
-            pointerEvents="none"
-          >
-            {maximumMessageSize - messageText.length}
+        {showLengthWarning ? (
+          <InputRightElement flexShrink={0}>
+            <Text fontSize="sm" color="flame.300" pointerEvents="none">
+              {maxMessageSize - messageText.length}
+            </Text>
           </InputRightElement>
-        )}
+        ) : null}
       </InputGroup>
     </form>
   )
