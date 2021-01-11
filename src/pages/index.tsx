@@ -347,8 +347,7 @@ function Home() {
           overflow="hidden"
         >
           {timeline ? (
-            <Box ref={chatContainerRef}>
-              {' '}
+            <Flex ref={chatContainerRef} overflow="hidden">
               <Scrollbars
                 ref={messagesRef}
                 onScrollFrame={handleScrollMessages}
@@ -365,7 +364,7 @@ function Home() {
                   />
                 ))}
               </Scrollbars>
-            </Box>
+            </Flex>
           ) : (
             <SkeletonText
               m={4}
