@@ -114,7 +114,7 @@ function ChatEntry({ onSend }) {
         {isPickerOpen && (
           <motion.div
             key="picker"
-            transition={{ type: 'tween' }}
+            transition={{ type: 'tween', duration: 0.2 }}
             initial={{ height: 0, overflow: 'hidden' }}
             animate={{ height: 'auto' }}
             exit={{ height: 0 }}
