@@ -76,6 +76,7 @@ function ChatEntry({ onSend }) {
   } = useForm({
     defaultValues: { message: '' },
   })
+  const inputRef = useRef<HTMLInputElement>()
   const {
     isOpen: isPickerOpen,
     onOpen: onPickerOpen,
@@ -96,6 +97,7 @@ function ChatEntry({ onSend }) {
       ' ',
     ]
     setFieldValue('message', messageParts.join(''))
+    inputRef.current.focus()
   }
 
   return (
@@ -116,7 +118,10 @@ function ChatEntry({ onSend }) {
           focusBorderColor="flame.600"
           placeholder="Say something"
           maxLength={maxMessageSize}
-          ref={registerField}
+          ref={(v) => {
+            registerField(v)
+            inputRef.current = v
+          }}
         />
         <InputRightElement
           w={rightElementWidth}
