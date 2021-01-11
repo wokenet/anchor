@@ -110,6 +110,26 @@ function ChatEntry({ onSend }) {
 
   return (
     <Flex flexDir="column">
+      <AnimatePresence>
+        {isPickerOpen && (
+          <motion.div
+            key="picker"
+            transition={{ type: 'tween' }}
+            initial={{ height: 0, overflow: 'hidden' }}
+            animate={{ height: 'auto' }}
+            exit={{ height: 0 }}
+          >
+            <EmotePicker
+              onClose={onPickerClose}
+              onPickEmote={handlePickEmote}
+              height="15rem"
+              px={2}
+              bg="gray.700"
+              boxShadow="0 5px 10px -5px rgba(0, 0, 0, .5) inset"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <chakra.form
         onSubmit={(ev) => {
           handleSubmit(onSend)(ev)
@@ -163,26 +183,6 @@ function ChatEntry({ onSend }) {
           </InputRightElement>
         </InputGroup>
       </chakra.form>
-      <AnimatePresence>
-        {isPickerOpen && (
-          <motion.div
-            key="picker"
-            transition={{ type: 'tween' }}
-            initial={{ height: 0, overflow: 'hidden' }}
-            animate={{ height: 'auto' }}
-            exit={{ height: 0 }}
-          >
-            <EmotePicker
-              onClose={onPickerClose}
-              onPickEmote={handlePickEmote}
-              height="15rem"
-              px={2}
-              bg="gray.700"
-              boxShadow="0 5px 10px -5px rgba(0, 0, 0, .5) inset"
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
     </Flex>
   )
 }
