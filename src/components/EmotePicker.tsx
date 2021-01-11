@@ -61,6 +61,7 @@ export default function EmotePicker({
               >
                 {Array.from(emotes.keys(), (emote) => (
                   <IconButton
+                    key={emote}
                     icon={
                       <Img src={emotes.get(emote)} boxSize={`${emoteSize}px`} />
                     }
