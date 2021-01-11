@@ -17,7 +17,7 @@ function loadEmotes() {
   )
   const emotes = new Map<string, string>(
     emoteRequire.keys().map((k) => {
-      const emoteText = k.match(/^\.\/(\w+)\.\w+$/)[1]
+      const emoteText = k.match(/^\.\/([\w-]+)\.\w+$/)[1]
       return [':' + emoteText.toLowerCase() + ':', emoteRequire(k).default]
     }),
   )
