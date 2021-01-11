@@ -110,16 +110,17 @@ function useAnchor() {
 
       setActions({
         register: async (username, password, captchaToken) => {
+          const registerClient = createClient({ baseUrl: matrixServer })
           let authSessionId
           const doRegister = (sessionId, auth) => {
-            return client.register(
+            return registerClient.register(
               username,
               password,
               sessionId,
               auth,
               null,
               // FIXME: results in "M_UNKNOWN: No row found (users)" from server. Why?
-              //userMode === 'guest' ? client.getAccessToken() : null,
+              //userMode === 'guest' ? registerClient.getAccessToken() : null,
             )
           }
           try {
@@ -145,7 +146,8 @@ function useAnchor() {
           await connect()
         },
         login: async (username, password) => {
-          const res = await client.loginWithPassword(username, password)
+          const loginClient = createClient({ baseUrl: matrixServer })
+          const res = await loginClient.loginWithPassword(username, password)
           localStorage.setItem('mx_user_mode', 'account')
           localStorage.setItem('mx_user_id', res['user_id'])
           localStorage.setItem('mx_access_token', res['access_token'])
