@@ -102,6 +102,19 @@ const customTheme = extendTheme({
       },
     },
   },
+  components: {
+    // via https://github.com/chakra-ui/chakra-ui/issues/2609#issuecomment-737289774
+    Popover: {
+      variants: {
+        responsive: {
+          popper: {
+            maxWidth: 'unset',
+            width: 'unset',
+          },
+        },
+      },
+    },
+  },
 })
 
 function App({ Component, pageProps }: AppProps) {

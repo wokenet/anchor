@@ -39,7 +39,7 @@ function loadEmotes() {
   return { emotes, emoteRegexp }
 }
 
-const { emotes, emoteRegexp } = loadEmotes()
+export const { emotes, emoteRegexp } = loadEmotes()
 
 export function Emote({ emote }: { emote: string }) {
   // TODO: implement https://github.com/Sorunome/matrix-doc/blob/b41c091dce3c29b3ade749f18d3350597a567512/proposals/2545-emotes.md

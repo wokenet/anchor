@@ -20,7 +20,6 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Scrollbars } from 'react-custom-scrollbars'
 import { useForm } from 'react-hook-form'
 import useResizeObserver from 'use-resize-observer'
 import { FaBullhorn, FaEye } from 'react-icons/fa'
@@ -31,8 +30,10 @@ import AuthDrawer from '../components/AuthDrawer'
 import { MessageText, ChatEvent } from '../components/messages'
 import View from '../components/View'
 import useAnchor from '../useAnchor'
+import Scrollbars, { ReactCustomScrollbars } from '../components/Scrollbars'
 import Header from '../components/Header'
 import IntroOverlay from '../components/IntroOverlay'
+import EmotePicker from '../components/EmotePicker'
 import useTinyCount from '../useTinyCount'
 import { maxMessageSize } from '../../constants.json'
 
@@ -75,9 +76,27 @@ function ChatEntry({ onSend }) {
   } = useForm({
     defaultValues: { message: '' },
   })
+  const {
+    isOpen: isPickerOpen,
+    onOpen: onPickerOpen,
+    onClose: onPickerClose,
+  } = useDisclosure()
 
   const messageText = watchField('message')
   const showLengthWarning = messageText.length > maxMessageSize * 0.75
+  const rightElementWidth = showLengthWarning ? '4.5rem' : undefined
+
+  function handlePickEmote(emote) {
+    onPickerClose()
+
+    const messageParts = [
+      messageText,
+      messageText && !messageText.endsWith(' ') ? ' ' : '',
+      emote,
+      ' ',
+    ]
+    setFieldValue('message', messageParts.join(''))
+  }
 
   return (
     <form
@@ -92,26 +111,40 @@ function ChatEntry({ onSend }) {
         <Input
           name="message"
           px={2}
+          pr={rightElementWidth}
           color="gray.200"
           focusBorderColor="flame.600"
           placeholder="Say something"
           maxLength={maxMessageSize}
           ref={registerField}
         />
-        {showLengthWarning ? (
-          <InputRightElement flexShrink={0}>
-            <Text fontSize="sm" color="flame.300" pointerEvents="none">
+        <InputRightElement
+          w={rightElementWidth}
+          justifyContent="flex-end"
+          pointerEvents="none"
+          px={1}
+        >
+          {showLengthWarning ? (
+            <Text fontSize="sm" color="flame.300" userSelect="none" pr={1}>
               {maxMessageSize - messageText.length}
             </Text>
-          </InputRightElement>
-        ) : null}
+          ) : null}
+          <EmotePicker
+            isOpen={isPickerOpen}
+            onClose={onPickerClose}
+            pointerEvents="auto"
+            aria-label="Select emote"
+            onClick={onPickerOpen}
+            onPickEmote={handlePickEmote}
+          />
+        </InputRightElement>
       </InputGroup>
     </form>
   )
 }
 
 function Home() {
-  const messagesRef = useRef<Scrollbars>()
+  const messagesRef = useRef<ReactCustomScrollbars>()
   const authButtonRef = useRef<HTMLButtonElement>()
   const isScrollPinned = useRef<boolean>(true)
   const { userInfo, timeline, announcement, view, room, actions } = useAnchor()
@@ -273,14 +306,9 @@ function Home() {
           {timeline ? (
             <Scrollbars
               ref={messagesRef}
-              renderThumbVertical={(props) => (
-                <Box {...props} bgColor="gray.600" borderRadius="full" />
-              )}
               onScrollFrame={handleScrollMessages}
               autoHeightMax="100%"
               autoHeight
-              autoHide
-              universal
             >
               {timeline.map((ev) => (
                 <ChatEvent
