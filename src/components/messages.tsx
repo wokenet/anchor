@@ -50,6 +50,8 @@ export function Emote({ emote }: { emote: string }) {
       display="inline-block"
       src={emoteMap.get(emote)}
       width="1.5em"
+      height="1.5em"
+      objectFit="contain"
       title={emote}
       verticalAlign="bottom"
     />

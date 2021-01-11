@@ -80,7 +80,14 @@ export default function EmotePicker({
           {shownEmotes.map((emote) => (
             <IconButton
               key={emote}
-              icon={<Img src={emotes.get(emote)} width={`${emoteSize}px`} />}
+              icon={
+                <Img
+                  src={emotes.get(emote)}
+                  width={`${emoteSize}px`}
+                  height={`${emoteSize}px`}
+                  objectFit="contain"
+                />
+              }
               variant="ghost"
               boxSize="2.15rem"
               minW={0}
