@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useCallback, useRef, useState } from 'react'
 import {
   Popover,
   PopoverTrigger,
@@ -10,8 +11,13 @@ import {
   SimpleGrid,
   Tooltip,
   Img,
+  Input,
+  InputGroup,
+  InputLeftElement,
 } from '@chakra-ui/react'
+import { throttle } from 'lodash'
 import { AiFillSmile } from 'react-icons/ai'
+import { FaSearch } from 'react-icons/fa'
 
 import { emoteSize } from '../../constants.json'
 import Scrollbars from './Scrollbars'
@@ -21,12 +27,30 @@ type EmotePickerProps = {
   onPickEmote: (string) => void
 } & React.ComponentProps<typeof IconButton>
 
+const allEmotes = Array.from(emotes.keys())
+
 export default function EmotePicker({
   isOpen,
   onClose,
   onPickEmote,
   ...props
 }: EmotePickerProps) {
+  const emoteFilterRef = useRef<HTMLInputElement>()
+  const [shownEmotes, setShownEmotes] = useState(allEmotes)
+  const handleChangeFilter = useCallback(
+    throttle((ev) => {
+      const filter = ev.target.value
+      if (!filter) {
+        setShownEmotes(allEmotes)
+        return
+      }
+
+      // TODO: use a trie to improve perf when the emote count gets large.
+      setShownEmotes(allEmotes.filter((k) => k.includes(filter)))
+    }),
+    [],
+  )
+
   return (
     <Popover
       isOpen={isOpen}
@@ -34,8 +58,8 @@ export default function EmotePicker({
       placement="top-end"
       gutter={10}
       variant="responsive"
+      initialFocusRef={emoteFilterRef}
       returnFocusOnClose={false}
-      autoFocus
     >
       <PopoverTrigger>
         <IconButton
@@ -53,13 +77,29 @@ export default function EmotePicker({
           _focus={{ outline: 'none' }}
         >
           <PopoverBody display="flex" flexDir="column" height="full" p={0}>
+            <InputGroup size="sm" w="auto" mx={2} mt={1} mb={1}>
+              <InputLeftElement
+                pointerEvents="none"
+                children={<Icon as={FaSearch} color="gray.300" />}
+              />
+              <Input
+                ref={emoteFilterRef}
+                variant="flushed"
+                color="gray.300"
+                focusBorderColor="gray.600"
+                placeholder="Find an emote"
+                onChange={handleChangeFilter}
+                autoFocus
+              />
+            </InputGroup>
             <Scrollbars autoHide={false}>
               <SimpleGrid
                 templateColumns="repeat(auto-fill, minmax(2.15rem, 1fr))"
                 spacing={1}
                 p={2}
+                pt={1}
               >
-                {Array.from(emotes.keys(), (emote) => (
+                {shownEmotes.map((emote) => (
                   <IconButton
                     key={emote}
                     icon={
