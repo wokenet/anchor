@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import {
+  chakra,
   Box,
   Button,
   Center,
@@ -18,11 +19,13 @@ import {
   InputRightElement,
   Skeleton,
   Text,
+  IconButton,
 } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import useResizeObserver from 'use-resize-observer'
 import { FaBullhorn, FaEye } from 'react-icons/fa'
+import { AiFillSmile } from 'react-icons/ai'
 
 import Page from '../components/Page'
 import FooterLinks from '../components/FooterLinks'
@@ -79,17 +82,22 @@ function ChatEntry({ onSend }) {
   const inputRef = useRef<HTMLInputElement>()
   const {
     isOpen: isPickerOpen,
-    onOpen: onPickerOpen,
     onClose: onPickerClose,
+    onToggle: onTogglePickerOpen,
   } = useDisclosure()
 
   const messageText = watchField('message')
   const showLengthWarning = messageText.length > maxMessageSize * 0.75
   const rightElementWidth = showLengthWarning ? '4.5rem' : undefined
 
-  function handlePickEmote(emote) {
-    onPickerClose()
+  function handleTogglePickerOpen() {
+    onTogglePickerOpen()
+    if (isPickerOpen) {
+      inputRef.current.focus()
+    }
+  }
 
+  function handlePickEmote(emote) {
     const messageParts = [
       messageText,
       messageText && !messageText.endsWith(' ') ? ' ' : '',
@@ -101,15 +109,16 @@ function ChatEntry({ onSend }) {
   }
 
   return (
-    <form
+    <chakra.form
       onSubmit={(ev) => {
         handleSubmit(onSend)(ev)
         setFieldValue('message', '')
       }}
       autoComplete="off"
-      style={{ display: 'flex' }}
+      display="flex"
+      flexDir="column"
     >
-      <InputGroup flex={1} m={2}>
+      <InputGroup w="auto" m={2}>
         <Input
           name="message"
           px={2}
@@ -134,17 +143,45 @@ function ChatEntry({ onSend }) {
               {maxMessageSize - messageText.length}
             </Text>
           ) : null}
-          <EmotePicker
-            isOpen={isPickerOpen}
-            onClose={onPickerClose}
+          <IconButton
+            variant="ghost"
+            size="sm"
+            icon={
+              <Icon
+                as={AiFillSmile}
+                color={isPickerOpen ? 'orangeYellow.100' : 'gray.200'}
+              />
+            }
+            bg={isPickerOpen ? 'orangeYellow.600' : undefined}
+            _hover={{ bg: isPickerOpen ? 'orangeYellow.700' : 'gray.700' }}
+            fontSize="1.5rem"
             pointerEvents="auto"
             aria-label="Select emote"
-            onClick={onPickerOpen}
-            onPickEmote={handlePickEmote}
+            onClick={handleTogglePickerOpen}
           />
         </InputRightElement>
       </InputGroup>
-    </form>
+      <AnimatePresence>
+        {isPickerOpen && (
+          <motion.div
+            key="picker"
+            transition={{ type: 'tween' }}
+            initial={{ height: 0, overflow: 'hidden' }}
+            animate={{ height: 'auto' }}
+            exit={{ height: 0 }}
+          >
+            <EmotePicker
+              onClose={onPickerClose}
+              onPickEmote={handlePickEmote}
+              height="15rem"
+              px={2}
+              bg="gray.700"
+              boxShadow="0 5px 10px -5px rgba(0, 0, 0, .5) inset"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </chakra.form>
   )
 }
 
@@ -213,7 +250,7 @@ function Home() {
     }
   }, [messagesRef, isScrollPinned])
 
-  const { ref: chatRef } = useResizeObserver({
+  const { ref: chatContainerRef } = useResizeObserver({
     onResize: () => {
       requestAnimationFrame(updateScroll)
     },
@@ -301,7 +338,6 @@ function Home() {
           </Flex>
         </Flex>
         <Flex
-          ref={chatRef}
           flexDir="column"
           w={{ base: 'full', lg: 'sm' }}
           flex={{ base: 1, lg: 'none' }}
@@ -309,22 +345,25 @@ function Home() {
           overflow="hidden"
         >
           {timeline ? (
-            <Scrollbars
-              ref={messagesRef}
-              onScrollFrame={handleScrollMessages}
-              autoHeightMax="100%"
-              autoHeight
-            >
-              {timeline.map((ev) => (
-                <ChatEvent
-                  // @ts-ignore
-                  key={ev.getId()}
-                  ev={ev}
-                  member={room.getMember(ev.getSender())}
-                  mxcURL={actions?.mxcURL}
-                />
-              ))}
-            </Scrollbars>
+            <Box ref={chatContainerRef}>
+              {' '}
+              <Scrollbars
+                ref={messagesRef}
+                onScrollFrame={handleScrollMessages}
+                autoHeightMax="100%"
+                autoHeight
+              >
+                {timeline.map((ev) => (
+                  <ChatEvent
+                    // @ts-ignore
+                    key={ev.getId()}
+                    ev={ev}
+                    member={room.getMember(ev.getSender())}
+                    mxcURL={actions?.mxcURL}
+                  />
+                ))}
+              </Scrollbars>
+            </Box>
           ) : (
             <SkeletonText
               m={4}
