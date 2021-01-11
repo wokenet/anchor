@@ -109,58 +109,60 @@ function ChatEntry({ onSend }) {
   }
 
   return (
-    <chakra.form
-      onSubmit={(ev) => {
-        handleSubmit(onSend)(ev)
-        setFieldValue('message', '')
-      }}
-      autoComplete="off"
-      display="flex"
-      flexDir="column"
-    >
-      <InputGroup w="auto" m={2}>
-        <Input
-          name="message"
-          px={2}
-          pr={rightElementWidth}
-          color="gray.200"
-          focusBorderColor="flame.600"
-          placeholder="Say something"
-          maxLength={maxMessageSize}
-          ref={(v) => {
-            registerField(v)
-            inputRef.current = v
-          }}
-        />
-        <InputRightElement
-          w={rightElementWidth}
-          justifyContent="flex-end"
-          pointerEvents="none"
-          px={1}
-        >
-          {showLengthWarning ? (
-            <Text fontSize="sm" color="flame.300" userSelect="none" pr={1}>
-              {maxMessageSize - messageText.length}
-            </Text>
-          ) : null}
-          <IconButton
-            variant="ghost"
-            size="sm"
-            icon={
-              <Icon
-                as={AiFillSmile}
-                color={isPickerOpen ? 'orangeYellow.100' : 'gray.200'}
-              />
-            }
-            bg={isPickerOpen ? 'orangeYellow.600' : undefined}
-            _hover={{ bg: isPickerOpen ? 'orangeYellow.700' : 'gray.700' }}
-            fontSize="1.5rem"
-            pointerEvents="auto"
-            aria-label="Select emote"
-            onClick={handleTogglePickerOpen}
+    <Flex flexDir="column">
+      <chakra.form
+        onSubmit={(ev) => {
+          handleSubmit(onSend)(ev)
+          setFieldValue('message', '')
+        }}
+        autoComplete="off"
+        display="flex"
+        flexDir="column"
+      >
+        <InputGroup w="auto" m={2}>
+          <Input
+            name="message"
+            px={2}
+            pr={rightElementWidth}
+            color="gray.200"
+            focusBorderColor="flame.600"
+            placeholder="Say something"
+            maxLength={maxMessageSize}
+            ref={(v) => {
+              registerField(v)
+              inputRef.current = v
+            }}
           />
-        </InputRightElement>
-      </InputGroup>
+          <InputRightElement
+            w={rightElementWidth}
+            justifyContent="flex-end"
+            pointerEvents="none"
+            px={1}
+          >
+            {showLengthWarning ? (
+              <Text fontSize="sm" color="flame.300" userSelect="none" pr={1}>
+                {maxMessageSize - messageText.length}
+              </Text>
+            ) : null}
+            <IconButton
+              variant="ghost"
+              size="sm"
+              icon={
+                <Icon
+                  as={AiFillSmile}
+                  color={isPickerOpen ? 'orangeYellow.100' : 'gray.200'}
+                />
+              }
+              bg={isPickerOpen ? 'orangeYellow.600' : undefined}
+              _hover={{ bg: isPickerOpen ? 'orangeYellow.700' : 'gray.700' }}
+              fontSize="1.5rem"
+              pointerEvents="auto"
+              aria-label="Select emote"
+              onClick={handleTogglePickerOpen}
+            />
+          </InputRightElement>
+        </InputGroup>
+      </chakra.form>
       <AnimatePresence>
         {isPickerOpen && (
           <motion.div
@@ -181,7 +183,7 @@ function ChatEntry({ onSend }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </chakra.form>
+    </Flex>
   )
 }
 
