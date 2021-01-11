@@ -123,7 +123,6 @@ function ChatEntry({ onSend }) {
               onClose={onPickerClose}
               onPickEmote={handlePickEmote}
               height="15rem"
-              px={2}
               mt={1}
               bg="gray.700"
             />

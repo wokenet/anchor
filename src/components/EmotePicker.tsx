@@ -54,7 +54,7 @@ export default function EmotePicker({
 
   return (
     <Flex flexDir="column" {...props}>
-      <InputGroup size="sm" w="auto" mx={2} mt={1} mb={1}>
+      <InputGroup size="sm" w="auto" mx={4} mt={1} mb={1}>
         <InputLeftElement
           pointerEvents="none"
           children={<Icon as={FaSearch} color="gray.300" />}
@@ -74,8 +74,8 @@ export default function EmotePicker({
         <SimpleGrid
           templateColumns="repeat(auto-fill, minmax(2.15rem, 1fr))"
           spacing={1}
-          p={2}
-          pt={1}
+          px={4}
+          py={1}
         >
           {shownEmotes.map((emote) => (
             <IconButton
