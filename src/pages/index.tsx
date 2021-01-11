@@ -124,8 +124,8 @@ function ChatEntry({ onSend }) {
               onPickEmote={handlePickEmote}
               height="15rem"
               px={2}
+              mt={1}
               bg="gray.700"
-              boxShadow="0 5px 10px -5px rgba(0, 0, 0, .5) inset"
             />
           </motion.div>
         )}
@@ -138,6 +138,9 @@ function ChatEntry({ onSend }) {
         autoComplete="off"
         display="flex"
         flexDir="column"
+        bg={isPickerOpen ? 'gray.700' : 'initial'}
+        transitionProperty="colors"
+        transitionDuration="normal"
       >
         <InputGroup w="auto" m={2}>
           <Input
@@ -145,6 +148,7 @@ function ChatEntry({ onSend }) {
             px={2}
             pr={rightElementWidth}
             color="gray.200"
+            bg="gray.950"
             focusBorderColor="flame.600"
             placeholder="Say something"
             maxLength={maxMessageSize}
