@@ -22,6 +22,8 @@ function loadEmotes() {
     }),
   )
 
+  const emoteMap = new Map(emotes)
+
   const emoteAliases: {
     [key: string]: string
   } = require('woke-content/emotes/aliases.json')
@@ -30,23 +32,23 @@ function loadEmotes() {
       console.warn('Unknown emote alias', alias, emote)
       continue
     }
-    emotes.set(alias, emotes.get(emote))
+    emoteMap.set(alias, emoteMap.get(emote))
   }
 
-  const emoteNames = Array.from(emotes.keys()).map(escapeStringRegexp)
+  const emoteNames = Array.from(emoteMap.keys()).map(escapeStringRegexp)
   const emoteRegexp = new RegExp('(' + emoteNames.join('|') + ')', 'i')
 
-  return { emotes, emoteRegexp }
+  return { emotes, emoteMap, emoteRegexp }
 }
 
-export const { emotes, emoteRegexp } = loadEmotes()
+export const { emotes, emoteMap, emoteRegexp } = loadEmotes()
 
 export function Emote({ emote }: { emote: string }) {
   // TODO: implement https://github.com/Sorunome/matrix-doc/blob/b41c091dce3c29b3ade749f18d3350597a567512/proposals/2545-emotes.md
   return (
     <Img
       display="inline-block"
-      src={emotes.get(emote)}
+      src={emoteMap.get(emote)}
       width="1.5em"
       title={emote}
       verticalAlign="bottom"
@@ -62,7 +64,7 @@ export function MessageText({ children, ...props }: MessageTextProps) {
   const parts = []
   for (const part of children.split(emoteRegexp)) {
     const emote = part.toLowerCase()
-    if (emotes.has(emote)) {
+    if (emoteMap.has(emote)) {
       parts.push(<Emote key={parts.length} emote={emote} />)
     } else {
       parts.push(part)
