@@ -103,7 +103,7 @@ export default function EmotePicker({
                   <IconButton
                     key={emote}
                     icon={
-                      <Img src={emotes.get(emote)} boxSize={`${emoteSize}px`} />
+                      <Img src={emotes.get(emote)} width={`${emoteSize}px`} />
                     }
                     variant="ghost"
                     boxSize="2.15rem"

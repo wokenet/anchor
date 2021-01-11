@@ -47,7 +47,7 @@ export function Emote({ emote }: { emote: string }) {
     <Img
       display="inline-block"
       src={emotes.get(emote)}
-      boxSize="1.5em"
+      width="1.5em"
       title={emote}
       verticalAlign="bottom"
     />
