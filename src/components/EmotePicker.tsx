@@ -53,7 +53,7 @@ export default function EmotePicker({
           _focus={{ outline: 'none' }}
         >
           <PopoverBody display="flex" flexDir="column" height="full" p={0}>
-            <Scrollbars>
+            <Scrollbars autoHide={false}>
               <SimpleGrid
                 templateColumns="repeat(auto-fill, minmax(2.15rem, 1fr))"
                 spacing={1}
