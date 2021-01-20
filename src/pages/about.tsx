@@ -20,27 +20,6 @@ import WokeSticker from 'woke-content/images/woke-4x6.svg'
 import { rotate } from '../components/keyframes'
 import Page from '../components/Page'
 
-const LEDGER_CSV_URL =
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSiTpYFeMBAzabZ1BxB0RJfrtJFPReyS9zlhAJP14Xd_3T5TJHAF5jjJsLO1lC33qbdetzCUaU84B_Y/pub?gid=0&single=true&output=csv'
-
-export const getStaticProps: GetStaticProps = async () => {
-  let ledger = null
-  const res = await fetch(LEDGER_CSV_URL)
-  const csv = await res.text()
-  if (csv) {
-    const ledgerData = await Papa.parse(csv, {
-      header: true,
-      transformHeader: camelCase,
-    })
-    ledger = ledgerData?.data?.filter((row) => row.category)
-  }
-
-  return {
-    revalidate: 60 * 60 * 8, // 8 hours
-    props: { ledger },
-  }
-}
-
 function Repo({ name, url, children }) {
   return (
     <Flex
@@ -206,4 +185,25 @@ export default function AboutPage({
       </Container>
     </Page>
   )
+}
+
+const LEDGER_CSV_URL =
+  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSiTpYFeMBAzabZ1BxB0RJfrtJFPReyS9zlhAJP14Xd_3T5TJHAF5jjJsLO1lC33qbdetzCUaU84B_Y/pub?gid=0&single=true&output=csv'
+
+export const getStaticProps: GetStaticProps = async () => {
+  let ledger = null
+  const res = await fetch(LEDGER_CSV_URL)
+  const csv = await res.text()
+  if (csv) {
+    const ledgerData = await Papa.parse(csv, {
+      header: true,
+      transformHeader: camelCase,
+    })
+    ledger = ledgerData?.data?.filter((row) => row.category)
+  }
+
+  return {
+    revalidate: 60 * 60 * 8, // 8 hours
+    props: { ledger },
+  }
 }
