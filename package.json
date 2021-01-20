@@ -33,6 +33,7 @@
     "react-google-recaptcha": "^2.1.0",
     "react-hook-form": "^6.13.1",
     "react-icons": "^3.11.0",
+    "react-intersection-observer": "^8.31.0",
     "tinycolor2": "^1.4.2",
     "use-resize-observer": "^7.0.0",
     "woke-content": "git+https://github.com/wokenet/woke-content.git"
