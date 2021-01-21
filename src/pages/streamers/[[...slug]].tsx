@@ -155,7 +155,7 @@ function StreamerModal({ streamer, isOpen, onClose }: StreamerModalProps) {
                   </ChakraLink>
                 </WrapItem>
                 <WrapItem alignItems="center" my={0}>
-                  <HStack fontSize="xl">
+                  <HStack spacing={2} fontSize="xl">
                     {streamer.facebook && (
                       <ChakraLink href={streamer.facebook} isExternal>
                         <Icon as={FaFacebook} />
@@ -262,7 +262,7 @@ function StreamerModal({ streamer, isOpen, onClose }: StreamerModalProps) {
                     <Heading as="h3" size="md" display="inline">
                       Support {streamer.name}:
                     </Heading>
-                    <HStack ml={4} spacing={4} fontSize="2rem">
+                    <HStack ml={4} spacing={3} fontSize="2rem">
                       {streamer.cashapp && (
                         <ChakraLink
                           display="flex"
