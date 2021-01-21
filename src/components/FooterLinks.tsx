@@ -26,10 +26,11 @@ function FooterLink({ href, children }) {
 export const footerLinks = (
   <>
     <FooterLink href="/about">about</FooterLink>
+    <FooterLink href="/engage">engage</FooterLink>
     <FooterLink href="/contact">contact</FooterLink>
-    <FooterLink href="/report">DMCA</FooterLink>
     <FooterLink href="/rules">rules</FooterLink>
     <FooterLink href="/appeal">appeal</FooterLink>
+    <FooterLink href="/report">DMCA</FooterLink>
   </>
 )
 

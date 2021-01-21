@@ -79,10 +79,9 @@ function Platform({ url, icon }) {
 
 export const secondaryHeaderLinks = (
   <>
-    <NavLink href="/videos">videos</NavLink>
     <NavLink href="/streams">streams</NavLink>
+    <NavLink href="/videos">videos</NavLink>
     <NavLink href="/submit">submit</NavLink>
-    <NavLink href="/streamers">streamers</NavLink>
   </>
 )
 
@@ -129,8 +128,8 @@ export default function Header(props: React.ComponentProps<typeof Flex>) {
       </Link>
       <HStack spacing="2">
         <NavLink href="/">watch</NavLink>
+        <NavLink href="/streamers">streamers</NavLink>
         {isDesktop && secondaryHeaderLinks}
-        <NavLink href="/engage">engage</NavLink>
       </HStack>
       <Spacer flex="1" />
       {isDesktop && (
