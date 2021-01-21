@@ -332,7 +332,7 @@ export default function StreamersPage({
       <StreamerModal
         streamer={selectedStreamer}
         isOpen={!!selectedStreamer}
-        onClose={() => router.push('/streamers')}
+        onClose={() => router.push('/streamers', undefined, { shallow: true })}
       />
       <SimpleGrid
         templateColumns="repeat(auto-fill, minmax(18rem, 1fr))"
@@ -346,7 +346,9 @@ export default function StreamersPage({
             <StreamerTile
               key={s.id}
               streamer={s}
-              onClick={() => router.push(`/streamers/${slug}`)}
+              onClick={() =>
+                router.push(`/streamers/${slug}`, undefined, { shallow: true })
+              }
             />
           ),
         )}
