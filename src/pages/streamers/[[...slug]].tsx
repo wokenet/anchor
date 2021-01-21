@@ -145,7 +145,7 @@ function StreamerModal({ streamer, isOpen, onClose }: StreamerModalProps) {
           <ModalCloseButton />
           <ModalBody p={0}>
             <Image src={streamer.photo} w="full" />
-            <Flex flexDir="column" mx={6} my={4}>
+            <Flex flexDir="column" mx={6} my={6}>
               <Wrap spacing={4} mb={2}>
                 <WrapItem my={0}>
                   <ChakraLink href={streamer.website} isExternal>
