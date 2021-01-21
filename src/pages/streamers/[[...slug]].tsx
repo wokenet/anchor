@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { useState } from 'react'
+import { kebabCase, keyBy } from 'lodash'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
+import { useRouter } from 'next/router'
 import {
   AspectRatio,
   Divider,
@@ -320,18 +321,18 @@ function StreamerModal({ streamer, isOpen, onClose }: StreamerModalProps) {
 }
 
 export default function StreamersPage({
-  streamers,
+  streamerMap,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const [selectedStreamer, setSelectedStreamer] = useState<Streamer>()
-  const streamersWithPhotos: Array<Streamer> = streamers.filter(
-    (s) => !!s.photo,
-  )
+  const router = useRouter()
+  const { slug } = router.query
+  const selectedStreamer =
+    streamerMap.hasOwnProperty(slug) && streamerMap[slug[0]]
   return (
     <Page title="streamers">
       <StreamerModal
         streamer={selectedStreamer}
         isOpen={!!selectedStreamer}
-        onClose={() => setSelectedStreamer(undefined)}
+        onClose={() => router.push('/streamers')}
       />
       <SimpleGrid
         templateColumns="repeat(auto-fill, minmax(18rem, 1fr))"
@@ -339,13 +340,16 @@ export default function StreamersPage({
         px={4}
         py={1}
       >
-        {streamersWithPhotos.map((s) => (
-          <StreamerTile
-            key={s.id}
-            streamer={s}
-            onClick={() => setSelectedStreamer(s)}
-          />
-        ))}
+        {Array.from(
+          Object.entries(streamerMap),
+          ([slug, s]: [string, Streamer]) => (
+            <StreamerTile
+              key={s.id}
+              streamer={s}
+              onClick={() => router.push(`/streamers/${slug}`)}
+            />
+          ),
+        )}
       </SimpleGrid>
     </Page>
   )
@@ -353,12 +357,30 @@ export default function StreamersPage({
 
 const STREAMERS_INDEX_URL = 'https://api.woke.net/streamers/index.json'
 
-export const getStaticProps: GetStaticProps = async () => {
+async function getStreamers() {
   const res = await fetch(STREAMERS_INDEX_URL)
-  const streamers = await res.json()
+  const streamers: Array<Streamer> = await res.json()
+  const streamersWithPhotos = streamers.filter((s) => !!s.photo)
+  return streamersWithPhotos
+}
+
+export async function getStaticPaths() {
+  const streamers = await getStreamers()
+
+  const paths = streamers.map((s) => ({
+    params: { slug: [kebabCase(s.name)] },
+  }))
+
+  paths.push({ params: { slug: null } })
+
+  return { paths, fallback: false }
+}
+export const getStaticProps: GetStaticProps = async () => {
+  const streamers = await getStreamers()
+  const streamerMap = keyBy(streamers, (s) => kebabCase(s.name))
 
   return {
     revalidate: 60 * 10, // 10 minutes
-    props: { streamers },
+    props: { streamerMap },
   }
 }
