@@ -79,6 +79,7 @@ function StreamerTile({ streamer, onClick }: StreamerTileProps) {
       <Flex
         role="group"
         alignItems="flex-end"
+        justifyContent="flex-end"
         overflow="hidden"
         bgColor="black"
         bgImage={inView && `url(${streamer.photo})`}
@@ -95,7 +96,7 @@ function StreamerTile({ streamer, onClick }: StreamerTileProps) {
           textOverflow="ellipsis"
           whiteSpace="nowrap"
           m={1}
-          fontSize="xl"
+          fontSize="lg"
           fontWeight="bold"
           borderRadius="4px"
           px={2}
