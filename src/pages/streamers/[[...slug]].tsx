@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { kebabCase, keyBy } from 'lodash'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import {
   AspectRatio,
@@ -46,6 +47,7 @@ type Streamer = {
   id: string
   photo: string
   name: string
+  slug: string
   info: string
   home?: string
   creators?: Array<string>
@@ -67,50 +69,51 @@ type Streamer = {
 
 type StreamerTileProps = {
   streamer: Streamer
-  onClick: () => void
 }
 
-function StreamerTile({ streamer, onClick }: StreamerTileProps) {
+function StreamerTile({ streamer }: StreamerTileProps) {
   const [tileRef, inView] = useInView({
     triggerOnce: true,
     rootMargin: '200px 0px',
   })
   return (
     <AspectRatio ref={tileRef} ratio={16 / 9}>
-      <Flex
-        role="group"
-        alignItems="flex-end"
-        justifyContent="flex-end"
-        overflow="hidden"
-        bgColor="black"
-        bgImage={inView && `url(${streamer.photo})`}
-        bgPosition="center"
-        bgSize="cover"
-        bgBlendMode="luminosity"
-        cursor="pointer"
-        transitionDuration="slow"
-        _hover={{ bgColor: 'orangeYellow.700' }}
-        onClick={onClick}
-      >
-        <Text
+      <Link href={`/streamers/${streamer.slug}`} shallow passHref>
+        <ChakraLink
+          display="flex"
+          role="group"
+          alignItems="flex-end"
+          justifyContent="flex-end"
           overflow="hidden"
-          textOverflow="ellipsis"
-          whiteSpace="nowrap"
-          m={1}
-          fontSize="lg"
-          fontWeight="bold"
-          borderRadius="4px"
-          px={2}
-          bg="rgba(0, 0, 0, .5)"
-          userSelect="none"
+          bgColor="black"
+          bgImage={inView && `url(${streamer.photo})`}
+          bgPosition="center"
+          bgSize="cover"
+          bgBlendMode="luminosity"
+          cursor="pointer"
           transitionDuration="slow"
-          css={{ backdropFilter: 'blur(10px)' }}
-          opacity="0"
-          _groupHover={{ opacity: 1 }}
+          _hover={{ bgColor: 'orangeYellow.700' }}
         >
-          {streamer.name}
-        </Text>
-      </Flex>
+          <Text
+            overflow="hidden"
+            textOverflow="ellipsis"
+            whiteSpace="nowrap"
+            m={1}
+            fontSize="lg"
+            fontWeight="bold"
+            borderRadius="4px"
+            px={2}
+            bg="rgba(0, 0, 0, .5)"
+            userSelect="none"
+            transitionDuration="slow"
+            css={{ backdropFilter: 'blur(10px)' }}
+            opacity="0"
+            _groupHover={{ opacity: 1 }}
+          >
+            {streamer.name}
+          </Text>
+        </ChakraLink>
+      </Link>
     </AspectRatio>
   )
 }
@@ -340,18 +343,9 @@ export default function StreamersPage({
         px={4}
         py={1}
       >
-        {Array.from(
-          Object.entries(streamerMap),
-          ([slug, s]: [string, Streamer]) => (
-            <StreamerTile
-              key={s.id}
-              streamer={s}
-              onClick={() =>
-                router.push(`/streamers/${slug}`, undefined, { shallow: true })
-              }
-            />
-          ),
-        )}
+        {Array.from(Object.values(streamerMap), (s: Streamer) => (
+          <StreamerTile key={s.id} streamer={s} />
+        ))}
       </SimpleGrid>
     </Page>
   )
@@ -363,6 +357,9 @@ async function getStreamers() {
   const res = await fetch(STREAMERS_INDEX_URL)
   const streamers: Array<Streamer> = await res.json()
   const streamersWithPhotos = streamers.filter((s) => !!s.photo)
+  for (const s of streamers) {
+    s.slug = kebabCase(s.name)
+  }
   return streamersWithPhotos
 }
 
@@ -370,7 +367,7 @@ export async function getStaticPaths() {
   const streamers = await getStreamers()
 
   const paths = streamers.map((s) => ({
-    params: { slug: [kebabCase(s.name)] },
+    params: { slug: [s.slug] },
   }))
 
   paths.push({ params: { slug: null } })
@@ -379,7 +376,7 @@ export async function getStaticPaths() {
 }
 export const getStaticProps: GetStaticProps = async () => {
   const streamers = await getStreamers()
-  const streamerMap = keyBy(streamers, (s) => kebabCase(s.name))
+  const streamerMap = keyBy(streamers, (s) => s.slug)
 
   return {
     revalidate: 60 * 10, // 10 minutes
