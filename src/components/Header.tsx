@@ -32,8 +32,8 @@ type NavLinkProps = {
 }
 
 export function NavLink({ href, children }: NavLinkProps) {
-  const { pathname } = useRouter()
-  const isActive = pathname === href
+  const { asPath } = useRouter()
+  const isActive = asPath === href
 
   return (
     <Link href={href} passHref>
