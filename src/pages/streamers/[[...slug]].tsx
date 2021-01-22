@@ -48,6 +48,7 @@ type Streamer = {
   photo: string
   name: string
   slug: string
+  publish: boolean
   info: string
   home?: string
   creators?: Array<string>
@@ -359,7 +360,7 @@ async function getStreamers() {
   for (const s of streamers) {
     s.slug = kebabCase(s.name)
   }
-  return streamers
+  return streamers.filter((s) => !!s.publish)
 }
 
 export async function getStaticPaths() {
