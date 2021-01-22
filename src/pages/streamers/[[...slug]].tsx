@@ -356,11 +356,10 @@ const STREAMERS_INDEX_URL = 'https://api.woke.net/streamers/index.json'
 async function getStreamers() {
   const res = await fetch(STREAMERS_INDEX_URL)
   const streamers: Array<Streamer> = await res.json()
-  const streamersWithPhotos = streamers.filter((s) => !!s.photo)
   for (const s of streamers) {
     s.slug = kebabCase(s.name)
   }
-  return streamersWithPhotos
+  return streamers
 }
 
 export async function getStaticPaths() {
