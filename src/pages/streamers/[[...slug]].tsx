@@ -238,7 +238,7 @@ function StreamerModal({ streamer, isOpen, onClose }: StreamerModalProps) {
                     ))}
                   </Wrap>
                 )}
-                {streamer.teams && streamer.teams.length > 1 && (
+                {streamer.cities && streamer.cities.length > 1 && (
                   <Wrap spacing={1}>
                     {streamer.cities.map((c) => (
                       <WrapItem key={c}>
