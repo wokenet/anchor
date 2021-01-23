@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { kebabCase, keyBy } from 'lodash'
-import { GetStaticProps, InferGetStaticPropsType } from 'next'
+import { groupBy, kebabCase, keyBy } from 'lodash'
+import { GetStaticProps } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import {
@@ -45,6 +45,7 @@ import Page from 'src/components/Page'
 
 type Streamer = {
   id: string
+  type: 'Individual' | 'Collective'
   photo: string
   name: string
   slug: string
@@ -324,13 +325,20 @@ function StreamerModal({ streamer, isOpen, onClose }: StreamerModalProps) {
   )
 }
 
-export default function StreamersPage({
-  streamerMap,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+// InferGetStaticPropsType types streamerMap as unknown :(
+type StreamersPageProps = {
+  streamerMap: { [k: string]: Streamer }
+}
+export default function StreamersPage({ streamerMap }: StreamersPageProps) {
   const router = useRouter()
   const { slug } = router.query
   const selectedStreamer =
-    streamerMap.hasOwnProperty(slug) && streamerMap[slug[0]]
+    slug &&
+    slug.length === 1 &&
+    streamerMap.hasOwnProperty(slug[0]) &&
+    streamerMap[slug[0]]
+  const streamers = [...Object.values(streamerMap)]
+  const streamersByType = groupBy(streamers, (s) => s.type)
   return (
     <Page title="streamers">
       <StreamerModal
@@ -344,7 +352,10 @@ export default function StreamersPage({
         px={4}
         py={1}
       >
-        {Array.from(Object.values(streamerMap), (s: Streamer) => (
+        {streamersByType['Individual'].map((s) => (
+          <StreamerTile key={s.id} streamer={s} />
+        ))}
+        {streamersByType['Collective'].map((s) => (
           <StreamerTile key={s.id} streamer={s} />
         ))}
       </SimpleGrid>
