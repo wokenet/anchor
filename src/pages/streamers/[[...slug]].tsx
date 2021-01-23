@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { groupBy, kebabCase, keyBy } from 'lodash'
 import { GetStaticProps } from 'next'
+import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import {
@@ -340,7 +341,13 @@ export default function StreamersPage({ streamerMap }: StreamersPageProps) {
   const streamers = [...Object.values(streamerMap)]
   const streamersByType = groupBy(streamers, (s) => s.type)
   return (
-    <Page title="streamers">
+    <Page
+      title={
+        (selectedStreamer ? selectedStreamer.name + ' – ' : '') + 'streamers'
+      }
+      description={selectedStreamer?.info}
+      socialImage={selectedStreamer?.photo}
+    >
       <StreamerModal
         streamer={selectedStreamer}
         isOpen={!!selectedStreamer}

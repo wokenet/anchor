@@ -272,7 +272,7 @@ function Home() {
   }, [announcement])
 
   return (
-    <Page noHeader noFooter>
+    <Page title="live stream" noHeader noFooter>
       <Flex
         display="flex"
         flex="1"
