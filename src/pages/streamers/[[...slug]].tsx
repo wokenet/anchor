@@ -375,9 +375,6 @@ const STREAMERS_INDEX_URL = 'https://api.woke.net/streamers/index.json'
 async function getStreamers() {
   const res = await fetch(STREAMERS_INDEX_URL)
   const streamers: Array<Streamer> = await res.json()
-  for (const s of streamers) {
-    s.slug = kebabCase(s.name)
-  }
   return streamers.filter((s) => !!s.publish)
 }
 
