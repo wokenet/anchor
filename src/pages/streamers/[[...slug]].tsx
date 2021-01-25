@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { groupBy, kebabCase, keyBy } from 'lodash'
+import { groupBy, keyBy } from 'lodash'
 import { GetStaticProps } from 'next'
-import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import {
