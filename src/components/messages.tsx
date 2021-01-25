@@ -1,5 +1,14 @@
 import * as React from 'react'
-import { Flex, Img, Text, useToken } from '@chakra-ui/react'
+import Link from 'next/link'
+import {
+  Flex,
+  HStack,
+  Img,
+  Link as ChakraLink,
+  Text,
+  useToken,
+  VStack,
+} from '@chakra-ui/react'
 import escapeStringRegexp from 'escape-string-regexp'
 import { ErrorBoundary } from 'react-error-boundary'
 
@@ -7,7 +16,10 @@ import { emoteSize, maxMessageSize, botUserId } from '../../constants.json'
 import { getSenderColor } from '../colors'
 import { MatrixEvent, RoomMember } from 'matrix-js-sdk'
 
+import type { Streamer } from '../types'
 import type { AnchorActions } from '../useAnchor'
+import StreamerSocialIcons from './StreamerSocialIconsProps'
+import StreamerSupportIcons, { hasSupportLinks } from './StreamerSupportIcons'
 
 function loadEmotes() {
   const emoteRequire = require.context(
@@ -195,6 +207,43 @@ export function BotNotice({ body, ...props }: BotNoticeProps) {
   )
 }
 
+type BotStreamerInfoProps = React.ComponentProps<typeof Text> & {
+  streamer: Streamer
+}
+
+export function BotStreamerInfo({ streamer, ...props }: BotStreamerInfoProps) {
+  return (
+    <VStack
+      spacing={1}
+      borderColor="orangeYellow.600"
+      borderStyle="solid"
+      borderTopWidth="1px"
+      borderBottomWidth="1px"
+      {...props}
+    >
+      <Link href={`/streamers/${streamer.slug}`} passHref>
+        <ChakraLink>
+          <Img src={streamer.photo} objectFit="cover" w="full" h={48} />
+        </ChakraLink>
+      </Link>
+      <HStack>
+        <Link href={`/streamers/${streamer.slug}`} passHref>
+          <ChakraLink fontWeight="bold" color="orangeYellow.300">
+            {streamer.name}
+          </ChakraLink>
+        </Link>
+        <StreamerSocialIcons streamer={streamer} />
+      </HStack>
+      {hasSupportLinks(streamer) && (
+        <HStack color="flame.300">
+          <Text fontWeight="bold">Support:</Text>
+          <StreamerSupportIcons streamer={streamer} />
+        </HStack>
+      )}
+    </VStack>
+  )
+}
+
 export function MessageFallback() {
   return (
     <Text as="div" color="gray.500" px={4}>
@@ -208,15 +257,17 @@ export function ChatEventContent({ ev, member, mxcURL }: ChatEventProps) {
   const content = ev.getContent()
 
   if (content?.msgtype === 'm.notice' && ev.sender.userId === botUserId) {
-    return (
-      <BotNotice
-        sender={ev.sender.name}
-        body={content.body}
-        px={4}
-        py={2}
-        my={2}
-      />
-    )
+    if (content.format === 'net.woke.streamer') {
+      return (
+        <BotStreamerInfo
+          streamer={content['net.woke.streamer']}
+          py={2}
+          my={2}
+          px={4}
+        />
+      )
+    }
+    return <BotNotice body={content.body} px={4} py={2} my={2} />
   }
 
   if (content?.msgtype === 'm.image' && member.powerLevel > 10) {

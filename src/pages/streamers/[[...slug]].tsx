@@ -8,7 +8,6 @@ import {
   Divider,
   Flex,
   Heading,
-  HStack,
   Icon,
   Image,
   Link as ChakraLink,
@@ -26,48 +25,14 @@ import {
   WrapItem,
 } from '@chakra-ui/react'
 import { useInView } from 'react-intersection-observer'
-import {
-  FaYoutube,
-  FaFacebook,
-  FaTwitter,
-  FaInstagram,
-  FaPeriscope,
-  FaTwitch,
-  FaLink,
-  FaPaypal,
-  FaPatreon,
-  FaGlasses,
-} from 'react-icons/fa'
-import { IoLogoVenmo } from 'react-icons/io5'
-import { SiCashapp } from 'react-icons/si'
+import { FaLink } from 'react-icons/fa'
 
+import type { Streamer } from '../../types'
 import Page from 'src/components/Page'
-
-type Streamer = {
-  id: string
-  type: 'Individual' | 'Collective'
-  photo: string
-  name: string
-  slug: string
-  publish: boolean
-  info: string
-  home?: string
-  creators?: Array<string>
-  teams?: Array<string>
-  cities: Array<string>
-  website?: string
-  facebook?: string
-  youtube?: string
-  twitch?: string
-  twitter?: string
-  instagram?: string
-  periscope?: string
-  cashapp?: string
-  paypal?: string
-  venmo?: string
-  patreon?: string
-  streamlabs?: string
-}
+import StreamerSupportIcons, {
+  hasSupportLinks,
+} from '../../components/StreamerSupportIcons'
+import StreamerSocialIcons from '../../components/StreamerSocialIconsProps'
 
 type StreamerTileProps = {
   streamer: Streamer
@@ -127,12 +92,6 @@ type StreamerModalProps = {
 }
 
 function StreamerModal({ streamer, isOpen, onClose }: StreamerModalProps) {
-  const hasSupportLinks =
-    streamer?.cashapp ||
-    streamer?.paypal ||
-    streamer?.venmo ||
-    streamer?.patreon ||
-    streamer?.streamlabs
   return (
     <Modal
       size="3xl"
@@ -160,38 +119,11 @@ function StreamerModal({ streamer, isOpen, onClose }: StreamerModalProps) {
                   </ChakraLink>
                 </WrapItem>
                 <WrapItem alignItems="center" my={0}>
-                  <HStack spacing={2} fontSize="xl">
-                    {streamer.facebook && (
-                      <ChakraLink href={streamer.facebook} isExternal>
-                        <Icon as={FaFacebook} />
-                      </ChakraLink>
-                    )}
-                    {streamer.youtube && (
-                      <ChakraLink href={streamer.youtube} isExternal>
-                        <Icon as={FaYoutube} />
-                      </ChakraLink>
-                    )}
-                    {streamer.twitch && (
-                      <ChakraLink href={streamer.twitch} isExternal>
-                        <Icon as={FaTwitch} />
-                      </ChakraLink>
-                    )}
-                    {streamer.twitter && (
-                      <ChakraLink href={streamer.twitter} isExternal>
-                        <Icon as={FaTwitter} />
-                      </ChakraLink>
-                    )}
-                    {streamer.instagram && (
-                      <ChakraLink href={streamer.instagram} isExternal>
-                        <Icon as={FaInstagram} />
-                      </ChakraLink>
-                    )}
-                    {streamer.periscope && (
-                      <ChakraLink href={streamer.periscope} isExternal>
-                        <Icon as={FaPeriscope} />
-                      </ChakraLink>
-                    )}
-                  </HStack>
+                  <StreamerSocialIcons
+                    streamer={streamer}
+                    spacing={2}
+                    fontSize="xl"
+                  />
                 </WrapItem>
               </Wrap>
               <VStack spacing={2} mt={2} alignItems="flex-start">
@@ -254,7 +186,7 @@ function StreamerModal({ streamer, isOpen, onClose }: StreamerModalProps) {
                   </Wrap>
                 )}
               </VStack>
-              {hasSupportLinks && (
+              {hasSupportLinks(streamer) && (
                 <>
                   <Divider pt={4} />
                   <ModalFooter
@@ -267,53 +199,12 @@ function StreamerModal({ streamer, isOpen, onClose }: StreamerModalProps) {
                     <Heading as="h3" size="md" display="inline">
                       Support {streamer.name}:
                     </Heading>
-                    <HStack ml={4} spacing={3} fontSize="2rem">
-                      {streamer.cashapp && (
-                        <ChakraLink
-                          display="flex"
-                          href={streamer.cashapp}
-                          isExternal
-                        >
-                          <Icon as={SiCashapp} />
-                        </ChakraLink>
-                      )}
-                      {streamer.paypal && (
-                        <ChakraLink
-                          display="flex"
-                          href={streamer.paypal}
-                          isExternal
-                        >
-                          <Icon as={FaPaypal} />
-                        </ChakraLink>
-                      )}
-                      {streamer.venmo && (
-                        <ChakraLink
-                          display="flex"
-                          href={streamer.venmo}
-                          isExternal
-                        >
-                          <Icon as={IoLogoVenmo} />
-                        </ChakraLink>
-                      )}
-                      {streamer.patreon && (
-                        <ChakraLink
-                          display="flex"
-                          href={streamer.patreon}
-                          isExternal
-                        >
-                          <Icon as={FaPatreon} />
-                        </ChakraLink>
-                      )}
-                      {streamer.streamlabs && (
-                        <ChakraLink
-                          display="flex"
-                          href={streamer.streamlabs}
-                          isExternal
-                        >
-                          <Icon as={FaGlasses} />
-                        </ChakraLink>
-                      )}
-                    </HStack>
+                    <StreamerSupportIcons
+                      streamer={streamer}
+                      ml={4}
+                      spacing={3}
+                      fontSize="2rem"
+                    />
                   </ModalFooter>
                 </>
               )}
