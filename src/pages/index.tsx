@@ -337,7 +337,8 @@ function Home() {
                 borderRadius={{ base: 'none', lg: 'md' }}
               >
                 <Icon as={FaEye} color="flame.500" boxSize={5} mr={2} />
-                {onlineCount} watching
+                {onlineCount}{' '}
+                {view?.kind !== 'offline' ? 'watching' : 'waiting'}
               </Flex>
             )}
           </Flex>
