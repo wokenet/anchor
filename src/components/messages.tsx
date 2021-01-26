@@ -222,13 +222,13 @@ export function BotStreamerInfo({ streamer, ...props }: BotStreamerInfoProps) {
       {...props}
     >
       <Link href={`/streamers/${streamer.slug}`} passHref>
-        <ChakraLink>
+        <ChakraLink isExternal>
           <Img src={streamer.photo} objectFit="cover" w="full" h={48} />
         </ChakraLink>
       </Link>
       <HStack>
         <Link href={`/streamers/${streamer.slug}`} passHref>
-          <ChakraLink fontWeight="bold" color="orangeYellow.300">
+          <ChakraLink fontWeight="bold" color="orangeYellow.300" isExternal>
             {streamer.name}
           </ChakraLink>
         </Link>
