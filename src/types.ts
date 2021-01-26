@@ -3,6 +3,7 @@ export type Streamer = {
   type: 'Individual' | 'Collective'
   photo: string
   name: string
+  pronoun: string
   slug: string
   publish: boolean
   info: string

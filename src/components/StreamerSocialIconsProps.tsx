@@ -21,32 +21,32 @@ export default function StreamerSocialIcons({
   return (
     <HStack {...props}>
       {streamer.facebook && (
-        <ChakraLink href={streamer.facebook} isExternal>
+        <ChakraLink display="flex" href={streamer.facebook} isExternal>
           <Icon as={FaFacebook} />
         </ChakraLink>
       )}
       {streamer.youtube && (
-        <ChakraLink href={streamer.youtube} isExternal>
+        <ChakraLink display="flex" href={streamer.youtube} isExternal>
           <Icon as={FaYoutube} />
         </ChakraLink>
       )}
       {streamer.twitch && (
-        <ChakraLink href={streamer.twitch} isExternal>
+        <ChakraLink display="flex" href={streamer.twitch} isExternal>
           <Icon as={FaTwitch} />
         </ChakraLink>
       )}
       {streamer.twitter && (
-        <ChakraLink href={streamer.twitter} isExternal>
+        <ChakraLink display="flex" href={streamer.twitter} isExternal>
           <Icon as={FaTwitter} />
         </ChakraLink>
       )}
       {streamer.instagram && (
-        <ChakraLink href={streamer.instagram} isExternal>
+        <ChakraLink display="flex" href={streamer.instagram} isExternal>
           <Icon as={FaInstagram} />
         </ChakraLink>
       )}
       {streamer.periscope && (
-        <ChakraLink href={streamer.periscope} isExternal>
+        <ChakraLink display="flex" href={streamer.periscope} isExternal>
           <Icon as={FaPeriscope} />
         </ChakraLink>
       )}

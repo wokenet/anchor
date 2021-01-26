@@ -212,31 +212,46 @@ type BotStreamerInfoProps = React.ComponentProps<typeof Text> & {
 }
 
 export function BotStreamerInfo({ streamer, ...props }: BotStreamerInfoProps) {
+  console.log(streamer)
   return (
     <VStack
-      spacing={1}
-      borderColor="orangeYellow.600"
+      spacing={0}
+      borderColor="gray.600"
       borderStyle="solid"
       borderTopWidth="1px"
       borderBottomWidth="1px"
       {...props}
     >
       <Link href={`/streamers/${streamer.slug}`} passHref>
-        <ChakraLink isExternal>
-          <Img src={streamer.photo} objectFit="cover" w="full" h={48} />
+        <ChakraLink mb="1" isExternal>
+          <Img
+            src={streamer.photo}
+            objectFit="cover"
+            borderRadius="sm"
+            w="full"
+            h={48}
+          />
         </ChakraLink>
       </Link>
       <HStack>
         <Link href={`/streamers/${streamer.slug}`} passHref>
-          <ChakraLink fontWeight="bold" color="orangeYellow.300" isExternal>
+          <ChakraLink
+            fontSize="xl"
+            fontWeight="bold"
+            color="orangeYellow.300"
+            isExternal
+          >
             {streamer.name}
           </ChakraLink>
         </Link>
-        <StreamerSocialIcons streamer={streamer} />
+        <StreamerSocialIcons streamer={streamer} alignItems="center" />
       </HStack>
       {hasSupportLinks(streamer) && (
         <HStack color="flame.300">
-          <Text fontWeight="bold">Support:</Text>
+          <Text fontWeight="bold" fontSize="xs" opacity=".75">
+            Support
+            {streamer.pronoun ? ' ' + streamer.pronoun.toLowerCase() : ''}:
+          </Text>
           <StreamerSupportIcons streamer={streamer} />
         </HStack>
       )}
@@ -262,7 +277,7 @@ export function ChatEventContent({ ev, member, mxcURL }: ChatEventProps) {
         <BotStreamerInfo
           streamer={content['net.woke.streamer']}
           py={2}
-          my={2}
+          my={1}
           px={4}
         />
       )
