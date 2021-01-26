@@ -265,7 +265,7 @@ const STREAMERS_INDEX_URL = 'https://api.woke.net/streamers/index.json'
 async function getStreamers() {
   const res = await fetch(STREAMERS_INDEX_URL)
   const streamers: Array<Streamer> = await res.json()
-  return streamers.filter((s) => !!s.publish)
+  return streamers
 }
 
 export async function getStaticPaths() {
