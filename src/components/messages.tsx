@@ -212,7 +212,6 @@ type BotStreamerInfoProps = React.ComponentProps<typeof Text> & {
 }
 
 export function BotStreamerInfo({ streamer, ...props }: BotStreamerInfoProps) {
-  console.log(streamer)
   return (
     <VStack
       spacing={0}
