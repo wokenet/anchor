@@ -215,7 +215,7 @@ export function BotStreamerInfo({ streamer, ...props }: BotStreamerInfoProps) {
   return (
     <VStack
       spacing={0}
-      borderColor="gray.600"
+      borderColor="orangeYellow.600"
       borderStyle="solid"
       borderTopWidth="1px"
       borderBottomWidth="1px"
