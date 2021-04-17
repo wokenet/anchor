@@ -44,7 +44,7 @@ export default function FooterLinks(
       px={4}
       h="14"
       bg="gray.950"
-      color="orangeYellow.800"
+      color="orangeYellow.700"
       {...props}
     >
       {footerLinks}
