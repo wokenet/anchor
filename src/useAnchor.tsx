@@ -51,6 +51,8 @@ export type ViewData =
 
 const AnchorViewEventType = 'net.woke.anchor.view' as EventType
 
+const initialSyncLimit = 35
+
 async function greedyLoadState<T>(
   isSynced: () => boolean,
   eventType: EventType,
@@ -220,6 +222,9 @@ function useAnchor() {
               ephemeral: {
                 types: [],
               },
+              timeline: {
+                limit: initialSyncLimit,
+              },
               state: {
                 lazy_load_members: true,
               },
@@ -230,7 +235,7 @@ function useAnchor() {
         client.getPushRules = async () => ({})
       }
 
-      await client.startClient({ initialSyncLimit: 20 })
+      await client.startClient({ initialSyncLimit })
       if (!isGuest) {
         await client.joinRoom(chatRoomId)
       }
@@ -252,8 +257,6 @@ function useAnchor() {
       updateLatestAnnouncement(chatRoom)
       setRoom(chatRoom)
       updateTimeline(chatRoom?.timeline)
-
-      client.scrollback(chatRoom, 30)
 
       const anchorViewEvent = chatRoom.currentState.getStateEvents(
         AnchorViewEventType,
