@@ -98,15 +98,13 @@ function useAnchor() {
       let userMode = localStorage.getItem('mx_user_mode') || 'guest'
       let userId = localStorage.getItem('mx_user_id')
       let accessToken = localStorage.getItem('mx_access_token')
+      const isGuest = userMode === 'guest'
 
       client = createClient({
-        baseUrl: userMode === 'guest' ? matrixGuestServer : matrixServer,
+        baseUrl: isGuest ? matrixGuestServer : matrixServer,
         userId,
-        accessToken: userMode === 'guest' ? 'guest' : accessToken,
+        accessToken: isGuest ? 'guest' : accessToken,
       })
-      if (userMode === 'guest') {
-        client.setGuest(true)
-      }
 
       setActions({
         register: async (username, password, captchaToken) => {
@@ -213,15 +211,31 @@ function useAnchor() {
       // @ts-ignore
       client._supportsVoip = false
 
-      // Guest room peeking has a hardcoded limit of 20
-      await client.startClient({ initialSyncLimit: 20 })
+      if (isGuest) {
+        // TODO: Hack client internals to obviate creating a filter on the
+        // server, so we can use the read only guest proxy.
+        client.getOrCreateFilter = async () =>
+          JSON.stringify({
+            room: {
+              ephemeral: {
+                types: [],
+              },
+              state: {
+                lazy_load_members: true,
+              },
+            },
+          })
 
-      if (client.isGuest()) {
-        await client.peekInRoom(chatRoomId)
-      } else {
-        await client.joinRoom(chatRoomId)
-        await once(client, 'sync')
+        // Also prevent fetching push rules.
+        client.getPushRules = async () => ({})
       }
+
+      await client.startClient({ initialSyncLimit: 20 })
+      if (!isGuest) {
+        await client.joinRoom(chatRoomId)
+      }
+
+      await once(client, 'sync')
 
       client.on('RoomState.events', (event) => {
         if (event.getType() !== AnchorViewEventType) {
@@ -233,7 +247,7 @@ function useAnchor() {
       const chatRoom = client.getRoom(chatRoomId)
       setUserInfo({
         userId: client.credentials.userId,
-        isGuest: client.isGuest(),
+        isGuest,
       })
       updateLatestAnnouncement(chatRoom)
       setRoom(chatRoom)
