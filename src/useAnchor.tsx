@@ -224,10 +224,10 @@ function useAnchor() {
               },
               timeline: {
                 limit: initialSyncLimit,
-                lazy_load_members: true,
               },
               state: {
                 lazy_load_members: true,
+                include_redundant_members: true,
               },
             },
           })
