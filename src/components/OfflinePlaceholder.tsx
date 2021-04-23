@@ -37,7 +37,7 @@ export default function OfflinePlacholder() {
         src={BackgroundVideo}
         w="full"
         h="full"
-        opacity=".075"
+        opacity=".020"
         objectFit="cover"
         autoPlay
         muted
