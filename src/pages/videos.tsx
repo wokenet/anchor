@@ -8,7 +8,7 @@ export default function VideosPage() {
     <Page title="streams" noFooter>
       <Box
         as="iframe"
-        src="//embedsocial.com/facebook_album/pro_hashtag/04efc264b55775f03dd002080d48735e180d4fbe"
+        src="//sociablekit.com/app/embed/58475"
         h="full"
         px={2}
         background="black"
