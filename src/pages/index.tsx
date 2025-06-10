@@ -195,7 +195,7 @@ function Home() {
   const authButtonRef = useRef<HTMLButtonElement>()
   const isScrollPinned = useRef<boolean>(true)
   const { userInfo, timeline, announcement, view, room, actions } = useAnchor()
-  const onlineCount = useTinyCount('https://get.woke.net/viewers/')
+  const onlineCount = useTinyCount('https://mars.woke.net/viewers/')
   const {
     isOpen: isAuthOpen,
     onOpen: onAuthOpen,
